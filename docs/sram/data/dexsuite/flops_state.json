@@ -1,0 +1,12 @@
+{
+ "state": {
+  "actor": {
+   "fwd_flops_per_sample": 1966848.0,
+   "fwd_bwd_flops_per_sample": 4267264.0
+  },
+  "critic": {
+   "fwd_flops_per_sample": 1961216.0,
+   "fwd_bwd_flops_per_sample": 4250368.0
+  }
+ }
+}

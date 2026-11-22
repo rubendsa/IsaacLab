@@ -1,0 +1,241 @@
+{
+ "num_sms": 188,
+ "validation": {
+  "stress_cg_188x256": {
+   "errors": 0,
+   "checks": 2887680000
+  },
+  "stress_cgstyle_188x256": {
+   "errors": 0,
+   "checks": 2887680000
+  },
+  "stressldg_cgstyle_188x256": {
+   "errors": 0,
+   "checks": 2887680000
+  },
+  "stress_rpoll_188x256": {
+   "errors": 0,
+   "checks": 2887680000
+  },
+  "stress_sense_188x256": {
+   "errors": 0,
+   "checks": 2887680000
+  },
+  "stress_flags_188x256": {
+   "errors": 0,
+   "checks": 2887680000
+  },
+  "stress_broken_188x256": {
+   "errors": 2887391232,
+   "checks": 2887680000
+  },
+  "stressldg_broken_188x256": {
+   "errors": 2887391232,
+   "checks": 2887680000
+  },
+  "stress_cg_376x512": {
+   "errors": 0,
+   "checks": 11550720000
+  },
+  "stress_cgstyle_376x512": {
+   "errors": 0,
+   "checks": 11550720000
+  },
+  "stressldg_cgstyle_376x512": {
+   "errors": 0,
+   "checks": 11550720000
+  },
+  "stress_rpoll_376x512": {
+   "errors": 0,
+   "checks": 11550720000
+  },
+  "stress_sense_376x512": {
+   "errors": 0,
+   "checks": 11550720000
+  },
+  "stress_flags_376x512": {
+   "errors": 0,
+   "checks": 11550720000
+  },
+  "stress_broken_376x512": {
+   "errors": 11549564928,
+   "checks": 11550720000
+  },
+  "stressldg_broken_376x512": {
+   "errors": 11549564928,
+   "checks": 11550720000
+  }
+ },
+ "latency_us": {
+  "cg": {
+   "188x128": {
+    "us_per_barrier_min": 0.7280895590782166,
+    "us_per_barrier_median": 0.728262436389923
+   },
+   "188x256": {
+    "us_per_barrier_min": 0.7319999933242798,
+    "us_per_barrier_median": 0.7316416382789612
+   },
+   "188x512": {
+    "us_per_barrier_min": 0.7427775979042053,
+    "us_per_barrier_median": 0.7421952486038208
+   },
+   "376x128": {
+    "us_per_barrier_min": 0.9929664015769959,
+    "us_per_barrier_median": 1.0154048323631286
+   },
+   "376x256": {
+    "us_per_barrier_min": 1.0053824424743651,
+    "us_per_barrier_median": 1.0085120439529418
+   },
+   "376x512": {
+    "us_per_barrier_min": 0.7712127804756165,
+    "us_per_barrier_median": 0.7713472366333007
+   },
+   "752x128": {
+    "us_per_barrier_min": 1.9786303758621215,
+    "us_per_barrier_median": 1.9791551589965821
+   },
+   "752x256": {
+    "us_per_barrier_min": 1.9849600553512574,
+    "us_per_barrier_median": 1.9861439228057862
+   }
+  },
+  "cgstyle": {
+   "188x128": {
+    "us_per_barrier_min": 0.7201663613319397,
+    "us_per_barrier_median": 0.7202368259429932
+   },
+   "188x256": {
+    "us_per_barrier_min": 0.7240512371063232,
+    "us_per_barrier_median": 0.7238783955574035
+   },
+   "188x512": {
+    "us_per_barrier_min": 0.7324416160583496,
+    "us_per_barrier_median": 0.7322687625885009
+   },
+   "376x128": {
+    "us_per_barrier_min": 0.7593408226966858,
+    "us_per_barrier_median": 0.7595199584960938
+   },
+   "376x256": {
+    "us_per_barrier_min": 0.7597120404243469,
+    "us_per_barrier_median": 0.7608320355415344
+   },
+   "376x512": {
+    "us_per_barrier_min": 0.7778559684753418,
+    "us_per_barrier_median": 0.777555239200592
+   },
+   "752x128": {
+    "us_per_barrier_min": 1.69320969581604,
+    "us_per_barrier_median": 1.693343949317932
+   },
+   "752x256": {
+    "us_per_barrier_min": 1.7055936574935913,
+    "us_per_barrier_median": 1.7058495998382568
+   }
+  },
+  "rpoll": {
+   "188x128": {
+    "us_per_barrier_min": 0.7586240410804749,
+    "us_per_barrier_median": 0.7585792303085327
+   },
+   "188x256": {
+    "us_per_barrier_min": 0.7621120333671569,
+    "us_per_barrier_median": 0.7624064207077026
+   },
+   "188x512": {
+    "us_per_barrier_min": 0.7695359945297241,
+    "us_per_barrier_median": 0.7695359826087952
+   },
+   "376x128": {
+    "us_per_barrier_min": 0.8236223578453064,
+    "us_per_barrier_median": 0.823628830909729
+   },
+   "376x256": {
+    "us_per_barrier_min": 0.8267648339271545,
+    "us_per_barrier_median": 0.8269248366355896
+   },
+   "376x512": {
+    "us_per_barrier_min": 0.8338240504264831,
+    "us_per_barrier_median": 0.834067165851593
+   },
+   "752x128": {
+    "us_per_barrier_min": 1.1958399772644044,
+    "us_per_barrier_median": 1.1959616422653199
+   },
+   "752x256": {
+    "us_per_barrier_min": 1.198412799835205,
+    "us_per_barrier_median": 1.1987904548645019
+   }
+  },
+  "sense": {
+   "188x128": {
+    "us_per_barrier_min": 1.197542428970337,
+    "us_per_barrier_median": 1.197382378578186
+   },
+   "188x256": {
+    "us_per_barrier_min": 1.201478409767151,
+    "us_per_barrier_median": 1.2012351751327515
+   },
+   "188x512": {
+    "us_per_barrier_min": 1.208735966682434,
+    "us_per_barrier_median": 1.2087615728378296
+   },
+   "376x128": {
+    "us_per_barrier_min": 1.2944000005722045,
+    "us_per_barrier_median": 1.2953216075897216
+   },
+   "376x256": {
+    "us_per_barrier_min": 1.2933824062347412,
+    "us_per_barrier_median": 1.2947840452194215
+   },
+   "376x512": {
+    "us_per_barrier_min": 1.2901951551437378,
+    "us_per_barrier_median": 1.2905600309371947
+   },
+   "752x128": {
+    "us_per_barrier_min": 1.9942784786224366,
+    "us_per_barrier_median": 1.9945791244506836
+   },
+   "752x256": {
+    "us_per_barrier_min": 2.3491583824157716,
+    "us_per_barrier_median": 2.352268838882446
+   }
+  },
+  "flags": {
+   "188x128": {
+    "us_per_barrier_min": 1.486252784729004,
+    "us_per_barrier_median": 1.4862655639648437
+   },
+   "188x256": {
+    "us_per_barrier_min": 1.2617791652679444,
+    "us_per_barrier_median": 1.2658175706863404
+   },
+   "188x512": {
+    "us_per_barrier_min": 1.2790080308914185,
+    "us_per_barrier_median": 1.2792320251464844
+   },
+   "376x128": {
+    "us_per_barrier_min": 1.6861888647079468,
+    "us_per_barrier_median": 1.6871872186660766
+   },
+   "376x256": {
+    "us_per_barrier_min": 1.4982463598251343,
+    "us_per_barrier_median": 1.499392032623291
+   },
+   "376x512": {
+    "us_per_barrier_min": 1.3388159990310669,
+    "us_per_barrier_median": 1.3389119148254394
+   },
+   "752x128": {
+    "us_per_barrier_min": 4.0318910598754885,
+    "us_per_barrier_median": 7.434822034835816
+   },
+   "752x256": {
+    "us_per_barrier_min": 3.3672065258026125,
+    "us_per_barrier_median": 6.377453088760376
+   }
+  }
+ }
+}

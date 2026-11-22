@@ -1,0 +1,290 @@
+[
+ {
+  "num_envs": 1024,
+  "iteration_s": 0.13,
+  "source": "./stock_scaling.json (20 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": null,
+  "env_steps_per_s": 126030.76923076922,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.13,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "envs_1024/stock_torch_s1.json (150 iterations)",
+    "iteration_s": 0.132,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "envs_1024/stock_torch_s2.json (150 iterations)",
+    "iteration_s": 0.13,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "envs_1024/stock_torch_s3.json (150 iterations)",
+    "iteration_s": 0.131,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.135,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   }
+  ]
+ },
+ {
+  "num_envs": 2048,
+  "iteration_s": 0.133,
+  "source": "./stock_scaling.json (20 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": null,
+  "env_steps_per_s": 246375.93984962406,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.133,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.133,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   }
+  ]
+ },
+ {
+  "num_envs": 4096,
+  "iteration_s": 0.131,
+  "source": "stock_torch_s1.json (150 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": null,
+  "env_steps_per_s": 500274.8091603053,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.133,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.134,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "stock_torch_s1.json (150 iterations)",
+    "iteration_s": 0.131,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "stock_torch_s2.json (150 iterations)",
+    "iteration_s": 0.134,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "stock_torch_s3.json (150 iterations)",
+    "iteration_s": 0.134,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   }
+  ]
+ },
+ {
+  "num_envs": 8192,
+  "iteration_s": 0.132,
+  "source": "./stock_scaling.json (20 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": null,
+  "env_steps_per_s": 992969.6969696969,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.132,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.133,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   }
+  ]
+ },
+ {
+  "num_envs": 16384,
+  "iteration_s": 0.133,
+  "source": "envs_16384/stock_torch_s1.json (150 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": 0.0,
+  "env_steps_per_s": 1971007.5187969925,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.155,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "envs_16384/stock_torch_s1.json (150 iterations)",
+    "iteration_s": 0.133,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "envs_16384/stock_torch_s2.json (150 iterations)",
+    "iteration_s": 0.14,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "envs_16384/stock_torch_s3.json (150 iterations)",
+    "iteration_s": 0.14100000000000001,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.15999999999999998,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   }
+  ]
+ },
+ {
+  "num_envs": 32768,
+  "iteration_s": 0.148,
+  "source": "stock_rep2/stock_scaling.json (20 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": 0.0,
+  "env_steps_per_s": 3542486.4864864866,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.164,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.148,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   }
+  ]
+ },
+ {
+  "num_envs": 65536,
+  "iteration_s": 0.15,
+  "source": "envs_65536/stock_torch_s2.json (150 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": 0.0,
+  "env_steps_per_s": 6990506.666666667,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.154,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "envs_65536/stock_torch_s1.json (150 iterations)",
+    "iteration_s": 0.153,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "envs_65536/stock_torch_s2.json (150 iterations)",
+    "iteration_s": 0.15,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "envs_65536/stock_torch_s3.json (150 iterations)",
+    "iteration_s": 0.152,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.152,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   }
+  ]
+ },
+ {
+  "num_envs": 131072,
+  "iteration_s": 0.179,
+  "source": "./stock_scaling.json (20 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": null,
+  "env_steps_per_s": 11715932.960893854,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.179,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.187,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   }
+  ]
+ },
+ {
+  "num_envs": 262144,
+  "iteration_s": 0.288,
+  "source": "stock_rep2/stock_scaling.json (20 iterations)",
+  "contended": false,
+  "foreign_gpu_seconds": 0.0,
+  "env_steps_per_s": 14563555.555555556,
+  "candidates": [
+   {
+    "source": "./stock_scaling.json (20 iterations)",
+    "iteration_s": 0.28600000000000003,
+    "other_gpu_job": true,
+    "other_gpu_job_seconds": null
+   },
+   {
+    "source": "envs_262144/stock_torch_s1.json (150 iterations)",
+    "iteration_s": 0.28300000000000003,
+    "other_gpu_job": true,
+    "other_gpu_job_seconds": 38.0
+   },
+   {
+    "source": "envs_262144/stock_torch_s2.json (150 iterations)",
+    "iteration_s": 0.28300000000000003,
+    "other_gpu_job": true,
+    "other_gpu_job_seconds": 22.0
+   },
+   {
+    "source": "envs_262144/stock_torch_s3.json (150 iterations)",
+    "iteration_s": 0.28400000000000003,
+    "other_gpu_job": true,
+    "other_gpu_job_seconds": 44.0
+   },
+   {
+    "source": "stock_rep2/stock_scaling.json (20 iterations)",
+    "iteration_s": 0.288,
+    "other_gpu_job": false,
+    "other_gpu_job_seconds": 0.0
+   }
+  ]
+ }
+]

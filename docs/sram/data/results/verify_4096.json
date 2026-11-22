@@ -1,0 +1,153 @@
+{
+ "num_envs": 4096,
+ "num_ctas": 188,
+ "envs_per_cta_max": 22,
+ "seed": 3,
+ "storage": "smem",
+ "init_params_roundtrip": {
+  "max_abs_err": 0.0,
+  "tol": 0.0,
+  "ok": true
+ },
+ "physics_vs_float64_reference": {
+  "max_abs_err": 1.624538523259389e-06,
+  "tol": 0.0002,
+  "ok": true
+ },
+ "transition_linkage": {
+  "max_abs_err": 0.0,
+  "tol": 0.0,
+  "ok": true
+ },
+ "reset_range_violations": 0,
+ "reward_termination_timeout_bootstrap": {
+  "max_abs_err": 3.358705666367534e-08,
+  "tol": 1e-05,
+  "ok": true
+ },
+ "termination_and_timeout_flags": {
+  "max_abs_err": 0.0,
+  "tol": 0,
+  "ok": true
+ },
+ "episode_counters_after_rollout": {
+  "max_abs_err": 0.0,
+  "tol": 0,
+  "ok": true
+ },
+ "actor_mean_vs_rsl_rl_MLPModel": {
+  "max_abs_err": 5.364418029785156e-07,
+  "tol": 1e-05,
+  "ok": true
+ },
+ "critic_value_vs_rsl_rl_MLPModel": {
+  "max_abs_err": 3.203749656677246e-07,
+  "tol": 1e-05,
+  "ok": true
+ },
+ "log_prob": {
+  "max_abs_err": 1.395780470758723e-06,
+  "tol": 1e-05,
+  "ok": true
+ },
+ "gae_returns": {
+  "max_abs_err": 3.425031900317066e-07,
+  "tol": 0.0001,
+  "ok": true
+ },
+ "global_advantage_normalisation": {
+  "max_abs_err": 6.246570922741057e-07,
+  "tol": 0.0001,
+  "ok": true
+ },
+ "permutations_are_bijections": true,
+ "first_minibatch_gradient_reference_dtype": "float64",
+ "float32_reference_gradient_error_vs_float64": 2.724589071717576e-07,
+ "first_minibatch_gradient_vs_autograd (abs, all 2499 params)": {
+  "max_abs_err": 1.6715144948720173e-08,
+  "tol": 2.1e-06,
+  "ok": true
+ },
+ "first_minibatch_gradient_relative_l2_err": 6.110794629415052e-08,
+ "kl_mean": {
+  "max_abs_err": 0.0,
+  "tol": 1e-06,
+  "ok": true
+ },
+ "surrogate_loss": {
+  "max_abs_err": 2.3283064365386963e-09,
+  "tol": 1e-06,
+  "ok": true
+ },
+ "value_loss": {
+  "max_abs_err": 0.0,
+  "tol": 1e-05,
+  "ok": true
+ },
+ "first_adam_step_params_vs_torch": {
+  "max_abs_err": 2.9802322387695312e-08,
+  "tol": 1e-06,
+  "ok": true
+ },
+ "teacher_forced_update_params (20 updates, max abs)": {
+  "max_abs_err": 2.9802322387695312e-08,
+  "tol": 1e-06,
+  "ok": true
+ },
+ "teacher_forced_update_adam_m (max abs / max |m|)": {
+  "max_abs_err": 1.0910293025013302e-06,
+  "tol": 0.001,
+  "ok": true
+ },
+ "teacher_forced_update_adam_v (max abs / max |v|)": {
+  "max_abs_err": 9.985337087228354e-07,
+  "tol": 0.001,
+  "ok": true
+ },
+ "teacher_forced_update_kl_mean (max abs)": {
+  "max_abs_err": 9.313225746154785e-09,
+  "tol": 1e-06,
+  "ok": true
+ },
+ "teacher_forced_update_learning_rate (mismatches)": {
+  "max_abs_err": 0.0,
+  "tol": 0.0,
+  "ok": true
+ },
+ "iteration_final_params_vs_rsl_rl_replay (relative L2, free-running)": {
+  "max_abs_err": 1.8316161219680644e-08,
+  "tol": 0.001,
+  "ok": true
+ },
+ "iteration_final_params_max_abs_err_free_running": 2.9802322387695312e-08,
+ "iteration_final_params_relative_l2_err": 1.8316161219680644e-08,
+ "replay_kl_means": [
+  0.0,
+  0.0026975960936397314,
+  0.01517977099865675,
+  0.02584957890212536,
+  0.028765741735696793,
+  0.028922978788614273,
+  0.02808699943125248,
+  0.027070367708802223,
+  0.026184136047959328,
+  0.02570810541510582,
+  0.025209473446011543,
+  0.02481871098279953,
+  0.024531953036785126,
+  0.024526719003915787,
+  0.02437363937497139,
+  0.024236641824245453,
+  0.024114985018968582,
+  0.024200977757573128,
+  0.024087104946374893,
+  0.023955555632710457
+ ],
+ "iteration_final_learning_rate": {
+  "max_abs_err": 0.0,
+  "tol": 0.0,
+  "ok": true
+ },
+ "kernel_minus_rsl_rl_note": "mini-batches are stratified per SM (each SM contributes 1/num_mini_batches of its own transitions); the loss/gradient math on a given mini-batch is checked exactly above",
+ "failures": []
+}

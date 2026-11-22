@@ -1,0 +1,133 @@
+{
+ "mb": 16384,
+ "conv_fwd_flops": 37178310656,
+ "conv_train_flops": 88852135936,
+ "variants": {
+  "nchw_tf32": {
+   "fwd_bwd_ms_median": 7.882400035858154,
+   "fwd_bwd_ms_min": 7.856256008148193,
+   "fwd_ms_median": 3.4134719371795654,
+   "per_update_ms_x40": 315.2960014343262,
+   "train_tflops": 11.272218554221944,
+   "fwd_tflops": 10.891640927541697,
+   "kernel_ms": 7.827722000000007,
+   "kernels": 74,
+   "kernel_ms_by_category": {
+    "conv": 5.047401000000002,
+    "elementwise": 2.3448070000000047,
+    "reduce": 0.3566989999999987,
+    "gemm": 0.07711899999999969,
+    "other": 0.0016960000000017317
+   },
+   "top_kernels_ms": {
+    "void implicit_convolve_sgemm<float, float, 1024, 5, 5, 3, 3, 3, 1, false, false, true>(int, int, int, float const*, int, float*, float const": 1.6257739999999994,
+    "void wgrad_alg0_engine<float, 512, 6, 5, 3, 3, 3, false, 512>(int, int, int, float const*, int, float*, float const*, kernel_grad_params, un": 1.1061640000000006,
+    "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl<at::native::addcmul_cuda_kernel(at::TensorIteratorBase&, c10::Scalar": 0.7873200000000001,
+    "void cudnn::engines_precompiled::nchwToNhwcKernel<float, float, float, false, true, (cudnnKernelDataType_t)2>(cudnn::engines_precompiled::nc": 0.6773689999999997,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::elu_backward_kernel(at::TensorIteratorBase&, c10::Scala": 0.5969849999999997,
+    "void cudnn::cnn::wgrad_alg1_engine<float, float, 128, 5, 5, 3, 3, 3, false, true>(int, int, int, float const*, int, float*, float const*, ke": 0.5571139999999996,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::elu_kernel(at::TensorIteratorBase&, c10::Scalar const&,": 0.3698520000000008,
+    "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<float> >(at::TensorIteratorBase&,": 0.3607960000000003,
+    "void foldedNhwcToNchwKernel<float, float, float, true, (cudnnKernelDataType_t)0>(int, int, int, int, int, int, int, float const*, float*, in": 0.35814000000000035,
+    "void cutlass__5x_cudnn::Kernel<cutlass_tensorop_s1688dgrad_optimized_tf32_128x64_16x6_nhwc_unity_stride_align4>(cutlass_tensorop_s1688dgrad_": 0.328125,
+    "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, f": 0.32012299999999866
+   }
+  },
+  "nhwc_tf32": {
+   "fwd_bwd_ms_median": 7.831232070922852,
+   "fwd_bwd_ms_min": 7.803552150726318,
+   "fwd_ms_median": 3.770240068435669,
+   "per_update_ms_x40": 313.24928283691406,
+   "train_tflops": 11.345869351248767,
+   "fwd_tflops": 9.860992929138822,
+   "kernel_ms": 7.812572999999994,
+   "kernels": 76,
+   "kernel_ms_by_category": {
+    "conv": 4.938353999999998,
+    "elementwise": 2.443401999999998,
+    "reduce": 0.35286499999999704,
+    "gemm": 0.07795200000000023
+   },
+   "top_kernels_ms": {
+    "void convolve_common_engine_float_NHWC<float, float, 128, 5, 5, 3, 3, 3, true, false, false, false, false>(int, int, int, float const*, floa": 1.460261,
+    "void cudnn::engines_precompiled::convertTensor_kernel<float, float, float, (cudnnKernelDataType_t)2>(float, float const*, float, float*, uns": 1.0867549999999975,
+    "void wgrad_alg0_engine_NHWC<float, 512, 6, 5, 3, 3, 3, false, 512>(int, int, int, float const*, int, float*, float const*, kernel_grad_param": 1.0837479999999995,
+    "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl<at::native::addcmul_cuda_kernel(at::TensorIteratorBase&, c10::Scalar": 0.7884829999999999,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::elu_backward_kernel(at::TensorIteratorBase&, c10::Scala": 0.5734430000000003,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::elu_kernel(at::TensorIteratorBase&, c10::Scalar const&,": 0.37702400000000036,
+    "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<float> >(at::TensorIteratorBase&,": 0.36272199999999977,
+    "void cutlass__5x_cudnn::Kernel<cutlass_tensorop_s1688dgrad_optimized_tf32_128x64_16x6_nhwc_unity_stride_align4>(cutlass_tensorop_s1688dgrad_": 0.3289300000000003,
+    "void foldedNhwcToNhwcKernel<float, float, float, true, (cudnnKernelDataType_t)0>(int, int, int, int, int, int, int, float const*, float*, in": 0.3216980000000003,
+    "sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_tf32f32_tf32f32_f32_nhwckrsc_nhwc_tilesize128x32x64_stage1_warpsize4x1x1_g1_tensor16x8x8_align": 0.2531840000000002,
+    "void at::native::reduce_kernel<128, 4, at::native::ReduceOp<float, at::native::func_wrapper_t<float, at::native::sum_functor<float, float, f": 0.24729699999999866
+   }
+  },
+  "nchw_bf16": {
+   "fwd_bwd_ms_median": 9.691295623779297,
+   "fwd_bwd_ms_min": 9.680671691894531,
+   "fwd_ms_median": 3.6184639930725098,
+   "per_update_ms_x40": 387.6518249511719,
+   "train_tflops": 9.168241212040387,
+   "fwd_tflops": 10.274611196125557,
+   "kernel_ms": 9.044694999999992,
+   "kernels": 104,
+   "kernel_ms_by_category": {
+    "conv": 6.2012299999999945,
+    "elementwise": 2.548360999999998,
+    "reduce": 0.25420899999999985,
+    "gemm": 0.04089500000000044
+   },
+   "top_kernels_ms": {
+    "void cudnn::engines_precompiled::nchwToNhwcKernel<__nv_bfloat16, __nv_bfloat16, float, false, true, (cudnnKernelDataType_t)0>(cudnn::engines": 3.0836559999999955,
+    "void precomputed_convolve_sgemm<__nv_bfloat16, 128, 5, 5, 3, 3, 3, 1, false>(int, int, int, __nv_bfloat16 const*, int, __nv_bfloat16*, __nv_": 1.1572509999999998,
+    "sm80_xmma_wgrad_implicit_gemm_indexed_bf16bf16_bf16f32_f32_nhwckrsc_nhwc_tilesize32x128x32_stage4_warpsize1x4x1_g1_tensor16x8x16_execute_ker": 0.8542099999999991,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::ar": 0.8353969999999982,
+    "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl<at::native::addcmul_cuda_kernel(at::TensorIteratorBase&, c10::Scalar": 0.7871380000000001,
+    "void precomputed_convolve_sgemm<__nv_bfloat16, 1024, 5, 5, 4, 3, 3, 1, false>(int, int, int, __nv_bfloat16 const*, int, __nv_bfloat16*, __nv": 0.31059200000000053,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::elu_backward_kernel(at::TensorIteratorBase&, c10::Scala": 0.3025610000000006,
+    "sm80_xmma_dgrad_implicit_gemm_indexed_bf16bf16_bf16f32_f32_nhwckrsc_nhwc_tilesize128x32x32_stage4_warpsize4x1x1_g1_tensor16x8x16_strided_exe": 0.26457699999999934,
+    "void cudnn::engines_precompiled::nhwcToNchwKernel<__nv_bfloat16, __nv_bfloat16, float, true, false, (cudnnKernelDataType_t)0>(cudnn::engines": 0.21529499999999915,
+    "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::BFloat16> >(at::TensorIterat": 0.20649599999999918,
+    "void at::native::reduce_kernel<512, 1, at::native::ReduceOp<c10::BFloat16, at::native::func_wrapper_t<c10::BFloat16, at::native::sum_functor": 0.17971299999999973,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::elu_kernel(at::TensorIteratorBase&, c10::Scalar const&,": 0.14742399999999997
+   }
+  },
+  "nhwc_bf16": {
+   "fwd_bwd_ms_median": 8.508607864379883,
+   "fwd_bwd_ms_min": 8.481439590454102,
+   "fwd_ms_median": 3.5283520221710205,
+   "per_update_ms_x40": 340.3443145751953,
+   "train_tflops": 10.442617329677072,
+   "fwd_tflops": 10.53701853510748,
+   "kernel_ms": 7.759100999999997,
+   "kernels": 89,
+   "kernel_ms_by_category": {
+    "conv": 4.979005,
+    "elementwise": 2.5217909999999946,
+    "reduce": 0.21747300000000178,
+    "gemm": 0.04083200000000033
+   },
+   "top_kernels_ms": {
+    "void nhwcAddPaddingKernel<__nv_bfloat16, __nv_bfloat16, float, true, (cudnnKernelDataType_t)0>(int, int, int, int, int, int, int, int, __nv_": 2.073242,
+    "void convolve_common_engine_float_NHWC<__nv_bfloat16, __nv_bfloat16, 128, 5, 5, 3, 3, 3, true, false, false, false, false>(int, int, int, __": 1.294032,
+    "sm80_xmma_wgrad_implicit_gemm_indexed_bf16bf16_bf16f32_f32_nhwckrsc_nhwc_tilesize32x128x32_stage4_warpsize1x4x1_g1_tensor16x8x16_execute_ker": 0.8905069999999996,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::ar": 0.8382179999999989,
+    "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl<at::native::addcmul_cuda_kernel(at::TensorIteratorBase&, c10::Scalar": 0.786795,
+    "sm80_xmma_dgrad_implicit_gemm_indexed_bf16bf16_bf16f32_f32_nhwckrsc_nhwc_tilesize128x32x32_stage4_warpsize4x1x1_g1_tensor16x8x16_strided_exe": 0.2666909999999998,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::elu_backward_kernel(at::TensorIteratorBase&, c10::Scala": 0.25229100000000015,
+    "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::BFloat16> >(at::TensorIterat": 0.19517199999999957,
+    "sm80_xmma_fprop_implicit_gemm_indexed_bf16bf16_bf16f32_f32_nhwckrsc_nhwc_tilesize128x32x32_stage4_warpsize4x1x1_g1_tensor16x8x16_execute_ker": 0.1790089999999991,
+    "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::elu_kernel(at::TensorIteratorBase&, c10::Scalar const&,": 0.1490890000000004,
+    "void at::native::reduce_kernel<128, 4, at::native::ReduceOp<c10::BFloat16, at::native::func_wrapper_t<c10::BFloat16, at::native::sum_functor": 0.13379200000000038
+   }
+  }
+ },
+ "nvidia_smi": {
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition, 94 %, 3852 MiB, 2422 MHz, 2430 MHz, 230.28 W",
+  "compute_apps": [
+   "17145, /usr/lib/x86_64-linux-gnu/dcv/dcvagent, 1155 MiB",
+   "17552, /usr/libexec/gnome-remote-desktop-daemon, 558 MiB",
+   "665031, <path>, 1730 MiB"
+  ]
+ }
+}

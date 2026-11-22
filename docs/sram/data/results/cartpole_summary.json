@@ -1,0 +1,172 @@
+{
+ "stock_torch": {
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "per_iteration_s": 0.134,
+  "per_iteration_s_by_seed": [
+   0.131,
+   0.134,
+   0.134
+  ],
+  "collection_s": 0.062,
+  "learning_s": 0.071,
+  "loop_s": 21.707,
+  "process_wall_s": 31.017302879015915,
+  "iterations_to_threshold": 33,
+  "iterations_to_threshold_by_seed": [
+   42,
+   30,
+   33
+  ],
+  "time_to_threshold_s": 4.422000000000001,
+  "time_to_threshold_cumulative_s": 6.454,
+  "eval_return_by_seed": [
+   4.946429271421948,
+   4.945992669596308,
+   4.9577794602300855
+  ],
+  "eval_return_mean": 4.950067133749447,
+  "eval_return_spread": 0.011786790633777855,
+  "final_train_return": 4.949,
+  "contended_seeds": []
+ },
+ "stock_warp": {
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "per_iteration_s": 0.103,
+  "per_iteration_s_by_seed": [
+   0.1,
+   0.103,
+   0.103
+  ],
+  "collection_s": 0.031,
+  "learning_s": 0.072,
+  "loop_s": 16.724,
+  "process_wall_s": 26.05037961807102,
+  "iterations_to_threshold": 38,
+  "iterations_to_threshold_by_seed": [
+   43,
+   31,
+   38
+  ],
+  "time_to_threshold_s": 3.9139999999999997,
+  "time_to_threshold_cumulative_s": 5.140000000000001,
+  "eval_return_by_seed": [
+   4.933070548191608,
+   4.946274212446951,
+   4.9526202901033685
+  ],
+  "eval_return_mean": 4.943988350247309,
+  "eval_return_spread": 0.019549741911760066,
+  "final_train_return": 4.946000000000001,
+  "contended_seeds": []
+ },
+ "torch_analytic": {
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "per_iteration_s": 0.10400000000000001,
+  "per_iteration_s_by_seed": [
+   0.104,
+   0.10400000000000001,
+   0.106
+  ],
+  "collection_s": 0.033,
+  "learning_s": 0.071,
+  "loop_s": 16.304,
+  "process_wall_s": 20.005744266090915,
+  "iterations_to_threshold": 37,
+  "iterations_to_threshold_by_seed": [
+   42,
+   33,
+   37
+  ],
+  "time_to_threshold_s": 3.9219999999999997,
+  "time_to_threshold_cumulative_s": 4.587000000000002,
+  "eval_return_by_seed": [
+   4.945823856833158,
+   4.942402420158032,
+   4.952054199377017
+  ],
+  "eval_return_mean": 4.946760158789402,
+  "eval_return_spread": 0.009651779218984302,
+  "final_train_return": 4.942,
+  "contended_seeds": []
+ },
+ "torch_analytic_compiled": {
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "per_iteration_s": 0.094,
+  "per_iteration_s_by_seed": [
+   0.094,
+   0.094,
+   0.094
+  ],
+  "collection_s": 0.022,
+  "learning_s": 0.072,
+  "loop_s": 14.739,
+  "process_wall_s": 20.854408628074452,
+  "iterations_to_threshold": 36,
+  "iterations_to_threshold_by_seed": [
+   39,
+   32,
+   36
+  ],
+  "time_to_threshold_s": 3.384,
+  "time_to_threshold_cumulative_s": 4.017000000000002,
+  "eval_return_by_seed": [
+   4.934494236109458,
+   4.936315640796238,
+   4.952732365552947
+  ],
+  "eval_return_mean": 4.941180747486214,
+  "eval_return_spread": 0.018238129443489015,
+  "final_train_return": 4.94,
+  "contended_seeds": []
+ },
+ "sram": {
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "per_iteration_s": 0.0004922743225097656,
+  "per_iteration_s_by_seed": [
+   0.0004923891194661458,
+   0.0004922743225097656,
+   0.0004921079508463542
+  ],
+  "collection_s": null,
+  "learning_s": null,
+  "loop_s": 0.07384114837646484,
+  "process_wall_s": 3.3123233079677448,
+  "iterations_to_threshold": 38,
+  "iterations_to_threshold_by_seed": [
+   44,
+   31,
+   38
+  ],
+  "time_to_threshold_s": 0.01870010213216146,
+  "time_to_threshold_cumulative_s": 0.01870010213216148,
+  "eval_return_by_seed": [
+   4.953429188513837,
+   4.947476108383853,
+   4.9522897743481735
+  ],
+  "eval_return_mean": 4.951065023748622,
+  "eval_return_spread": 0.005953080129984301,
+  "final_train_return": 4.947543252509708,
+  "contended_seeds": []
+ }
+}

@@ -1,0 +1,248 @@
+{
+ "runs_repeated_after_overlapping_other_gpu_jobs": [
+  "envs_262144/sram_s2",
+  "stock_torch_s1",
+  "stock_torch_s3",
+  "stock_warp_s1",
+  "stock_warp_s3",
+  "torch_analytic_compiled_s3",
+  "torch_analytic_s1",
+  "torch_analytic_s3"
+ ],
+ "runs": [
+  {
+   "run": "sram_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "sram_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "sram_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "stock_torch_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "stock_torch_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "stock_torch_s3",
+   "attempts": 4,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "stock_warp_s1",
+   "attempts": 2,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "stock_warp_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "stock_warp_s3",
+   "attempts": 2,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "torch_analytic_compiled_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "torch_analytic_compiled_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "torch_analytic_compiled_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "torch_analytic_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "torch_analytic_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "torch_analytic_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": null
+  },
+  {
+   "run": "envs_1024/sram_s1",
+   "attempts": 2,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_1024/sram_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_1024/sram_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_1024/stock_torch_s1",
+   "attempts": 2,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_1024/stock_torch_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_1024/stock_torch_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_16384/sram_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_16384/sram_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_16384/sram_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_16384/stock_torch_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_16384/stock_torch_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_16384/stock_torch_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_262144/sram_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_262144/sram_s2",
+   "attempts": 8,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_262144/sram_s3",
+   "attempts": 3,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_262144/stock_torch_s1",
+   "attempts": 4,
+   "other_gpu_job_during_kept_attempt": true,
+   "other_gpu_job_seconds": 38.0
+  },
+  {
+   "run": "envs_262144/stock_torch_s2",
+   "attempts": 4,
+   "other_gpu_job_during_kept_attempt": true,
+   "other_gpu_job_seconds": 22.0
+  },
+  {
+   "run": "envs_262144/stock_torch_s3",
+   "attempts": 4,
+   "other_gpu_job_during_kept_attempt": true,
+   "other_gpu_job_seconds": 44.0
+  },
+  {
+   "run": "envs_65536/sram_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_65536/sram_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_65536/sram_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_65536/stock_torch_s1",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_65536/stock_torch_s2",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  },
+  {
+   "run": "envs_65536/stock_torch_s3",
+   "attempts": 1,
+   "other_gpu_job_during_kept_attempt": false,
+   "other_gpu_job_seconds": 0.0
+  }
+ ]
+}

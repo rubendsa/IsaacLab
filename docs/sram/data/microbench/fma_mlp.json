@@ -1,0 +1,176 @@
+{
+ "fp32_peak_TFLOPs_theoretical_at_nominal_clock": 116.95104000000002,
+ "ffma_peak_256": 112.7545835878964,
+ "ffma_peak_512": 112.84683456158466,
+ "mlp_tpe": {
+  "H32_E1": {
+   "TFLOPs": 46.657205099053165,
+   "maxerr": 9.5367431640625e-07,
+   "regs": 85,
+   "spill_bytes": 0,
+   "occ_per_sm": 2,
+   "block": 256
+  },
+  "H32_E2": {
+   "TFLOPs": 70.79816265044352,
+   "maxerr": 9.5367431640625e-07,
+   "regs": 161,
+   "spill_bytes": 0,
+   "occ_per_sm": 3,
+   "block": 128
+  },
+  "H32_E4": {
+   "TFLOPs": 71.53982833565863,
+   "maxerr": 6.258487701416016e-07,
+   "regs": 255,
+   "spill_bytes": 56,
+   "occ_per_sm": 4,
+   "block": 64
+  },
+  "H64_E1": {
+   "TFLOPs": 46.44088943517514,
+   "maxerr": 1.1920928955078125e-06,
+   "regs": 166,
+   "spill_bytes": 0,
+   "occ_per_sm": 3,
+   "block": 128
+  }
+ },
+ "mlp_gemm": {
+  "H32_B256_4x4": {
+   "TFLOPs": 54.92496569567885,
+   "maxerr": 1.430511474609375e-06,
+   "regs": 57,
+   "spill_bytes": 0,
+   "occ_per_sm": 1,
+   "threads": 512,
+   "smem": 69760
+  },
+  "H32_B256_4x8": {
+   "TFLOPs": 53.3458936014836,
+   "maxerr": 1.430511474609375e-06,
+   "regs": 77,
+   "spill_bytes": 0,
+   "occ_per_sm": 1,
+   "threads": 256,
+   "smem": 69760
+  },
+  "H32_B256_8x8": {
+   "TFLOPs": 40.12495332286422,
+   "maxerr": 1.430511474609375e-06,
+   "regs": 121,
+   "spill_bytes": 0,
+   "occ_per_sm": 1,
+   "threads": 128,
+   "smem": 69760
+  },
+  "H32_B128_4x4": {
+   "TFLOPs": 53.89426498805968,
+   "maxerr": 1.430511474609375e-06,
+   "regs": 48,
+   "spill_bytes": 8,
+   "occ_per_sm": 2,
+   "threads": 256,
+   "smem": 36992
+  },
+  "H32_B64_4x4": {
+   "TFLOPs": 59.998871189858065,
+   "maxerr": 1.430511474609375e-06,
+   "regs": 54,
+   "spill_bytes": 0,
+   "occ_per_sm": 4,
+   "threads": 128,
+   "smem": 20608
+  },
+  "H64_B128_4x8": {
+   "TFLOPs": 55.825863293833635,
+   "maxerr": 9.5367431640625e-07,
+   "regs": 79,
+   "spill_bytes": 0,
+   "occ_per_sm": 1,
+   "threads": 256,
+   "smem": 82176
+  },
+  "H64_B128_8x8": {
+   "TFLOPs": 42.3831039736009,
+   "maxerr": 9.5367431640625e-07,
+   "regs": 121,
+   "spill_bytes": 0,
+   "occ_per_sm": 1,
+   "threads": 128,
+   "smem": 82176
+  },
+  "H64_B64_4x4": {
+   "TFLOPs": 58.08121259662294,
+   "maxerr": 9.5367431640625e-07,
+   "regs": 48,
+   "spill_bytes": 8,
+   "occ_per_sm": 2,
+   "threads": 256,
+   "smem": 49408
+  },
+  "H64_B64_4x8": {
+   "TFLOPs": 57.493082682845305,
+   "maxerr": 9.5367431640625e-07,
+   "regs": 72,
+   "spill_bytes": 0,
+   "occ_per_sm": 2,
+   "threads": 128,
+   "smem": 49408
+  },
+  "H128_B32_4x8": {
+   "TFLOPs": 49.84129429047586,
+   "maxerr": 1.0728836059570312e-06,
+   "regs": 79,
+   "spill_bytes": 0,
+   "occ_per_sm": 1,
+   "threads": 128,
+   "smem": 98816
+  },
+  "H128_B32_4x4": {
+   "TFLOPs": 42.43857898431955,
+   "maxerr": 1.0728836059570312e-06,
+   "regs": 48,
+   "spill_bytes": 8,
+   "occ_per_sm": 1,
+   "threads": 256,
+   "smem": 98816
+  }
+ },
+ "mlp_wpe": {
+  "mlp_wpe_shfl": {
+   "TFLOPs": 13.854767571977963,
+   "maxerr": 7.152557373046875e-07,
+   "regs": 46,
+   "occ_per_sm": 5
+  },
+  "mlp_wpe_smem": {
+   "TFLOPs": 40.4543222145052,
+   "maxerr": 8.344650268554688e-07,
+   "regs": 64,
+   "occ_per_sm": 4
+  }
+ },
+ "small_batch_4096": {
+  "thread-per-env (32 thr/CTA, 128 CTAs)": {
+   "ns_per_layer": 1016.0000238101929,
+   "TFLOPs": 8.256503743514816,
+   "maxerr": 9.5367431640625e-07
+  },
+  "warp-per-env shfl (4096 warps)": {
+   "ns_per_layer": 640.0000020221341,
+   "TFLOPs": 13.107199958586694,
+   "maxerr": 9.5367431640625e-07
+  },
+  "warp-per-env smem (4096 warps)": {
+   "ns_per_layer": 200.00000586151145,
+   "TFLOPs": 41.94303877075199,
+   "maxerr": 9.5367431640625e-07
+  },
+  "CTA-GEMM B=32 envs/CTA (128 CTAs x 64 thr)": {
+   "ns_per_layer": 656.0000183526427,
+   "TFLOPs": 12.787511837370984,
+   "maxerr": 9.5367431640625e-07
+  }
+ }
+}

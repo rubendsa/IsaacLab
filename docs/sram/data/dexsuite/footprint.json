@@ -1,0 +1,3644 @@
+{
+ "device": {
+  "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "multiProcessorCount": 188,
+  "maxSharedMemoryPerMultiprocessor(B)": 102400,
+  "maxRegistersPerMultiprocessor(32bit)": 65536,
+  "l2CacheSize(B)": 134217728,
+  "maxPersistingL2CacheSize(B)": 83886080,
+  "totalGlobalMem(B)": 101971460096
+ },
+ "configs": {
+  "state": {
+   "task": "Isaac-Lift-KukaAllegro",
+   "num_envs_measured": [
+    64,
+    256,
+    1024,
+    4096
+   ],
+   "unique_bytes_by_group_by_N": {
+    "env/action_manager": {
+     "64": 23552,
+     "256": 94208,
+     "1024": 376832,
+     "4096": 1507328
+    },
+    "env/command_manager": {
+     "64": 4608,
+     "256": 18432,
+     "1024": 73728,
+     "4096": 294912
+    },
+    "env/curriculum(ADR)": {
+     "64": 256,
+     "256": 1024,
+     "1024": 4096,
+     "4096": 16384
+    },
+    "env/episode_length_buf": {
+     "64": 512,
+     "256": 2048,
+     "1024": 8192,
+     "4096": 32768
+    },
+    "env/event_manager(DR terms, other)": {
+     "64": 88744,
+     "256": 352552,
+     "1024": 1407784,
+     "4096": 5628712
+    },
+    "env/extras": {
+     "64": 48,
+     "256": 48,
+     "1024": 48,
+     "4096": 48
+    },
+    "env/obs_buf(current obs, all groups)": {
+     "64": 408320,
+     "256": 1633280,
+     "1024": 6533120,
+     "4096": 26132480
+    },
+    "env/obs_history(5-frame circular buffers)": {
+     "64": 418560,
+     "256": 1674240,
+     "1024": 6696960,
+     "4096": 26787840
+    },
+    "env/observation_manager(other)": {
+     "64": 98344,
+     "256": 393256,
+     "1024": 1572904,
+     "4096": 6291496
+    },
+    "env/reset_bank(conditional_reset, fixed)": {
+     "64": 5571724,
+     "256": 5574796,
+     "1024": 5587084,
+     "4096": 5636236
+    },
+    "env/reset_bank_success_monitor(fixed)": {
+     "64": 983080,
+     "256": 983080,
+     "1024": 983080,
+     "4096": 983080
+    },
+    "env/reset_buf": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reset_terminated": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reset_time_outs": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reward_buf": {
+     "64": 256,
+     "256": 1024,
+     "1024": 4096,
+     "4096": 16384
+    },
+    "env/reward_manager": {
+     "64": 5736,
+     "256": 22824,
+     "1024": 91176,
+     "4096": 364584
+    },
+    "env/scene.contact_sensors": {
+     "64": 39680,
+     "256": 158720,
+     "1024": 634880,
+     "4096": 2539520
+    },
+    "env/scene.object(rigid object data)": {
+     "64": 19407,
+     "256": 77583,
+     "1024": 310287,
+     "4096": 1241103
+    },
+    "env/scene.other": {
+     "64": 2048,
+     "256": 8192,
+     "1024": 32768,
+     "4096": 131072
+    },
+    "env/scene.robot(articulation data)": {
+     "64": 583732,
+     "256": 2331700,
+     "1024": 9323572,
+     "4096": 37291060
+    },
+    "env/scene.table(rigid object data)": {
+     "64": 19407,
+     "256": 77583,
+     "1024": 310287,
+     "4096": 1241103
+    },
+    "env/sim": {
+     "64": 0,
+     "256": 0,
+     "1024": 0,
+     "4096": 0
+    },
+    "env/termination_manager": {
+     "64": 1920,
+     "256": 7680,
+     "1024": 30720,
+     "4096": 122880
+    },
+    "render/shape_bvh(on newton model)": {
+     "64": 89916,
+     "256": 359484,
+     "1024": 1437756,
+     "4096": 5750844
+    },
+    "sim/misc(manager/sim-context)": {
+     "64": 111905,
+     "256": 447521,
+     "1024": 1789985,
+     "4096": 7159841
+    },
+    "sim/mjw_data:input(per-step)": {
+     "64": 71424,
+     "256": 285696,
+     "1024": 1142784,
+     "4096": 4571136
+    },
+    "sim/mjw_data:scratch:contact(nconmax-sized)": {
+     "64": 1945600,
+     "256": 7782400,
+     "1024": 31129600,
+     "4096": 124518400
+    },
+    "sim/mjw_data:scratch:efc(njmax-sized)": {
+     "64": 3874816,
+     "256": 15499264,
+     "1024": 61997056,
+     "4096": 247988224
+    },
+    "sim/mjw_data:scratch:island": {
+     "64": 272640,
+     "256": 1090560,
+     "1024": 4362240,
+     "4096": 17448960
+    },
+    "sim/mjw_data:scratch:kinematics/dynamics/other": {
+     "64": 1148164,
+     "256": 4592644,
+     "1024": 18370564,
+     "4096": 73482244
+    },
+    "sim/mjw_data:scratch:mass-matrix/factor": {
+     "64": 324352,
+     "256": 1297408,
+     "1024": 5189632,
+     "4096": 20758528
+    },
+    "sim/mjw_data:state": {
+     "64": 30208,
+     "256": 120832,
+     "1024": 483328,
+     "4096": 1933312
+    },
+    "sim/mjw_model": {
+     "64": 1184310,
+     "256": 4558134,
+     "1024": 18053430,
+     "4096": 72034614
+    },
+    "sim/mjw_solver_other": {
+     "64": 112548,
+     "256": 446628,
+     "1024": 1782948,
+     "4096": 7128228
+    },
+    "sim/newton_collision_pipeline": {
+     "64": 435360,
+     "256": 1740960,
+     "1024": 20775080,
+     "4096": 83099816
+    },
+    "sim/newton_contacts(rigid_contact_max buffers)": {
+     "64": 480000016,
+     "256": 480000016,
+     "1024": 480000016,
+     "4096": 480000016
+    },
+    "sim/newton_control": {
+     "64": 36352,
+     "256": 145408,
+     "1024": 581632,
+     "4096": 2326528
+    },
+    "sim/newton_model(per-shape/body arrays)": {
+     "64": 1566460,
+     "256": 6050620,
+     "1024": 23987260,
+     "4096": 95733820
+    },
+    "sim/newton_model.meshes(shared geometry)": {
+     "64": 41576,
+     "256": 78440,
+     "1024": 225896,
+     "4096": 815720
+    },
+    "sim/newton_state_0+1": {
+     "64": 348160,
+     "256": 1392640,
+     "1024": 5570560,
+     "4096": 22282240
+    }
+   },
+   "walked_total_by_N": {
+    "64": 499863933,
+    "256": 539301693,
+    "1024": 710864453,
+    "4096": 1383303749
+   },
+   "allocator_after_steps_by_N": {
+    "64": {
+     "warp_mempool_used": 492372368,
+     "warp_mempool_high": 521787028,
+     "torch_allocated": 16195584,
+     "torch_reserved": 62914560,
+     "nvidia_smi_proc_MiB": 1274.0
+    },
+    "256": {
+     "warp_mempool_used": 528576848,
+     "warp_mempool_high": 563010964,
+     "torch_allocated": 19463680,
+     "torch_reserved": 69206016,
+     "nvidia_smi_proc_MiB": 1312.0
+    },
+    "1024": {
+     "warp_mempool_used": 687206488,
+     "warp_mempool_high": 741718428,
+     "torch_allocated": 32594432,
+     "torch_reserved": 75497472,
+     "nvidia_smi_proc_MiB": 1510.0
+    },
+    "4096": {
+     "warp_mempool_used": 1307913304,
+     "warp_mempool_high": 1442736540,
+     "torch_allocated": 87812608,
+     "torch_reserved": 153092096,
+     "nvidia_smi_proc_MiB": 2384.0
+    }
+   },
+   "unattributed_allocator_minus_walked_by_N": {
+    "64": 8704019,
+    "256": 8738835,
+    "1024": 8936467,
+    "4096": 12422163
+   },
+   "walk_coverage_of_allocators_by_N": {
+    "64": 0.9828852389031387,
+    "256": 0.9840544000789664,
+    "1024": 0.9875848074770451,
+    "4096": 0.9910998549978915
+   },
+   "fits": {
+    "env/action_manager": {
+     "slope_B_per_env": 368.00000000000006,
+     "fixed_B": 1.0006398653649766e-10,
+     "max_abs_resid_B": 2.3283064365386963e-10,
+     "marginal_1024_4096_B_per_env": 368.0
+    },
+    "env/command_manager": {
+     "slope_B_per_env": 72.00000000000001,
+     "fixed_B": 8.117146688472594e-12,
+     "max_abs_resid_B": 5.820766091346741e-11,
+     "marginal_1024_4096_B_per_env": 72.0
+    },
+    "env/curriculum(ADR)": {
+     "slope_B_per_env": 4.000000000000002,
+     "fixed_B": 1.283003180330392e-12,
+     "max_abs_resid_B": 7.275957614183426e-12,
+     "marginal_1024_4096_B_per_env": 4.0
+    },
+    "env/episode_length_buf": {
+     "slope_B_per_env": 8.000000000000004,
+     "fixed_B": 2.566006360660784e-12,
+     "max_abs_resid_B": 1.4551915228366852e-11,
+     "marginal_1024_4096_B_per_env": 8.0
+    },
+    "env/event_manager(DR terms, other)": {
+     "slope_B_per_env": 1374.0000000000002,
+     "fixed_B": 808.0000000001189,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1374.0
+    },
+    "env/extras": {
+     "slope_B_per_env": 8.499210833263141e-18,
+     "fixed_B": 47.99999999999998,
+     "max_abs_resid_B": 2.1316282072803006e-14,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/obs_buf(current obs, all groups)": {
+     "slope_B_per_env": 6380.000000000002,
+     "fixed_B": 5.022706837545495e-10,
+     "max_abs_resid_B": 7.450580596923828e-09,
+     "marginal_1024_4096_B_per_env": 6380.0
+    },
+    "env/obs_history(5-frame circular buffers)": {
+     "slope_B_per_env": 6540.000000000001,
+     "fixed_B": -1.293559464457991e-10,
+     "max_abs_resid_B": 3.725290298461914e-09,
+     "marginal_1024_4096_B_per_env": 6540.0
+    },
+    "env/observation_manager(other)": {
+     "slope_B_per_env": 1536.0000000000005,
+     "fixed_B": 40.000000000079986,
+     "max_abs_resid_B": 1.862645149230957e-09,
+     "marginal_1024_4096_B_per_env": 1536.0
+    },
+    "env/reset_bank(conditional_reset, fixed)": {
+     "slope_B_per_env": 16.000000000000888,
+     "fixed_B": 5570699.999999997,
+     "max_abs_resid_B": 2.7939677238464355e-09,
+     "marginal_1024_4096_B_per_env": 16.0
+    },
+    "env/reset_bank_success_monitor(fixed)": {
+     "slope_B_per_env": 8.246524056120938e-14,
+     "fixed_B": 983079.9999999999,
+     "max_abs_resid_B": 2.3283064365386963e-10,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/reset_buf": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reset_terminated": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reset_time_outs": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reward_buf": {
+     "slope_B_per_env": 4.000000000000002,
+     "fixed_B": 1.283003180330392e-12,
+     "max_abs_resid_B": 7.275957614183426e-12,
+     "marginal_1024_4096_B_per_env": 4.0
+    },
+    "env/reward_manager": {
+     "slope_B_per_env": 89.00000000000003,
+     "fixed_B": 40.00000000001236,
+     "max_abs_resid_B": 1.1641532182693481e-10,
+     "marginal_1024_4096_B_per_env": 89.0
+    },
+    "env/scene.contact_sensors": {
+     "slope_B_per_env": 620.0000000000001,
+     "fixed_B": 4.460330928137196e-11,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 620.0
+    },
+    "env/scene.object(rigid object data)": {
+     "slope_B_per_env": 303.0000000000001,
+     "fixed_B": 15.000000000082085,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 303.0
+    },
+    "env/scene.other": {
+     "slope_B_per_env": 32.000000000000014,
+     "fixed_B": 1.0264025442643136e-11,
+     "max_abs_resid_B": 5.820766091346741e-11,
+     "marginal_1024_4096_B_per_env": 32.0
+    },
+    "env/scene.robot(articulation data)": {
+     "slope_B_per_env": 9104.000000000004,
+     "fixed_B": 1076.0000000044313,
+     "max_abs_resid_B": 2.2351741790771484e-08,
+     "marginal_1024_4096_B_per_env": 9104.0
+    },
+    "env/scene.table(rigid object data)": {
+     "slope_B_per_env": 303.0000000000001,
+     "fixed_B": 15.000000000082085,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 303.0
+    },
+    "env/sim": {
+     "slope_B_per_env": 0.0,
+     "fixed_B": 0.0,
+     "max_abs_resid_B": 0.0,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/termination_manager": {
+     "slope_B_per_env": 30.000000000000007,
+     "fixed_B": 7.37598748126402e-12,
+     "max_abs_resid_B": 4.3655745685100555e-11,
+     "marginal_1024_4096_B_per_env": 30.0
+    },
+    "render/shape_bvh(on newton model)": {
+     "slope_B_per_env": 1404.0000000000002,
+     "fixed_B": 60.000000000030475,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1404.0
+    },
+    "sim/misc(manager/sim-context)": {
+     "slope_B_per_env": 1748.0000000000005,
+     "fixed_B": 33.000000000201915,
+     "max_abs_resid_B": 1.862645149230957e-09,
+     "marginal_1024_4096_B_per_env": 1748.0
+    },
+    "sim/mjw_data:input(per-step)": {
+     "slope_B_per_env": 1116.0000000000002,
+     "fixed_B": 4.2535398653314334e-10,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1116.0
+    },
+    "sim/mjw_data:scratch:contact(nconmax-sized)": {
+     "slope_B_per_env": 30400.000000000004,
+     "fixed_B": 8.81626423040235e-09,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 30400.0
+    },
+    "sim/mjw_data:scratch:efc(njmax-sized)": {
+     "slope_B_per_env": 60544.000000000015,
+     "fixed_B": 8.827864949824986e-09,
+     "max_abs_resid_B": 5.960464477539063e-08,
+     "marginal_1024_4096_B_per_env": 60544.0
+    },
+    "sim/mjw_data:scratch:island": {
+     "slope_B_per_env": 4260.0,
+     "fixed_B": 4.3633209311355987e-10,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 4260.0
+    },
+    "sim/mjw_data:scratch:kinematics/dynamics/other": {
+     "slope_B_per_env": 17940.000000000007,
+     "fixed_B": 4.00000000990264,
+     "max_abs_resid_B": 4.470348358154297e-08,
+     "marginal_1024_4096_B_per_env": 17940.0
+    },
+    "sim/mjw_data:scratch:mass-matrix/factor": {
+     "slope_B_per_env": 5068.000000000001,
+     "fixed_B": 1.3874322013768693e-09,
+     "max_abs_resid_B": 3.725290298461914e-09,
+     "marginal_1024_4096_B_per_env": 5068.0
+    },
+    "sim/mjw_data:state": {
+     "slope_B_per_env": 472.0000000000001,
+     "fixed_B": 1.3042668374121883e-10,
+     "max_abs_resid_B": 6.984919309616089e-10,
+     "marginal_1024_4096_B_per_env": 472.0
+    },
+    "sim/mjw_model": {
+     "slope_B_per_env": 17572.000000000004,
+     "fixed_B": 59702.00000000144,
+     "max_abs_resid_B": 1.4901161193847656e-08,
+     "marginal_1024_4096_B_per_env": 17572.0
+    },
+    "sim/mjw_solver_other": {
+     "slope_B_per_env": 1740.0000000000002,
+     "fixed_B": 1188.0000000000632,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1740.0
+    },
+    "sim/newton_collision_pipeline": {
+     "slope_B_per_env": 20757.733172373435,
+     "fixed_B": -1717713.1144278527,
+     "max_abs_resid_B": 1855306.577699747,
+     "marginal_1024_4096_B_per_env": 20288.0
+    },
+    "sim/newton_contacts(rigid_contact_max buffers)": {
+     "slope_B_per_env": 6.703125830644893e-11,
+     "fixed_B": 480000015.99999994,
+     "max_abs_resid_B": 2.384185791015625e-07,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "sim/newton_control": {
+     "slope_B_per_env": 568.0000000000001,
+     "fixed_B": 1.7320027513019876e-10,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 568.0
+    },
+    "sim/newton_model(per-shape/body arrays)": {
+     "slope_B_per_env": 23355.000000000007,
+     "fixed_B": 71739.99999999981,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 23355.0
+    },
+    "sim/newton_model.meshes(shared geometry)": {
+     "slope_B_per_env": 192.00000000000009,
+     "fixed_B": 29288.00000000005,
+     "max_abs_resid_B": 3.4924596548080444e-10,
+     "marginal_1024_4096_B_per_env": 192.0
+    },
+    "sim/newton_state_0+1": {
+     "slope_B_per_env": 5440.000000000002,
+     "fixed_B": 1.5292166252052895e-09,
+     "max_abs_resid_B": 7.450580596923828e-09,
+     "marginal_1024_4096_B_per_env": 5440.0
+    }
+   },
+   "fits_supergroup": {
+    "env": {
+     "slope_B_per_env": 26786.000000000007,
+     "fixed_B": 6555821.999999998,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 26786.0
+    },
+    "render": {
+     "slope_B_per_env": 1404.0000000000002,
+     "fixed_B": 60.000000000030475,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1404.0
+    },
+    "sim": {
+     "slope_B_per_env": 191172.73317237356,
+     "fixed_B": 478444257.8855719,
+     "max_abs_resid_B": 1855306.577699542,
+     "marginal_1024_4096_B_per_env": 190703.0
+    }
+   },
+   "mdp": {
+    "obs_dims": {
+     "policy": [
+      170
+     ],
+     "proprio": [
+      465
+     ],
+     "perception": [
+      960
+     ]
+    },
+    "obs_dtypes": {
+     "policy": "torch.float32",
+     "proprio": "torch.float32",
+     "perception": "torch.float32"
+    },
+    "obs_terms": {
+     "policy": {
+      "object_quat_b": [
+       20
+      ],
+      "target_object_pose_b": [
+       35
+      ],
+      "actions": [
+       115
+      ]
+     },
+     "proprio": {
+      "joint_pos": [
+       115
+      ],
+      "joint_vel": [
+       115
+      ],
+      "hand_tips_state_b": [
+       175
+      ],
+      "contact": [
+       60
+      ]
+     },
+     "perception": {
+      "object_point_cloud": [
+       960
+      ]
+     }
+    },
+    "obs_group_history": {
+     "policy": 5,
+     "proprio": 5,
+     "perception": 5
+    },
+    "action_dim": 23,
+    "physics_dt": 0.008333333333333333,
+    "decimation": 4,
+    "substeps": 2,
+    "solver_dt": 0.004166666666666667,
+    "control_dt": 0.03333333333333333,
+    "mjwarp_steps_per_env_step": 8,
+    "episode_length_s": 12.0,
+    "max_episode_length": 360,
+    "reward_terms": [
+     "action_l2",
+     "fingers_to_object",
+     "position_tracking",
+     "success",
+     "early_termination",
+     "good_finger_contact",
+     "contact_count"
+    ],
+    "termination_terms": [
+     "time_out",
+     "object_out_of_bound",
+     "abnormal_robot"
+    ],
+    "event_terms": {
+     "startup": [
+      "robot_physics_material",
+      "object_physics_material",
+      "object_physics_inertia",
+      "joint_stiffness_and_damping",
+      "joint_friction",
+      "object_scale_mass",
+      "finger_closing_speed"
+     ],
+     "reset": [
+      "variable_gravity",
+      "conditional_reset"
+     ]
+    },
+    "curriculum_terms": [
+     "adr",
+     "joint_pos_unoise_min_adr",
+     "joint_pos_unoise_max_adr",
+     "joint_vel_unoise_min_adr",
+     "joint_vel_unoise_max_adr",
+     "hand_tips_pos_unoise_min_adr",
+     "hand_tips_pos_unoise_max_adr",
+     "object_quat_unoise_min_adr",
+     "object_quat_unoise_max_adr",
+     "object_obs_unoise_min_adr",
+     "object_obs_unoise_max_adr",
+     "oob_adr",
+     "gravity_adr"
+    ],
+    "camera_cfgs": {},
+    "solver_cfg": {
+     "njmax": 300,
+     "nconmax": 200,
+     "iterations": 100,
+     "ls_iterations": 50,
+     "solver": "newton",
+     "integrator": "implicitfast",
+     "cone": "pyramidal",
+     "impratio": 1.0,
+     "use_mujoco_contacts": false,
+     "tolerance": 1e-06,
+     "ccd_iterations": 35,
+     "update_data_interval": 2
+    },
+    "collision_cfg": {
+     "broad_phase": "explicit",
+     "reduce_contacts": true,
+     "rigid_contact_max": 4000000,
+     "max_triangle_pairs": 1000000,
+     "soft_contact_max": null,
+     "soft_contact_margin": 0.01,
+     "enable_rigid_soft_full_surface_contact": false,
+     "requires_grad": null,
+     "sdf_hydroelastic_config": null
+    }
+   },
+   "model_counts": {
+    "mjw": {
+     "nbody_incl_world": 33,
+     "njnt": 25,
+     "nq": 37,
+     "nv": 35,
+     "nu": 46,
+     "ngeom": 25,
+     "nM": 222,
+     "nC": 222,
+     "ntree": 3,
+     "nexclude": 334,
+     "nmesh": 1,
+     "geom_types": {
+      "mjGEOM_PLANE": 1,
+      "mjGEOM_CAPSULE": 9,
+      "mjGEOM_BOX": 14,
+      "mjGEOM_MESH": 1
+     },
+     "jnt_types": {
+      "mjJNT_FREE": 2,
+      "mjJNT_HINGE": 23
+     },
+     "jnt_limited": 23,
+     "jacobian": "sparse",
+     "cone": "pyramidal",
+     "condim": {
+      "3": 25
+     },
+     "nv_pad": 48,
+     "njmax_per_world": 300,
+     "nconmax_per_world": 200,
+     "njmax_nnz_per_world": 5146,
+     "batched_model_bytes_per_world": 17504
+    },
+    "newton": {
+     "bodies_per_world": 32.0,
+     "joints_per_world": 32.0,
+     "dofs_per_world": 35.0,
+     "coords_per_world": 37.0,
+     "articulations_per_world": 3.0,
+     "shapes_per_world": 24,
+     "collide_shapes_per_world": 24,
+     "visual_only_shapes_per_world": 0,
+     "visible_shapes_per_world": 2,
+     "collide_type_hist": {
+      "BOX": 14,
+      "CAPSULE": 9,
+      "CONVEX_MESH": 1
+     },
+     "visual_only_type_hist": {},
+     "global_shapes": {
+      "PLANE": 1
+     },
+     "candidate_contact_pairs_per_world": 281.0,
+     "rigid_contact_max_total": 4000000,
+     "unique_mesh_sources": 16,
+     "unique_mesh_total_verts": 626,
+     "unique_mesh_total_tris": 1188,
+     "visible_tris_per_world_mean_max": [
+      74.25,
+      124
+     ],
+     "collide_mesh_verts_per_world_mean_max": [
+      39.125,
+      64
+     ],
+     "bvh_enabled_shapes_total": 8192,
+     "object_prototype_groups": 16
+    }
+   },
+   "contact_stats_native_config_at_maxN": {
+    "nacon_total": {
+     "max": 44813,
+     "mean": 42964.032258064515,
+     "last": 43430
+    },
+    "nacon_max_per_world": {
+     "max": 40,
+     "mean": 32.61290322580645,
+     "last": 31
+    },
+    "nefc_max": {
+     "max": 59,
+     "mean": 39.74193548387097,
+     "last": 35
+    },
+    "nefc_mean": {
+     "max": 24.119384765625,
+     "mean": 23.396893901209676,
+     "last": 23.47998046875
+    },
+    "niter_max": {
+     "max": 7,
+     "mean": 5.838709677419355,
+     "last": 5
+    },
+    "niter_mean": {
+     "max": 1.623779296875,
+     "mean": 1.5700132308467742,
+     "last": 1.59814453125
+    },
+    "newton_contacts_total": {
+     "max": 44813,
+     "mean": 42964.032258064515,
+     "last": 43430
+    },
+    "newton_contacts_max_per_world": {
+     "max": 40,
+     "mean": 32.61290322580645,
+     "last": 31
+    },
+    "newton_contacts_mean_per_world": {
+     "max": 10.940673828125,
+     "mean": 10.489265688004032,
+     "last": 10.60302734375
+    }
+   },
+   "renderer_info": {},
+   "t_make_s_by_N": {
+    "64": 5.963640213012695,
+    "256": 5.8737804889678955,
+    "1024": 6.262077808380127,
+    "4096": 8.909758567810059
+   },
+   "t_first_reset_s_by_N": {
+    "64": 15.750285863876343,
+    "256": 4.614135980606079,
+    "1024": 2.0921270847320557,
+    "4096": 2.1229851245880127
+   }
+  },
+  "rgb64": {
+   "task": "Isaac-Lift-KukaAllegro-Camera presets=single_camera,rgb64",
+   "num_envs_measured": [
+    64,
+    256,
+    1024,
+    4096
+   ],
+   "unique_bytes_by_group_by_N": {
+    "env/action_manager": {
+     "64": 23552,
+     "256": 94208,
+     "1024": 376832,
+     "4096": 1507328
+    },
+    "env/command_manager": {
+     "64": 4608,
+     "256": 18432,
+     "1024": 73728,
+     "4096": 294912
+    },
+    "env/curriculum(ADR)": {
+     "64": 256,
+     "256": 1024,
+     "1024": 4096,
+     "4096": 16384
+    },
+    "env/episode_length_buf": {
+     "64": 512,
+     "256": 2048,
+     "1024": 8192,
+     "4096": 32768
+    },
+    "env/event_manager(DR terms, other)": {
+     "64": 88744,
+     "256": 352552,
+     "1024": 1407784,
+     "4096": 5628712
+    },
+    "env/extras": {
+     "64": 48,
+     "256": 48,
+     "1024": 48,
+     "4096": 48
+    },
+    "env/obs_buf(current obs, all groups)": {
+     "64": 1194752,
+     "256": 4779008,
+     "1024": 19116032,
+     "4096": 76464128
+    },
+    "env/obs_history(5-frame circular buffers)": {
+     "64": 418560,
+     "256": 1674240,
+     "1024": 6696960,
+     "4096": 26787840
+    },
+    "env/observation_manager(other)": {
+     "64": 98344,
+     "256": 393256,
+     "1024": 1572904,
+     "4096": 6291496
+    },
+    "env/reset_bank(conditional_reset, fixed)": {
+     "64": 5571724,
+     "256": 5574796,
+     "1024": 5587084,
+     "4096": 5636236
+    },
+    "env/reset_bank_success_monitor(fixed)": {
+     "64": 983080,
+     "256": 983080,
+     "1024": 983080,
+     "4096": 983080
+    },
+    "env/reset_buf": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reset_terminated": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reset_time_outs": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reward_buf": {
+     "64": 256,
+     "256": 1024,
+     "1024": 4096,
+     "4096": 16384
+    },
+    "env/reward_manager": {
+     "64": 5736,
+     "256": 22824,
+     "1024": 91176,
+     "4096": 364584
+    },
+    "env/scene.camera(other)": {
+     "64": 14084,
+     "256": 56324,
+     "1024": 225284,
+     "4096": 901124
+    },
+    "env/scene.contact_sensors": {
+     "64": 39680,
+     "256": 158720,
+     "1024": 634880,
+     "4096": 2539520
+    },
+    "env/scene.object(rigid object data)": {
+     "64": 19407,
+     "256": 77583,
+     "1024": 310287,
+     "4096": 1241103
+    },
+    "env/scene.other": {
+     "64": 2824,
+     "256": 11272,
+     "1024": 45064,
+     "4096": 180232
+    },
+    "env/scene.robot(articulation data)": {
+     "64": 583732,
+     "256": 2331700,
+     "1024": 9323572,
+     "4096": 37291060
+    },
+    "env/scene.table(rigid object data)": {
+     "64": 19407,
+     "256": 77583,
+     "1024": 310287,
+     "4096": 1241103
+    },
+    "env/sim": {
+     "64": 0,
+     "256": 0,
+     "1024": 0,
+     "4096": 0
+    },
+    "env/termination_manager": {
+     "64": 1920,
+     "256": 7680,
+     "1024": 30720,
+     "4096": 122880
+    },
+    "render/camera_output_buffers(+pose/intrinsics)": {
+     "64": 1054720,
+     "256": 4218880,
+     "1024": 16875520,
+     "4096": 67502080
+    },
+    "render/context+scene_data_provider": {
+     "64": 0,
+     "256": 0,
+     "1024": 0,
+     "4096": 0
+    },
+    "render/ray_field+camera_transforms": {
+     "64": 126710,
+     "256": 211190,
+     "1024": 549110,
+     "4096": 1900790
+    },
+    "render/shape_bvh(on newton model)": {
+     "64": 233360,
+     "256": 933008,
+     "1024": 3731600,
+     "4096": 14925968
+    },
+    "sim/misc(manager/sim-context)": {
+     "64": 167233,
+     "256": 668737,
+     "1024": 2674753,
+     "4096": 10698817
+    },
+    "sim/mjw_data:input(per-step)": {
+     "64": 71424,
+     "256": 285696,
+     "1024": 1142784,
+     "4096": 4571136
+    },
+    "sim/mjw_data:scratch:contact(nconmax-sized)": {
+     "64": 1945600,
+     "256": 7782400,
+     "1024": 31129600,
+     "4096": 124518400
+    },
+    "sim/mjw_data:scratch:efc(njmax-sized)": {
+     "64": 3874816,
+     "256": 15499264,
+     "1024": 61997056,
+     "4096": 247988224
+    },
+    "sim/mjw_data:scratch:island": {
+     "64": 272640,
+     "256": 1090560,
+     "1024": 4362240,
+     "4096": 17448960
+    },
+    "sim/mjw_data:scratch:kinematics/dynamics/other": {
+     "64": 1148164,
+     "256": 4592644,
+     "1024": 18370564,
+     "4096": 73482244
+    },
+    "sim/mjw_data:scratch:mass-matrix/factor": {
+     "64": 324352,
+     "256": 1297408,
+     "1024": 5189632,
+     "4096": 20758528
+    },
+    "sim/mjw_data:state": {
+     "64": 30208,
+     "256": 120832,
+     "1024": 483328,
+     "4096": 1933312
+    },
+    "sim/mjw_model": {
+     "64": 1184310,
+     "256": 4558134,
+     "1024": 18053430,
+     "4096": 72034614
+    },
+    "sim/mjw_solver_other": {
+     "64": 119464,
+     "256": 474280,
+     "1024": 1893544,
+     "4096": 7570600
+    },
+    "sim/newton_collision_pipeline": {
+     "64": 601344,
+     "256": 2404608,
+     "1024": 23429384,
+     "4096": 93716744
+    },
+    "sim/newton_contacts(rigid_contact_max buffers)": {
+     "64": 480000016,
+     "256": 480000016,
+     "1024": 480000016,
+     "4096": 480000016
+    },
+    "sim/newton_control": {
+     "64": 36352,
+     "256": 145408,
+     "1024": 581632,
+     "4096": 2326528
+    },
+    "sim/newton_model(per-shape/body arrays)": {
+     "64": 2033290,
+     "256": 7917130,
+     "1024": 31452490,
+     "4096": 125593930
+    },
+    "sim/newton_model.meshes(shared geometry)": {
+     "64": 15032704,
+     "256": 15111040,
+     "1024": 15424384,
+     "4096": 16677760
+    },
+    "sim/newton_state_0+1": {
+     "64": 348160,
+     "256": 1392640,
+     "1024": 5570560,
+     "4096": 22282240
+    }
+   },
+   "walked_total_by_N": {
+    "64": 517676285,
+    "256": 565322045,
+    "1024": 769716805,
+    "4096": 1573484101
+   },
+   "allocator_after_steps_by_N": {
+    "64": {
+     "warp_mempool_used": 532763760,
+     "warp_mempool_high": 562178420,
+     "torch_allocated": 16982016,
+     "torch_reserved": 65011712,
+     "nvidia_smi_proc_MiB": 1312.0
+    },
+    "256": {
+     "warp_mempool_used": 575236272,
+     "warp_mempool_high": 609670388,
+     "torch_allocated": 22609408,
+     "torch_reserved": 69206016,
+     "nvidia_smi_proc_MiB": 1380.0
+    },
+    "1024": {
+     "warp_mempool_used": 758938040,
+     "warp_mempool_high": 813449980,
+     "torch_allocated": 45177344,
+     "torch_reserved": 92274688,
+     "nvidia_smi_proc_MiB": 1594.0
+    },
+    "4096": {
+     "warp_mempool_used": 1479933368,
+     "warp_mempool_high": 1614756604,
+     "torch_allocated": 135817728,
+     "torch_reserved": 333447168,
+     "nvidia_smi_proc_MiB": 2720.0
+    }
+   },
+   "unattributed_allocator_minus_walked_by_N": {
+    "64": 32069491,
+    "256": 32523635,
+    "1024": 34398579,
+    "4096": 42266995
+   },
+   "walk_coverage_of_allocators_by_N": {
+    "64": 0.9416648705637349,
+    "256": 0.9455986116684827,
+    "1024": 0.957221836959657,
+    "4096": 0.9738406521247998
+   },
+   "fits": {
+    "env/action_manager": {
+     "slope_B_per_env": 368.00000000000006,
+     "fixed_B": 1.0006398653649766e-10,
+     "max_abs_resid_B": 2.3283064365386963e-10,
+     "marginal_1024_4096_B_per_env": 368.0
+    },
+    "env/command_manager": {
+     "slope_B_per_env": 72.00000000000001,
+     "fixed_B": 8.117146688472594e-12,
+     "max_abs_resid_B": 5.820766091346741e-11,
+     "marginal_1024_4096_B_per_env": 72.0
+    },
+    "env/curriculum(ADR)": {
+     "slope_B_per_env": 4.000000000000002,
+     "fixed_B": 1.283003180330392e-12,
+     "max_abs_resid_B": 7.275957614183426e-12,
+     "marginal_1024_4096_B_per_env": 4.0
+    },
+    "env/episode_length_buf": {
+     "slope_B_per_env": 8.000000000000004,
+     "fixed_B": 2.566006360660784e-12,
+     "max_abs_resid_B": 1.4551915228366852e-11,
+     "marginal_1024_4096_B_per_env": 8.0
+    },
+    "env/event_manager(DR terms, other)": {
+     "slope_B_per_env": 1374.0000000000002,
+     "fixed_B": 808.0000000001189,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1374.0
+    },
+    "env/extras": {
+     "slope_B_per_env": 8.499210833263141e-18,
+     "fixed_B": 47.99999999999998,
+     "max_abs_resid_B": 2.1316282072803006e-14,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/obs_buf(current obs, all groups)": {
+     "slope_B_per_env": 18668.0,
+     "fixed_B": 1.3763846922109179e-09,
+     "max_abs_resid_B": 1.3969838619232178e-09,
+     "marginal_1024_4096_B_per_env": 18668.0
+    },
+    "env/obs_history(5-frame circular buffers)": {
+     "slope_B_per_env": 6540.000000000001,
+     "fixed_B": -1.293559464457991e-10,
+     "max_abs_resid_B": 3.725290298461914e-09,
+     "marginal_1024_4096_B_per_env": 6540.0
+    },
+    "env/observation_manager(other)": {
+     "slope_B_per_env": 1536.0000000000005,
+     "fixed_B": 40.000000000079986,
+     "max_abs_resid_B": 1.862645149230957e-09,
+     "marginal_1024_4096_B_per_env": 1536.0
+    },
+    "env/reset_bank(conditional_reset, fixed)": {
+     "slope_B_per_env": 16.000000000000888,
+     "fixed_B": 5570699.999999997,
+     "max_abs_resid_B": 2.7939677238464355e-09,
+     "marginal_1024_4096_B_per_env": 16.0
+    },
+    "env/reset_bank_success_monitor(fixed)": {
+     "slope_B_per_env": 8.246524056120938e-14,
+     "fixed_B": 983079.9999999999,
+     "max_abs_resid_B": 2.3283064365386963e-10,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/reset_buf": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reset_terminated": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reset_time_outs": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reward_buf": {
+     "slope_B_per_env": 4.000000000000002,
+     "fixed_B": 1.283003180330392e-12,
+     "max_abs_resid_B": 7.275957614183426e-12,
+     "marginal_1024_4096_B_per_env": 4.0
+    },
+    "env/reward_manager": {
+     "slope_B_per_env": 89.00000000000003,
+     "fixed_B": 40.00000000001236,
+     "max_abs_resid_B": 1.1641532182693481e-10,
+     "marginal_1024_4096_B_per_env": 89.0
+    },
+    "env/scene.camera(other)": {
+     "slope_B_per_env": 220.00000000000009,
+     "fixed_B": 4.000000000106277,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 220.0
+    },
+    "env/scene.contact_sensors": {
+     "slope_B_per_env": 620.0000000000001,
+     "fixed_B": 4.460330928137196e-11,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 620.0
+    },
+    "env/scene.object(rigid object data)": {
+     "slope_B_per_env": 303.0000000000001,
+     "fixed_B": 15.000000000082085,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 303.0
+    },
+    "env/scene.other": {
+     "slope_B_per_env": 44.0,
+     "fixed_B": 8.000000000000167,
+     "max_abs_resid_B": 0.0,
+     "marginal_1024_4096_B_per_env": 44.0
+    },
+    "env/scene.robot(articulation data)": {
+     "slope_B_per_env": 9104.000000000004,
+     "fixed_B": 1076.0000000044313,
+     "max_abs_resid_B": 2.2351741790771484e-08,
+     "marginal_1024_4096_B_per_env": 9104.0
+    },
+    "env/scene.table(rigid object data)": {
+     "slope_B_per_env": 303.0000000000001,
+     "fixed_B": 15.000000000082085,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 303.0
+    },
+    "env/sim": {
+     "slope_B_per_env": 0.0,
+     "fixed_B": 0.0,
+     "max_abs_resid_B": 0.0,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/termination_manager": {
+     "slope_B_per_env": 30.000000000000007,
+     "fixed_B": 7.37598748126402e-12,
+     "max_abs_resid_B": 4.3655745685100555e-11,
+     "marginal_1024_4096_B_per_env": 30.0
+    },
+    "render/camera_output_buffers(+pose/intrinsics)": {
+     "slope_B_per_env": 16480.000000000004,
+     "fixed_B": 5.489659262115458e-09,
+     "max_abs_resid_B": 1.4901161193847656e-08,
+     "marginal_1024_4096_B_per_env": 16480.0
+    },
+    "render/context+scene_data_provider": {
+     "slope_B_per_env": 0.0,
+     "fixed_B": 0.0,
+     "max_abs_resid_B": 0.0,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "render/ray_field+camera_transforms": {
+     "slope_B_per_env": 440.0000000000001,
+     "fixed_B": 98550.00000000016,
+     "max_abs_resid_B": 6.984919309616089e-10,
+     "marginal_1024_4096_B_per_env": 440.0
+    },
+    "render/shape_bvh(on newton model)": {
+     "slope_B_per_env": 3644.0000000000005,
+     "fixed_B": 144.00000000053885,
+     "max_abs_resid_B": 1.862645149230957e-09,
+     "marginal_1024_4096_B_per_env": 3644.0
+    },
+    "sim/misc(manager/sim-context)": {
+     "slope_B_per_env": 2612.000000000001,
+     "fixed_B": 65.00000000014167,
+     "max_abs_resid_B": 3.725290298461914e-09,
+     "marginal_1024_4096_B_per_env": 2612.0
+    },
+    "sim/mjw_data:input(per-step)": {
+     "slope_B_per_env": 1116.0000000000002,
+     "fixed_B": 4.2535398653314334e-10,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1116.0
+    },
+    "sim/mjw_data:scratch:contact(nconmax-sized)": {
+     "slope_B_per_env": 30400.000000000004,
+     "fixed_B": 8.81626423040235e-09,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 30400.0
+    },
+    "sim/mjw_data:scratch:efc(njmax-sized)": {
+     "slope_B_per_env": 60544.000000000015,
+     "fixed_B": 8.827864949824986e-09,
+     "max_abs_resid_B": 5.960464477539063e-08,
+     "marginal_1024_4096_B_per_env": 60544.0
+    },
+    "sim/mjw_data:scratch:island": {
+     "slope_B_per_env": 4260.0,
+     "fixed_B": 4.3633209311355987e-10,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 4260.0
+    },
+    "sim/mjw_data:scratch:kinematics/dynamics/other": {
+     "slope_B_per_env": 17940.000000000007,
+     "fixed_B": 4.00000000990264,
+     "max_abs_resid_B": 4.470348358154297e-08,
+     "marginal_1024_4096_B_per_env": 17940.0
+    },
+    "sim/mjw_data:scratch:mass-matrix/factor": {
+     "slope_B_per_env": 5068.000000000001,
+     "fixed_B": 1.3874322013768693e-09,
+     "max_abs_resid_B": 3.725290298461914e-09,
+     "marginal_1024_4096_B_per_env": 5068.0
+    },
+    "sim/mjw_data:state": {
+     "slope_B_per_env": 472.0000000000001,
+     "fixed_B": 1.3042668374121883e-10,
+     "max_abs_resid_B": 6.984919309616089e-10,
+     "marginal_1024_4096_B_per_env": 472.0
+    },
+    "sim/mjw_model": {
+     "slope_B_per_env": 17572.000000000004,
+     "fixed_B": 59702.00000000144,
+     "max_abs_resid_B": 1.4901161193847656e-08,
+     "marginal_1024_4096_B_per_env": 17572.0
+    },
+    "sim/mjw_solver_other": {
+     "slope_B_per_env": 1848.0000000000005,
+     "fixed_B": 1192.000000000535,
+     "max_abs_resid_B": 2.7939677238464355e-09,
+     "marginal_1024_4096_B_per_env": 1848.0
+    },
+    "sim/newton_collision_pipeline": {
+     "slope_B_per_env": 23349.73317237343,
+     "fixed_B": -1717617.1144278562,
+     "max_abs_resid_B": 1855306.5776997423,
+     "marginal_1024_4096_B_per_env": 22880.0
+    },
+    "sim/newton_contacts(rigid_contact_max buffers)": {
+     "slope_B_per_env": 6.703125830644893e-11,
+     "fixed_B": 480000015.99999994,
+     "max_abs_resid_B": 2.384185791015625e-07,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "sim/newton_control": {
+     "slope_B_per_env": 568.0000000000001,
+     "fixed_B": 1.7320027513019876e-10,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 568.0
+    },
+    "sim/newton_model(per-shape/body arrays)": {
+     "slope_B_per_env": 30645.000000000007,
+     "fixed_B": 72010.00000000653,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 30645.0
+    },
+    "sim/newton_model.meshes(shared geometry)": {
+     "slope_B_per_env": 408.0000000000005,
+     "fixed_B": 15006591.999999994,
+     "max_abs_resid_B": 5.587935447692871e-09,
+     "marginal_1024_4096_B_per_env": 408.0
+    },
+    "sim/newton_state_0+1": {
+     "slope_B_per_env": 5440.000000000002,
+     "fixed_B": 1.5292166252052895e-09,
+     "max_abs_resid_B": 7.450580596923828e-09,
+     "marginal_1024_4096_B_per_env": 5440.0
+    }
+   },
+   "fits_supergroup": {
+    "env": {
+     "slope_B_per_env": 39306.00000000001,
+     "fixed_B": 6555833.999999998,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 39306.0
+    },
+    "render": {
+     "slope_B_per_env": 20564.000000000007,
+     "fixed_B": 98694.00000001189,
+     "max_abs_resid_B": 4.470348358154297e-08,
+     "marginal_1024_4096_B_per_env": 20564.0
+    },
+    "sim": {
+     "slope_B_per_env": 202242.73317237353,
+     "fixed_B": 493421963.88557196,
+     "max_abs_resid_B": 1855306.577699542,
+     "marginal_1024_4096_B_per_env": 201773.0
+    }
+   },
+   "mdp": {
+    "obs_dims": {
+     "policy": [
+      170
+     ],
+     "proprio": [
+      465
+     ],
+     "perception": [
+      960
+     ],
+     "base_image": [
+      3,
+      64,
+      64
+     ]
+    },
+    "obs_dtypes": {
+     "policy": "torch.float32",
+     "proprio": "torch.float32",
+     "perception": "torch.float32",
+     "base_image": "torch.uint8"
+    },
+    "obs_terms": {
+     "policy": {
+      "object_quat_b": [
+       20
+      ],
+      "target_object_pose_b": [
+       35
+      ],
+      "actions": [
+       115
+      ]
+     },
+     "proprio": {
+      "joint_pos": [
+       115
+      ],
+      "joint_vel": [
+       115
+      ],
+      "hand_tips_state_b": [
+       175
+      ],
+      "contact": [
+       60
+      ]
+     },
+     "perception": {
+      "object_point_cloud": [
+       960
+      ]
+     },
+     "base_image": {
+      "object_observation_b": [
+       3,
+       64,
+       64
+      ]
+     }
+    },
+    "obs_group_history": {
+     "policy": 5,
+     "proprio": 5,
+     "perception": 5,
+     "base_image": null
+    },
+    "action_dim": 23,
+    "physics_dt": 0.008333333333333333,
+    "decimation": 4,
+    "substeps": 2,
+    "solver_dt": 0.004166666666666667,
+    "control_dt": 0.03333333333333333,
+    "mjwarp_steps_per_env_step": 8,
+    "episode_length_s": 12.0,
+    "max_episode_length": 360,
+    "reward_terms": [
+     "action_l2",
+     "fingers_to_object",
+     "position_tracking",
+     "success",
+     "early_termination",
+     "good_finger_contact",
+     "contact_count"
+    ],
+    "termination_terms": [
+     "time_out",
+     "object_out_of_bound",
+     "abnormal_robot"
+    ],
+    "event_terms": {
+     "startup": [
+      "robot_physics_material",
+      "object_physics_material",
+      "object_physics_inertia",
+      "joint_stiffness_and_damping",
+      "joint_friction",
+      "object_scale_mass",
+      "finger_closing_speed"
+     ],
+     "reset": [
+      "variable_gravity",
+      "conditional_reset"
+     ]
+    },
+    "curriculum_terms": [
+     "adr",
+     "joint_pos_unoise_min_adr",
+     "joint_pos_unoise_max_adr",
+     "joint_vel_unoise_min_adr",
+     "joint_vel_unoise_max_adr",
+     "hand_tips_pos_unoise_min_adr",
+     "hand_tips_pos_unoise_max_adr",
+     "object_quat_unoise_min_adr",
+     "object_quat_unoise_max_adr",
+     "object_obs_unoise_min_adr",
+     "object_obs_unoise_max_adr",
+     "oob_adr",
+     "gravity_adr"
+    ],
+    "camera_cfgs": {
+     "base_camera": {
+      "data_types": [
+       "rgb"
+      ],
+      "width": 64,
+      "height": 64,
+      "renderer": "NewtonWarpRendererCfg"
+     }
+    },
+    "solver_cfg": {
+     "njmax": 300,
+     "nconmax": 200,
+     "iterations": 100,
+     "ls_iterations": 50,
+     "solver": "newton",
+     "integrator": "implicitfast",
+     "cone": "pyramidal",
+     "impratio": 1.0,
+     "use_mujoco_contacts": false,
+     "tolerance": 1e-06,
+     "ccd_iterations": 35,
+     "update_data_interval": 2
+    },
+    "collision_cfg": {
+     "broad_phase": "explicit",
+     "reduce_contacts": true,
+     "rigid_contact_max": 4000000,
+     "max_triangle_pairs": 1000000,
+     "soft_contact_max": null,
+     "soft_contact_margin": 0.01,
+     "enable_rigid_soft_full_surface_contact": false,
+     "requires_grad": null,
+     "sdf_hydroelastic_config": null
+    }
+   },
+   "model_counts": {
+    "mjw": {
+     "nbody_incl_world": 33,
+     "njnt": 25,
+     "nq": 37,
+     "nv": 35,
+     "nu": 46,
+     "ngeom": 25,
+     "nM": 222,
+     "nC": 222,
+     "ntree": 3,
+     "nexclude": 334,
+     "nmesh": 1,
+     "geom_types": {
+      "mjGEOM_PLANE": 1,
+      "mjGEOM_CAPSULE": 9,
+      "mjGEOM_BOX": 14,
+      "mjGEOM_MESH": 1
+     },
+     "jnt_types": {
+      "mjJNT_FREE": 2,
+      "mjJNT_HINGE": 23
+     },
+     "jnt_limited": 23,
+     "jacobian": "sparse",
+     "cone": "pyramidal",
+     "condim": {
+      "3": 25
+     },
+     "nv_pad": 48,
+     "njmax_per_world": 300,
+     "nconmax_per_world": 200,
+     "njmax_nnz_per_world": 5146,
+     "batched_model_bytes_per_world": 17504
+    },
+    "newton": {
+     "bodies_per_world": 32.0,
+     "joints_per_world": 32.0,
+     "dofs_per_world": 35.0,
+     "coords_per_world": 37.0,
+     "articulations_per_world": 3.0,
+     "shapes_per_world": 51,
+     "collide_shapes_per_world": 24,
+     "visual_only_shapes_per_world": 27,
+     "visible_shapes_per_world": 28,
+     "collide_type_hist": {
+      "BOX": 14,
+      "CAPSULE": 9,
+      "CONVEX_MESH": 1
+     },
+     "visual_only_type_hist": {
+      "MESH": 27
+     },
+     "global_shapes": {
+      "MESH": 1,
+      "PLANE": 1
+     },
+     "candidate_contact_pairs_per_world": 281.0,
+     "rigid_contact_max_total": 4000000,
+     "unique_mesh_sources": 59,
+     "unique_mesh_total_verts": 550567,
+     "unique_mesh_total_tris": 237734,
+     "visible_tris_per_world_mean_max": [
+      207556.5,
+      209464
+     ],
+     "collide_mesh_verts_per_world_mean_max": [
+      39.125,
+      64
+     ],
+     "bvh_enabled_shapes_total": 114689,
+     "object_prototype_groups": 16
+    }
+   },
+   "contact_stats_native_config_at_maxN": {
+    "nacon_total": {
+     "max": 44811,
+     "mean": 42938.67741935484,
+     "last": 43495
+    },
+    "nacon_max_per_world": {
+     "max": 44,
+     "mean": 32.32258064516129,
+     "last": 32
+    },
+    "nefc_max": {
+     "max": 59,
+     "mean": 39.74193548387097,
+     "last": 39
+    },
+    "nefc_mean": {
+     "max": 24.103759765625,
+     "mean": 23.397271925403224,
+     "last": 23.482177734375
+    },
+    "niter_max": {
+     "max": 7,
+     "mean": 5.935483870967742,
+     "last": 5
+    },
+    "niter_mean": {
+     "max": 1.62353515625,
+     "mean": 1.570249495967742,
+     "last": 1.602294921875
+    },
+    "newton_contacts_total": {
+     "max": 44811,
+     "mean": 42938.67741935484,
+     "last": 43495
+    },
+    "newton_contacts_max_per_world": {
+     "max": 44,
+     "mean": 32.32258064516129,
+     "last": 32
+    },
+    "newton_contacts_mean_per_world": {
+     "max": 10.940185546875,
+     "mean": 10.483075541834678,
+     "last": 10.618896484375
+    }
+   },
+   "renderer_info": {
+    "base_camera": {
+     "renderer": "NewtonWarpRenderer",
+     "width": 64,
+     "height": 64,
+     "outputs": {
+      "rgba": [
+       4096,
+       64,
+       64,
+       4,
+       "uint8"
+      ],
+      "rgb": [
+       4096,
+       64,
+       64,
+       3,
+       "uint8"
+      ]
+     }
+    }
+   },
+   "t_make_s_by_N": {
+    "64": 7.390111684799194,
+    "256": 9.368333101272583,
+    "1024": 8.668838739395142,
+    "4096": 15.730042934417725
+   },
+   "t_first_reset_s_by_N": {
+    "64": 11.150408029556274,
+    "256": 7.474052667617798,
+    "1024": 1.8310532569885254,
+    "4096": 1.703047752380371
+   }
+  },
+  "depth64": {
+   "task": "Isaac-Lift-KukaAllegro-Camera presets=single_camera,depth64",
+   "num_envs_measured": [
+    64,
+    256,
+    1024,
+    4096
+   ],
+   "unique_bytes_by_group_by_N": {
+    "env/action_manager": {
+     "64": 23552,
+     "256": 94208,
+     "1024": 376832,
+     "4096": 1507328
+    },
+    "env/command_manager": {
+     "64": 4608,
+     "256": 18432,
+     "1024": 73728,
+     "4096": 294912
+    },
+    "env/curriculum(ADR)": {
+     "64": 256,
+     "256": 1024,
+     "1024": 4096,
+     "4096": 16384
+    },
+    "env/episode_length_buf": {
+     "64": 512,
+     "256": 2048,
+     "1024": 8192,
+     "4096": 32768
+    },
+    "env/event_manager(DR terms, other)": {
+     "64": 88744,
+     "256": 352552,
+     "1024": 1407784,
+     "4096": 5628712
+    },
+    "env/extras": {
+     "64": 48,
+     "256": 48,
+     "1024": 48,
+     "4096": 48
+    },
+    "env/obs_buf(current obs, all groups)": {
+     "64": 1456896,
+     "256": 5827584,
+     "1024": 23310336,
+     "4096": 93241344
+    },
+    "env/obs_history(5-frame circular buffers)": {
+     "64": 418560,
+     "256": 1674240,
+     "1024": 6696960,
+     "4096": 26787840
+    },
+    "env/observation_manager(other)": {
+     "64": 98344,
+     "256": 393256,
+     "1024": 1572904,
+     "4096": 6291496
+    },
+    "env/reset_bank(conditional_reset, fixed)": {
+     "64": 5571724,
+     "256": 5574796,
+     "1024": 5587084,
+     "4096": 5636236
+    },
+    "env/reset_bank_success_monitor(fixed)": {
+     "64": 983080,
+     "256": 983080,
+     "1024": 983080,
+     "4096": 983080
+    },
+    "env/reset_buf": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reset_terminated": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reset_time_outs": {
+     "64": 64,
+     "256": 256,
+     "1024": 1024,
+     "4096": 4096
+    },
+    "env/reward_buf": {
+     "64": 256,
+     "256": 1024,
+     "1024": 4096,
+     "4096": 16384
+    },
+    "env/reward_manager": {
+     "64": 5736,
+     "256": 22824,
+     "1024": 91176,
+     "4096": 364584
+    },
+    "env/scene.camera(other)": {
+     "64": 14084,
+     "256": 56324,
+     "1024": 225284,
+     "4096": 901124
+    },
+    "env/scene.contact_sensors": {
+     "64": 39680,
+     "256": 158720,
+     "1024": 634880,
+     "4096": 2539520
+    },
+    "env/scene.object(rigid object data)": {
+     "64": 19407,
+     "256": 77583,
+     "1024": 310287,
+     "4096": 1241103
+    },
+    "env/scene.other": {
+     "64": 2824,
+     "256": 11272,
+     "1024": 45064,
+     "4096": 180232
+    },
+    "env/scene.robot(articulation data)": {
+     "64": 583732,
+     "256": 2331700,
+     "1024": 9323572,
+     "4096": 37291060
+    },
+    "env/scene.table(rigid object data)": {
+     "64": 19407,
+     "256": 77583,
+     "1024": 310287,
+     "4096": 1241103
+    },
+    "env/sim": {
+     "64": 0,
+     "256": 0,
+     "1024": 0,
+     "4096": 0
+    },
+    "env/termination_manager": {
+     "64": 1920,
+     "256": 7680,
+     "1024": 30720,
+     "4096": 122880
+    },
+    "render/camera_output_buffers(+pose/intrinsics)": {
+     "64": 1054720,
+     "256": 4218880,
+     "1024": 16875520,
+     "4096": 67502080
+    },
+    "render/context+scene_data_provider": {
+     "64": 0,
+     "256": 0,
+     "1024": 0,
+     "4096": 0
+    },
+    "render/ray_field+camera_transforms": {
+     "64": 126710,
+     "256": 211190,
+     "1024": 549110,
+     "4096": 1900790
+    },
+    "render/shape_bvh(on newton model)": {
+     "64": 233360,
+     "256": 933008,
+     "1024": 3731600,
+     "4096": 14925968
+    },
+    "sim/misc(manager/sim-context)": {
+     "64": 167233,
+     "256": 668737,
+     "1024": 2674753,
+     "4096": 10698817
+    },
+    "sim/mjw_data:input(per-step)": {
+     "64": 71424,
+     "256": 285696,
+     "1024": 1142784,
+     "4096": 4571136
+    },
+    "sim/mjw_data:scratch:contact(nconmax-sized)": {
+     "64": 1945600,
+     "256": 7782400,
+     "1024": 31129600,
+     "4096": 124518400
+    },
+    "sim/mjw_data:scratch:efc(njmax-sized)": {
+     "64": 3874816,
+     "256": 15499264,
+     "1024": 61997056,
+     "4096": 247988224
+    },
+    "sim/mjw_data:scratch:island": {
+     "64": 272640,
+     "256": 1090560,
+     "1024": 4362240,
+     "4096": 17448960
+    },
+    "sim/mjw_data:scratch:kinematics/dynamics/other": {
+     "64": 1148164,
+     "256": 4592644,
+     "1024": 18370564,
+     "4096": 73482244
+    },
+    "sim/mjw_data:scratch:mass-matrix/factor": {
+     "64": 324352,
+     "256": 1297408,
+     "1024": 5189632,
+     "4096": 20758528
+    },
+    "sim/mjw_data:state": {
+     "64": 30208,
+     "256": 120832,
+     "1024": 483328,
+     "4096": 1933312
+    },
+    "sim/mjw_model": {
+     "64": 1184310,
+     "256": 4558134,
+     "1024": 18053430,
+     "4096": 72034614
+    },
+    "sim/mjw_solver_other": {
+     "64": 119464,
+     "256": 474280,
+     "1024": 1893544,
+     "4096": 7570600
+    },
+    "sim/newton_collision_pipeline": {
+     "64": 601344,
+     "256": 2404608,
+     "1024": 23429384,
+     "4096": 93716744
+    },
+    "sim/newton_contacts(rigid_contact_max buffers)": {
+     "64": 480000016,
+     "256": 480000016,
+     "1024": 480000016,
+     "4096": 480000016
+    },
+    "sim/newton_control": {
+     "64": 36352,
+     "256": 145408,
+     "1024": 581632,
+     "4096": 2326528
+    },
+    "sim/newton_model(per-shape/body arrays)": {
+     "64": 2033290,
+     "256": 7917130,
+     "1024": 31452490,
+     "4096": 125593930
+    },
+    "sim/newton_model.meshes(shared geometry)": {
+     "64": 15032704,
+     "256": 15111040,
+     "1024": 15424384,
+     "4096": 16677760
+    },
+    "sim/newton_state_0+1": {
+     "64": 348160,
+     "256": 1392640,
+     "1024": 5570560,
+     "4096": 22282240
+    }
+   },
+   "walked_total_by_N": {
+    "64": 517938429,
+    "256": 566370621,
+    "1024": 773911109,
+    "4096": 1590261317
+   },
+   "allocator_after_steps_by_N": {
+    "64": {
+     "warp_mempool_used": 532763760,
+     "warp_mempool_high": 562178420,
+     "torch_allocated": 17244160,
+     "torch_reserved": 67108864,
+     "nvidia_smi_proc_MiB": 1314.0
+    },
+    "256": {
+     "warp_mempool_used": 575236272,
+     "warp_mempool_high": 609670388,
+     "torch_allocated": 23657984,
+     "torch_reserved": 69206016,
+     "nvidia_smi_proc_MiB": 1380.0
+    },
+    "1024": {
+     "warp_mempool_used": 758938040,
+     "warp_mempool_high": 813449980,
+     "torch_allocated": 49371648,
+     "torch_reserved": 104857600,
+     "nvidia_smi_proc_MiB": 1606.0
+    },
+    "4096": {
+     "warp_mempool_used": 1479933368,
+     "warp_mempool_high": 1614756604,
+     "torch_allocated": 152594944,
+     "torch_reserved": 350224384,
+     "nvidia_smi_proc_MiB": 2736.0
+    }
+   },
+   "unattributed_allocator_minus_walked_by_N": {
+    "64": 32069491,
+    "256": 32523635,
+    "1024": 34398579,
+    "4096": 42266995
+   },
+   "walk_coverage_of_allocators_by_N": {
+    "64": 0.9416926741709465,
+    "256": 0.9456938605201783,
+    "1024": 0.9574438120553617,
+    "4096": 0.9741094872969039
+   },
+   "fits": {
+    "env/action_manager": {
+     "slope_B_per_env": 368.00000000000006,
+     "fixed_B": 1.0006398653649766e-10,
+     "max_abs_resid_B": 2.3283064365386963e-10,
+     "marginal_1024_4096_B_per_env": 368.0
+    },
+    "env/command_manager": {
+     "slope_B_per_env": 72.00000000000001,
+     "fixed_B": 8.117146688472594e-12,
+     "max_abs_resid_B": 5.820766091346741e-11,
+     "marginal_1024_4096_B_per_env": 72.0
+    },
+    "env/curriculum(ADR)": {
+     "slope_B_per_env": 4.000000000000002,
+     "fixed_B": 1.283003180330392e-12,
+     "max_abs_resid_B": 7.275957614183426e-12,
+     "marginal_1024_4096_B_per_env": 4.0
+    },
+    "env/episode_length_buf": {
+     "slope_B_per_env": 8.000000000000004,
+     "fixed_B": 2.566006360660784e-12,
+     "max_abs_resid_B": 1.4551915228366852e-11,
+     "marginal_1024_4096_B_per_env": 8.0
+    },
+    "env/event_manager(DR terms, other)": {
+     "slope_B_per_env": 1374.0000000000002,
+     "fixed_B": 808.0000000001189,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1374.0
+    },
+    "env/extras": {
+     "slope_B_per_env": 8.499210833263141e-18,
+     "fixed_B": 47.99999999999998,
+     "max_abs_resid_B": 2.1316282072803006e-14,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/obs_buf(current obs, all groups)": {
+     "slope_B_per_env": 22764.000000000004,
+     "fixed_B": 7.291086226302641e-09,
+     "max_abs_resid_B": 1.4901161193847656e-08,
+     "marginal_1024_4096_B_per_env": 22764.0
+    },
+    "env/obs_history(5-frame circular buffers)": {
+     "slope_B_per_env": 6540.000000000001,
+     "fixed_B": -1.293559464457991e-10,
+     "max_abs_resid_B": 3.725290298461914e-09,
+     "marginal_1024_4096_B_per_env": 6540.0
+    },
+    "env/observation_manager(other)": {
+     "slope_B_per_env": 1536.0000000000005,
+     "fixed_B": 40.000000000079986,
+     "max_abs_resid_B": 1.862645149230957e-09,
+     "marginal_1024_4096_B_per_env": 1536.0
+    },
+    "env/reset_bank(conditional_reset, fixed)": {
+     "slope_B_per_env": 16.000000000000888,
+     "fixed_B": 5570699.999999997,
+     "max_abs_resid_B": 2.7939677238464355e-09,
+     "marginal_1024_4096_B_per_env": 16.0
+    },
+    "env/reset_bank_success_monitor(fixed)": {
+     "slope_B_per_env": 8.246524056120938e-14,
+     "fixed_B": 983079.9999999999,
+     "max_abs_resid_B": 2.3283064365386963e-10,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/reset_buf": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reset_terminated": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reset_time_outs": {
+     "slope_B_per_env": 1.0000000000000004,
+     "fixed_B": 3.20750795082598e-13,
+     "max_abs_resid_B": 1.8189894035458565e-12,
+     "marginal_1024_4096_B_per_env": 1.0
+    },
+    "env/reward_buf": {
+     "slope_B_per_env": 4.000000000000002,
+     "fixed_B": 1.283003180330392e-12,
+     "max_abs_resid_B": 7.275957614183426e-12,
+     "marginal_1024_4096_B_per_env": 4.0
+    },
+    "env/reward_manager": {
+     "slope_B_per_env": 89.00000000000003,
+     "fixed_B": 40.00000000001236,
+     "max_abs_resid_B": 1.1641532182693481e-10,
+     "marginal_1024_4096_B_per_env": 89.0
+    },
+    "env/scene.camera(other)": {
+     "slope_B_per_env": 220.00000000000009,
+     "fixed_B": 4.000000000106277,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 220.0
+    },
+    "env/scene.contact_sensors": {
+     "slope_B_per_env": 620.0000000000001,
+     "fixed_B": 4.460330928137196e-11,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 620.0
+    },
+    "env/scene.object(rigid object data)": {
+     "slope_B_per_env": 303.0000000000001,
+     "fixed_B": 15.000000000082085,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 303.0
+    },
+    "env/scene.other": {
+     "slope_B_per_env": 44.0,
+     "fixed_B": 8.000000000000167,
+     "max_abs_resid_B": 0.0,
+     "marginal_1024_4096_B_per_env": 44.0
+    },
+    "env/scene.robot(articulation data)": {
+     "slope_B_per_env": 9104.000000000004,
+     "fixed_B": 1076.0000000044313,
+     "max_abs_resid_B": 2.2351741790771484e-08,
+     "marginal_1024_4096_B_per_env": 9104.0
+    },
+    "env/scene.table(rigid object data)": {
+     "slope_B_per_env": 303.0000000000001,
+     "fixed_B": 15.000000000082085,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 303.0
+    },
+    "env/sim": {
+     "slope_B_per_env": 0.0,
+     "fixed_B": 0.0,
+     "max_abs_resid_B": 0.0,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "env/termination_manager": {
+     "slope_B_per_env": 30.000000000000007,
+     "fixed_B": 7.37598748126402e-12,
+     "max_abs_resid_B": 4.3655745685100555e-11,
+     "marginal_1024_4096_B_per_env": 30.0
+    },
+    "render/camera_output_buffers(+pose/intrinsics)": {
+     "slope_B_per_env": 16480.000000000004,
+     "fixed_B": 5.489659262115458e-09,
+     "max_abs_resid_B": 1.4901161193847656e-08,
+     "marginal_1024_4096_B_per_env": 16480.0
+    },
+    "render/context+scene_data_provider": {
+     "slope_B_per_env": 0.0,
+     "fixed_B": 0.0,
+     "max_abs_resid_B": 0.0,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "render/ray_field+camera_transforms": {
+     "slope_B_per_env": 440.0000000000001,
+     "fixed_B": 98550.00000000016,
+     "max_abs_resid_B": 6.984919309616089e-10,
+     "marginal_1024_4096_B_per_env": 440.0
+    },
+    "render/shape_bvh(on newton model)": {
+     "slope_B_per_env": 3644.0000000000005,
+     "fixed_B": 144.00000000053885,
+     "max_abs_resid_B": 1.862645149230957e-09,
+     "marginal_1024_4096_B_per_env": 3644.0
+    },
+    "sim/misc(manager/sim-context)": {
+     "slope_B_per_env": 2612.000000000001,
+     "fixed_B": 65.00000000014167,
+     "max_abs_resid_B": 3.725290298461914e-09,
+     "marginal_1024_4096_B_per_env": 2612.0
+    },
+    "sim/mjw_data:input(per-step)": {
+     "slope_B_per_env": 1116.0000000000002,
+     "fixed_B": 4.2535398653314334e-10,
+     "max_abs_resid_B": 9.313225746154785e-10,
+     "marginal_1024_4096_B_per_env": 1116.0
+    },
+    "sim/mjw_data:scratch:contact(nconmax-sized)": {
+     "slope_B_per_env": 30400.000000000004,
+     "fixed_B": 8.81626423040235e-09,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 30400.0
+    },
+    "sim/mjw_data:scratch:efc(njmax-sized)": {
+     "slope_B_per_env": 60544.000000000015,
+     "fixed_B": 8.827864949824986e-09,
+     "max_abs_resid_B": 5.960464477539063e-08,
+     "marginal_1024_4096_B_per_env": 60544.0
+    },
+    "sim/mjw_data:scratch:island": {
+     "slope_B_per_env": 4260.0,
+     "fixed_B": 4.3633209311355987e-10,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 4260.0
+    },
+    "sim/mjw_data:scratch:kinematics/dynamics/other": {
+     "slope_B_per_env": 17940.000000000007,
+     "fixed_B": 4.00000000990264,
+     "max_abs_resid_B": 4.470348358154297e-08,
+     "marginal_1024_4096_B_per_env": 17940.0
+    },
+    "sim/mjw_data:scratch:mass-matrix/factor": {
+     "slope_B_per_env": 5068.000000000001,
+     "fixed_B": 1.3874322013768693e-09,
+     "max_abs_resid_B": 3.725290298461914e-09,
+     "marginal_1024_4096_B_per_env": 5068.0
+    },
+    "sim/mjw_data:state": {
+     "slope_B_per_env": 472.0000000000001,
+     "fixed_B": 1.3042668374121883e-10,
+     "max_abs_resid_B": 6.984919309616089e-10,
+     "marginal_1024_4096_B_per_env": 472.0
+    },
+    "sim/mjw_model": {
+     "slope_B_per_env": 17572.000000000004,
+     "fixed_B": 59702.00000000144,
+     "max_abs_resid_B": 1.4901161193847656e-08,
+     "marginal_1024_4096_B_per_env": 17572.0
+    },
+    "sim/mjw_solver_other": {
+     "slope_B_per_env": 1848.0000000000005,
+     "fixed_B": 1192.000000000535,
+     "max_abs_resid_B": 2.7939677238464355e-09,
+     "marginal_1024_4096_B_per_env": 1848.0
+    },
+    "sim/newton_collision_pipeline": {
+     "slope_B_per_env": 23349.73317237343,
+     "fixed_B": -1717617.1144278562,
+     "max_abs_resid_B": 1855306.5776997423,
+     "marginal_1024_4096_B_per_env": 22880.0
+    },
+    "sim/newton_contacts(rigid_contact_max buffers)": {
+     "slope_B_per_env": 6.703125830644893e-11,
+     "fixed_B": 480000015.99999994,
+     "max_abs_resid_B": 2.384185791015625e-07,
+     "marginal_1024_4096_B_per_env": 0.0
+    },
+    "sim/newton_control": {
+     "slope_B_per_env": 568.0000000000001,
+     "fixed_B": 1.7320027513019876e-10,
+     "max_abs_resid_B": 4.656612873077393e-10,
+     "marginal_1024_4096_B_per_env": 568.0
+    },
+    "sim/newton_model(per-shape/body arrays)": {
+     "slope_B_per_env": 30645.000000000007,
+     "fixed_B": 72010.00000000653,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 30645.0
+    },
+    "sim/newton_model.meshes(shared geometry)": {
+     "slope_B_per_env": 408.0000000000005,
+     "fixed_B": 15006591.999999994,
+     "max_abs_resid_B": 5.587935447692871e-09,
+     "marginal_1024_4096_B_per_env": 408.0
+    },
+    "sim/newton_state_0+1": {
+     "slope_B_per_env": 5440.000000000002,
+     "fixed_B": 1.5292166252052895e-09,
+     "max_abs_resid_B": 7.450580596923828e-09,
+     "marginal_1024_4096_B_per_env": 5440.0
+    }
+   },
+   "fits_supergroup": {
+    "env": {
+     "slope_B_per_env": 43402.00000000001,
+     "fixed_B": 6555834.000000003,
+     "max_abs_resid_B": 2.9802322387695312e-08,
+     "marginal_1024_4096_B_per_env": 43402.0
+    },
+    "render": {
+     "slope_B_per_env": 20564.000000000007,
+     "fixed_B": 98694.00000001189,
+     "max_abs_resid_B": 4.470348358154297e-08,
+     "marginal_1024_4096_B_per_env": 20564.0
+    },
+    "sim": {
+     "slope_B_per_env": 202242.73317237353,
+     "fixed_B": 493421963.88557196,
+     "max_abs_resid_B": 1855306.577699542,
+     "marginal_1024_4096_B_per_env": 201773.0
+    }
+   },
+   "mdp": {
+    "obs_dims": {
+     "policy": [
+      170
+     ],
+     "proprio": [
+      465
+     ],
+     "perception": [
+      960
+     ],
+     "base_image": [
+      1,
+      64,
+      64
+     ]
+    },
+    "obs_dtypes": {
+     "policy": "torch.float32",
+     "proprio": "torch.float32",
+     "perception": "torch.float32",
+     "base_image": "torch.float32"
+    },
+    "obs_terms": {
+     "policy": {
+      "object_quat_b": [
+       20
+      ],
+      "target_object_pose_b": [
+       35
+      ],
+      "actions": [
+       115
+      ]
+     },
+     "proprio": {
+      "joint_pos": [
+       115
+      ],
+      "joint_vel": [
+       115
+      ],
+      "hand_tips_state_b": [
+       175
+      ],
+      "contact": [
+       60
+      ]
+     },
+     "perception": {
+      "object_point_cloud": [
+       960
+      ]
+     },
+     "base_image": {
+      "object_observation_b": [
+       1,
+       64,
+       64
+      ]
+     }
+    },
+    "obs_group_history": {
+     "policy": 5,
+     "proprio": 5,
+     "perception": 5,
+     "base_image": null
+    },
+    "action_dim": 23,
+    "physics_dt": 0.008333333333333333,
+    "decimation": 4,
+    "substeps": 2,
+    "solver_dt": 0.004166666666666667,
+    "control_dt": 0.03333333333333333,
+    "mjwarp_steps_per_env_step": 8,
+    "episode_length_s": 12.0,
+    "max_episode_length": 360,
+    "reward_terms": [
+     "action_l2",
+     "fingers_to_object",
+     "position_tracking",
+     "success",
+     "early_termination",
+     "good_finger_contact",
+     "contact_count"
+    ],
+    "termination_terms": [
+     "time_out",
+     "object_out_of_bound",
+     "abnormal_robot"
+    ],
+    "event_terms": {
+     "startup": [
+      "robot_physics_material",
+      "object_physics_material",
+      "object_physics_inertia",
+      "joint_stiffness_and_damping",
+      "joint_friction",
+      "object_scale_mass",
+      "finger_closing_speed"
+     ],
+     "reset": [
+      "variable_gravity",
+      "conditional_reset"
+     ]
+    },
+    "curriculum_terms": [
+     "adr",
+     "joint_pos_unoise_min_adr",
+     "joint_pos_unoise_max_adr",
+     "joint_vel_unoise_min_adr",
+     "joint_vel_unoise_max_adr",
+     "hand_tips_pos_unoise_min_adr",
+     "hand_tips_pos_unoise_max_adr",
+     "object_quat_unoise_min_adr",
+     "object_quat_unoise_max_adr",
+     "object_obs_unoise_min_adr",
+     "object_obs_unoise_max_adr",
+     "oob_adr",
+     "gravity_adr"
+    ],
+    "camera_cfgs": {
+     "base_camera": {
+      "data_types": [
+       "depth"
+      ],
+      "width": 64,
+      "height": 64,
+      "renderer": "NewtonWarpRendererCfg"
+     }
+    },
+    "solver_cfg": {
+     "njmax": 300,
+     "nconmax": 200,
+     "iterations": 100,
+     "ls_iterations": 50,
+     "solver": "newton",
+     "integrator": "implicitfast",
+     "cone": "pyramidal",
+     "impratio": 1.0,
+     "use_mujoco_contacts": false,
+     "tolerance": 1e-06,
+     "ccd_iterations": 35,
+     "update_data_interval": 2
+    },
+    "collision_cfg": {
+     "broad_phase": "explicit",
+     "reduce_contacts": true,
+     "rigid_contact_max": 4000000,
+     "max_triangle_pairs": 1000000,
+     "soft_contact_max": null,
+     "soft_contact_margin": 0.01,
+     "enable_rigid_soft_full_surface_contact": false,
+     "requires_grad": null,
+     "sdf_hydroelastic_config": null
+    }
+   },
+   "model_counts": {
+    "mjw": {
+     "nbody_incl_world": 33,
+     "njnt": 25,
+     "nq": 37,
+     "nv": 35,
+     "nu": 46,
+     "ngeom": 25,
+     "nM": 222,
+     "nC": 222,
+     "ntree": 3,
+     "nexclude": 334,
+     "nmesh": 1,
+     "geom_types": {
+      "mjGEOM_PLANE": 1,
+      "mjGEOM_CAPSULE": 9,
+      "mjGEOM_BOX": 14,
+      "mjGEOM_MESH": 1
+     },
+     "jnt_types": {
+      "mjJNT_FREE": 2,
+      "mjJNT_HINGE": 23
+     },
+     "jnt_limited": 23,
+     "jacobian": "sparse",
+     "cone": "pyramidal",
+     "condim": {
+      "3": 25
+     },
+     "nv_pad": 48,
+     "njmax_per_world": 300,
+     "nconmax_per_world": 200,
+     "njmax_nnz_per_world": 5146,
+     "batched_model_bytes_per_world": 17504
+    },
+    "newton": {
+     "bodies_per_world": 32.0,
+     "joints_per_world": 32.0,
+     "dofs_per_world": 35.0,
+     "coords_per_world": 37.0,
+     "articulations_per_world": 3.0,
+     "shapes_per_world": 51,
+     "collide_shapes_per_world": 24,
+     "visual_only_shapes_per_world": 27,
+     "visible_shapes_per_world": 28,
+     "collide_type_hist": {
+      "BOX": 14,
+      "CAPSULE": 9,
+      "CONVEX_MESH": 1
+     },
+     "visual_only_type_hist": {
+      "MESH": 27
+     },
+     "global_shapes": {
+      "MESH": 1,
+      "PLANE": 1
+     },
+     "candidate_contact_pairs_per_world": 281.0,
+     "rigid_contact_max_total": 4000000,
+     "unique_mesh_sources": 59,
+     "unique_mesh_total_verts": 550567,
+     "unique_mesh_total_tris": 237734,
+     "visible_tris_per_world_mean_max": [
+      207556.5,
+      209464
+     ],
+     "collide_mesh_verts_per_world_mean_max": [
+      39.125,
+      64
+     ],
+     "bvh_enabled_shapes_total": 114689,
+     "object_prototype_groups": 16
+    }
+   },
+   "contact_stats_native_config_at_maxN": {
+    "nacon_total": {
+     "max": 44811,
+     "mean": 42950.290322580644,
+     "last": 43528
+    },
+    "nacon_max_per_world": {
+     "max": 44,
+     "mean": 32.70967741935484,
+     "last": 32
+    },
+    "nefc_max": {
+     "max": 59,
+     "mean": 39.25806451612903,
+     "last": 39
+    },
+    "nefc_mean": {
+     "max": 24.103759765625,
+     "mean": 23.397728704637096,
+     "last": 23.486328125
+    },
+    "niter_max": {
+     "max": 7,
+     "mean": 5.806451612903226,
+     "last": 5
+    },
+    "niter_mean": {
+     "max": 1.6240234375,
+     "mean": 1.5709976688508065,
+     "last": 1.604248046875
+    },
+    "newton_contacts_total": {
+     "max": 44811,
+     "mean": 42950.290322580644,
+     "last": 43528
+    },
+    "newton_contacts_max_per_world": {
+     "max": 44,
+     "mean": 32.70967741935484,
+     "last": 32
+    },
+    "newton_contacts_mean_per_world": {
+     "max": 10.940185546875,
+     "mean": 10.48591072328629,
+     "last": 10.626953125
+    }
+   },
+   "renderer_info": {
+    "base_camera": {
+     "renderer": "NewtonWarpRenderer",
+     "width": 64,
+     "height": 64,
+     "outputs": {
+      "depth": [
+       4096,
+       64,
+       64,
+       1,
+       "float32"
+      ]
+     }
+    }
+   },
+   "t_make_s_by_N": {
+    "64": 8.492779016494751,
+    "256": 7.549981594085693,
+    "1024": 8.629661798477173,
+    "4096": 12.495430707931519
+   },
+   "t_first_reset_s_by_N": {
+    "64": 11.159850597381592,
+    "256": 3.9652273654937744,
+    "1024": 1.9070274829864502,
+    "4096": 1.4131419658660889
+   }
+  }
+ },
+ "tiers_bytes": {
+  "SMEM(188x100KiB=18.4MiB)": 19251200,
+  "registers(188x256KiB=47MiB)": 49283072,
+  "SMEM+registers(65.4MiB)": 68534272,
+  "L2_persisting(80MiB)": 83886080,
+  "L2(128MiB)": 134217728,
+  "DRAM(95GiB total)": 101971460096
+ },
+ "physics_flops": {
+  "source": "state-adrend_1024 (final ADR: full gravity, random Gaussian actions std 1, scale 0.1 rad relative joint targets)",
+  "observed_mean": {
+   "nc": 23.31117650082237,
+   "nefc": 36.65943667763158,
+   "iters": 2.1569952713815788
+  },
+  "observed_max": {
+   "nc": 76,
+   "nefc": 80,
+   "iters": 9
+  },
+  "candidate_pairs_per_world": 281.0,
+  "per_mjwarp_substep_mean": {
+   "kinematics": 5360,
+   "com_pos+cdof": 4680,
+   "crb+M": 4394,
+   "factor_M(LDL)": 1786,
+   "rne+cvel+passive": 7278,
+   "actuation": 552,
+   "smooth_acc(solve)": 1028,
+   "collision(broad+narrow)": 10521.676475123355,
+   "make_constraint": 32724.162623355267,
+   "solver(init)": 3010.160567434211,
+   "solver(iterations)": 154554.87227483647,
+   "integrate(implicitfast)": 2804,
+   "newton<->mjwarp glue": 2000
+  },
+  "per_mjwarp_substep_max": {
+   "kinematics": 5360,
+   "com_pos+cdof": 4680,
+   "crb+M": 4394,
+   "factor_M(LDL)": 1786,
+   "rne+cvel+passive": 7278,
+   "actuation": 552,
+   "smooth_acc(solve)": 1028,
+   "collision(broad+narrow)": 18425.0,
+   "make_constraint": 103922.28571428572,
+   "solver(init)": 6044,
+   "solver(iterations)": 1192137.0000000002,
+   "integrate(implicitfast)": 2804,
+   "newton<->mjwarp glue": 2000
+  },
+  "per_mjwarp_substep_mean_table_static": {
+   "kinematics": 5240,
+   "com_pos+cdof": 4390,
+   "crb+M": 3892,
+   "factor_M(LDL)": 1695,
+   "rne+cvel+passive": 6850,
+   "actuation": 552,
+   "smooth_acc(solve)": 920,
+   "collision(broad+narrow)": 10521.676475123355,
+   "make_constraint": 29475.88419847437,
+   "solver(init)": 2528.2473273026317,
+   "solver(iterations)": 105455.08070784505,
+   "integrate(implicitfast)": 2617,
+   "newton<->mjwarp glue": 1890
+  },
+  "convex_mesh_narrowphase_extra_per_substep_assumed": 44757.45888157895,
+  "mjwarp_substeps_per_env_step": 8,
+  "physics_per_env_step_mean": 2203602.646578626,
+  "physics_per_env_step_max": 11161341.956766918,
+  "native_config_contact_stats(zero_gravity_ADR0)": {
+   "nacon_total": {
+    "max": 44813,
+    "mean": 42964.032258064515,
+    "last": 43430
+   },
+   "nacon_max_per_world": {
+    "max": 40,
+    "mean": 32.61290322580645,
+    "last": 31
+   },
+   "nefc_max": {
+    "max": 59,
+    "mean": 39.74193548387097,
+    "last": 35
+   },
+   "nefc_mean": {
+    "max": 24.119384765625,
+    "mean": 23.396893901209676,
+    "last": 23.47998046875
+   },
+   "niter_max": {
+    "max": 7,
+    "mean": 5.838709677419355,
+    "last": 5
+   },
+   "niter_mean": {
+    "max": 1.623779296875,
+    "mean": 1.5700132308467742,
+    "last": 1.59814453125
+   },
+   "newton_contacts_total": {
+    "max": 44813,
+    "mean": 42964.032258064515,
+    "last": 43430
+   },
+   "newton_contacts_max_per_world": {
+    "max": 40,
+    "mean": 32.61290322580645,
+    "last": 31
+   },
+   "newton_contacts_mean_per_world": {
+    "max": 10.940673828125,
+    "mean": 10.489265688004032,
+    "last": 10.60302734375
+   }
+  },
+  "tflop_per_ppo_iter_4096": 0.2888306060923536
+ },
+ "rsl_rl": {
+  "state": {
+   "num_envs": 4096,
+   "T": 32,
+   "epochs": 5,
+   "mini_batches": 4,
+   "mini_batch_size": 32768,
+   "actor_params": 984366,
+   "actor_cnn_params": 0,
+   "critic_params": 981505,
+   "total_params": 1965871,
+   "learner_bytes_fp32_params_grads_adam": 31454004,
+   "storage_total_bytes": 875167744,
+   "storage_bytes_per_env_per_step": 6677.0,
+   "storage_bytes_per_env_per_step_by_field": {
+    "rewards": 4.0,
+    "actions": 92.0,
+    "dones": 1.0,
+    "values": 4.0,
+    "actions_log_prob": 4.0,
+    "returns": 4.0,
+    "advantages": 4.0,
+    "observations[policy]": 680.0,
+    "observations[proprio]": 1860.0,
+    "observations[perception]": 3840.0,
+    "distribution_params[0]": 92.0,
+    "distribution_params[1]": 92.0
+   },
+   "update_peak_transient_bytes": 1342880256,
+   "forward_macs_total": {
+    "actor": 983424,
+    "critic": 980608
+   },
+   "forward_macs_cnn": 0,
+   "t_update_s_contended": [
+    0.19640984502620995,
+    0.19679069402627647
+   ],
+   "t_act_per_step_ms_contended": 4.564538467093371
+  },
+  "rgb64": {
+   "num_envs": 4096,
+   "T": 32,
+   "epochs": 5,
+   "mini_batches": 8,
+   "mini_batch_size": 16384,
+   "actor_params": 546206,
+   "actor_cnn_params": 20592,
+   "critic_params": 981505,
+   "total_params": 1527711,
+   "learner_bytes_fp32_params_grads_adam": 24443472,
+   "storage_total_bytes": 2485780480,
+   "storage_bytes_per_env_per_step": 18965.0,
+   "storage_bytes_per_env_per_step_by_field": {
+    "rewards": 4.0,
+    "actions": 92.0,
+    "dones": 1.0,
+    "values": 4.0,
+    "actions_log_prob": 4.0,
+    "returns": 4.0,
+    "advantages": 4.0,
+    "observations[policy]": 680.0,
+    "observations[proprio]": 1860.0,
+    "observations[perception]": 3840.0,
+    "observations[base_image]": 12288.0,
+    "distribution_params[0]": 92.0,
+    "distribution_params[1]": 92.0
+   },
+   "update_peak_transient_bytes": 5120967680,
+   "forward_macs_total": {
+    "actor": 1658240,
+    "critic": 980608
+   },
+   "forward_macs_cnn": 1133568,
+   "t_update_s_contended": [
+    1.2197762499563396,
+    0.9730264300014824
+   ],
+   "t_act_per_step_ms_contended": 7.131989681511186
+  },
+  "depth64": {
+   "num_envs": 4096,
+   "T": 32,
+   "epochs": 5,
+   "mini_batches": 8,
+   "mini_batch_size": 16384,
+   "actor_params": 544158,
+   "actor_cnn_params": 18544,
+   "critic_params": 981505,
+   "total_params": 1525663,
+   "learner_bytes_fp32_params_grads_adam": 24410704,
+   "storage_total_bytes": 3022651392,
+   "storage_bytes_per_env_per_step": 23061.0,
+   "storage_bytes_per_env_per_step_by_field": {
+    "rewards": 4.0,
+    "actions": 92.0,
+    "dones": 1.0,
+    "values": 4.0,
+    "actions_log_prob": 4.0,
+    "returns": 4.0,
+    "advantages": 4.0,
+    "observations[policy]": 680.0,
+    "observations[proprio]": 1860.0,
+    "observations[perception]": 3840.0,
+    "observations[base_image]": 16384.0,
+    "distribution_params[0]": 92.0,
+    "distribution_params[1]": 92.0
+   },
+   "update_peak_transient_bytes": 4650439680,
+   "forward_macs_total": {
+    "actor": 1197440,
+    "critic": 980608
+   },
+   "forward_macs_cnn": 672768,
+   "t_update_s_contended": [
+    1.750256504979916,
+    1.7806249069981277
+   ],
+   "t_act_per_step_ms_contended": 12.40962790325284
+  }
+ },
+ "minimal_persistent_state_per_env": {
+  "bytes": {
+   "physics_qpos_qvel": 236,
+   "physics_qacc_warmstart": 116,
+   "obs_history_4_past_frames_raw": 1520,
+   "command_goal_pose_and_resample_timer": 32,
+   "episode_counters_flags": 16,
+   "domain_rand_params": 460,
+   "adr_difficulty": 4,
+   "rng_counter_key": 16,
+   "object_type_id": 4,
+   "total": 2404
+  },
+  "raw_frame_words": {
+   "last_action": 23,
+   "joint_pos": 23,
+   "joint_vel": 23,
+   "fingertip_contact_forces": 12,
+   "object_pose": 7,
+   "goal_pose": 7
+  },
+  "notes": [
+   "derived from measured nq/nv/obs terms; assumed design: fp32, table as static geometry (stock MJWarp model has it as a free body: nq 37/nv 35)",
+   "observation histories (stock: 1595 floats/env = 6380 B) are re-derived from the last 4 raw frames: hand-tip poses by FK from joint_pos, object quat / point cloud from object_pose and a shared per-object-type 64-point table (16 types x 768 B), noise from a counter-based RNG",
+   "startup DR values (friction, mass/inertia, gains, joint friction, armature) and per-env gravity kept per env; derived model quantities (invweight0, acc0, subtree mass) recomputed or cached in the fixed per-type tables",
+   "reset bank (16 groups x 1024 states x 85 floats = 5.57 MB) and success monitor are global/fixed, not per env"
+  ],
+  "stock_isaaclab_obs_history_bytes_per_env": 6380
+ },
+ "learner_bytes_fp32(params+grads+adam)": {
+  "state": 31453936,
+  "rgb64": 24443376,
+  "depth64": 24410608
+ },
+ "fixed_lean_bytes": {
+  "reset_bank(16x1024x85 fp32, stock size)": 5570560,
+  "object_point_tables(16 types x 64 pts x 3 fp32)": 12288,
+  "per-type model constants (bodies/geoms/joints, ~17.5 KB batched fields x 16 types, upper bound)": 280064,
+  "collision-proxy render scene (24 primitives + 64-vert hull per type)": 13824
+ },
+ "stock_render_scene_fixed_bytes(visual meshes+native mesh BVH)": {
+  "visual_mesh_arrays_walked": 14977303.999999994,
+  "extra_unattributed_native": 23468766.089552235,
+  "total": 38446070.08955223
+ },
+ "lean_inflight_scratch_per_world_bytes": {
+  "observed_mean(full gravity)": {
+   "nv35_stock_model": 32105.228515625,
+   "nv29_table_static": 28969.40203536184
+  },
+  "observed_max(full gravity)": {
+   "nv35_stock_model": 47096,
+   "nv29_table_static": 42920
+  },
+  "configured_caps(nconmax 200, njmax 300)": {
+   "nv35_stock_model": 105976,
+   "nv29_table_static": 96520
+  }
+ },
+ "working_sets": {
+  "T": 32,
+  "minimal_persistent_state_per_env": 2404,
+  "misc_lean_per_step": 197,
+  "state_frame_lean_fp32": 380,
+  "stock_visual_scene_fixed": 38446070.08955223,
+  "variants": {
+   "stock_rsl_rl_state_task": {
+    "bytes_per_env_step": 6677.0,
+    "description": "RSL-RL 5.5.1 layout, state task (policy+proprio+perception histories fp32)",
+    "provenance": "measured",
+    "per_env_bytes": 216068.0,
+    "rollout_bytes_per_env": 213664.0,
+    "learner_bytes": 31453936,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 258584304.0,
+    "rollout_only_N1024": 218791936.0,
+    "working_set_N4096": 922345200.0,
+    "rollout_only_N4096": 875167744.0,
+    "working_set_N16384": 3577388784.0,
+    "rollout_only_N16384": 3500670976.0,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 89,
+     "registers(188x256KiB=47MiB)": 228,
+     "SMEM+registers(65.4MiB)": 317,
+     "L2_persisting(80MiB)": 388,
+     "L2(128MiB)": 621,
+     "DRAM(95GiB total)": 471941
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 55,
+     "SMEM+registers(65.4MiB)": 144,
+     "L2_persisting(80MiB)": 215,
+     "L2(128MiB)": 448,
+     "DRAM(95GiB total)": 471768
+    }
+   },
+   "stock_rsl_rl_rgb64(uint8)": {
+    "bytes_per_env_step": 18965.0,
+    "description": "RSL-RL layout, camera task: all 4 obs groups incl. uint8 3x64x64",
+    "provenance": "measured",
+    "per_env_bytes": 609284.0,
+    "rollout_bytes_per_env": 606880.0,
+    "learner_bytes": 24443376,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 654226928.0,
+    "rollout_only_N1024": 621445120.0,
+    "working_set_N4096": 2525947376.0,
+    "rollout_only_N4096": 2485780480.0,
+    "working_set_N16384": 10012829168.0,
+    "rollout_only_N16384": 9943121920.0,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 31,
+     "registers(188x256KiB=47MiB)": 80,
+     "SMEM+registers(65.4MiB)": 112,
+     "L2_persisting(80MiB)": 137,
+     "L2(128MiB)": 220,
+     "DRAM(95GiB total)": 167362
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 31,
+     "SMEM+registers(65.4MiB)": 62,
+     "L2_persisting(80MiB)": 87,
+     "L2(128MiB)": 170,
+     "DRAM(95GiB total)": 167313
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 24,
+     "L2(128MiB)": 107,
+     "DRAM(95GiB total)": 167249
+    }
+   },
+   "stock_rsl_rl_depth64(fp32)": {
+    "bytes_per_env_step": 23061.0,
+    "description": "RSL-RL layout, camera task: all 4 obs groups incl. fp32 1x64x64 depth",
+    "provenance": "measured",
+    "per_env_bytes": 740356.0,
+    "rollout_bytes_per_env": 737952.0,
+    "learner_bytes": 24410608,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 788411888.0,
+    "rollout_only_N1024": 755662848.0,
+    "working_set_N4096": 3062785520.0,
+    "rollout_only_N4096": 3022651392.0,
+    "working_set_N16384": 12160280048.0,
+    "rollout_only_N16384": 12090605568.0,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 26,
+     "registers(188x256KiB=47MiB)": 66,
+     "SMEM+registers(65.4MiB)": 92,
+     "L2_persisting(80MiB)": 113,
+     "L2(128MiB)": 181,
+     "DRAM(95GiB total)": 137733
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 25,
+     "SMEM+registers(65.4MiB)": 51,
+     "L2_persisting(80MiB)": 72,
+     "L2(128MiB)": 140,
+     "DRAM(95GiB total)": 137692
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 20,
+     "L2(128MiB)": 88,
+     "DRAM(95GiB total)": 137640
+    }
+   },
+   "lean_state_only": {
+    "bytes_per_env_step": 577,
+    "description": "raw frame fp32 + lean PPO fields (no image)",
+    "provenance": "derived",
+    "per_env_bytes": 20868,
+    "rollout_bytes_per_env": 18464,
+    "learner_bytes": 31453936,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 58699504,
+    "rollout_only_N1024": 18907136,
+    "working_set_N4096": 122806000,
+    "rollout_only_N4096": 75628544,
+    "working_set_N16384": 379231984,
+    "rollout_only_N16384": 302514176,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 922,
+     "registers(188x256KiB=47MiB)": 2361,
+     "SMEM+registers(65.4MiB)": 3284,
+     "L2_persisting(80MiB)": 4019,
+     "L2(128MiB)": 6431,
+     "DRAM(95GiB total)": 4886498
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 572,
+     "SMEM+registers(65.4MiB)": 1495,
+     "L2_persisting(80MiB)": 2230,
+     "L2(128MiB)": 4642,
+     "DRAM(95GiB total)": 4884710
+    }
+   },
+   "lean_(i)_uint8_rgb64": {
+    "bytes_per_env_step": 12865,
+    "description": "uint8 RGB 64x64 + raw state frame fp32",
+    "provenance": "derived",
+    "per_env_bytes": 414084,
+    "rollout_bytes_per_env": 411680,
+    "learner_bytes": 24443376,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 454342128,
+    "rollout_only_N1024": 421560320,
+    "working_set_N4096": 1726408176,
+    "rollout_only_N4096": 1686241280,
+    "working_set_N16384": 6814672368,
+    "rollout_only_N16384": 6744965120,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 46,
+     "registers(188x256KiB=47MiB)": 119,
+     "SMEM+registers(65.4MiB)": 165,
+     "L2_persisting(80MiB)": 202,
+     "L2(128MiB)": 324,
+     "DRAM(95GiB total)": 246257
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 45,
+     "SMEM+registers(65.4MiB)": 92,
+     "L2_persisting(80MiB)": 129,
+     "L2(128MiB)": 250,
+     "DRAM(95GiB total)": 246184
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 36,
+     "L2(128MiB)": 158,
+     "DRAM(95GiB total)": 246091
+    }
+   },
+   "lean_(ii)_latent64_fp32": {
+    "bytes_per_env_step": 833,
+    "description": "64 keypoint features fp32 (= stock spatial-softmax width)",
+    "provenance": "derived",
+    "per_env_bytes": 29060,
+    "rollout_bytes_per_env": 26656,
+    "learner_bytes": 24443376,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 60077552,
+    "rollout_only_N1024": 27295744,
+    "working_set_N4096": 149349872,
+    "rollout_only_N4096": 109182976,
+    "working_set_N16384": 506439152,
+    "rollout_only_N16384": 436731904,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 662,
+     "registers(188x256KiB=47MiB)": 1695,
+     "SMEM+registers(65.4MiB)": 2358,
+     "L2_persisting(80MiB)": 2886,
+     "L2(128MiB)": 4618,
+     "DRAM(95GiB total)": 3508997
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 652,
+     "SMEM+registers(65.4MiB)": 1315,
+     "L2_persisting(80MiB)": 1843,
+     "L2(128MiB)": 3575,
+     "DRAM(95GiB total)": 3507953
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 520,
+     "L2(128MiB)": 2252,
+     "DRAM(95GiB total)": 3506630
+    }
+   },
+   "lean_(ii)_latent128_bf16": {
+    "bytes_per_env_step": 643,
+    "description": "128 features bf16 + bf16 raw frame",
+    "provenance": "derived",
+    "per_env_bytes": 22980,
+    "rollout_bytes_per_env": 20576,
+    "learner_bytes": 24443376,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 53851632,
+    "rollout_only_N1024": 21069824,
+    "working_set_N4096": 124446192,
+    "rollout_only_N4096": 84279296,
+    "working_set_N16384": 406824432,
+    "rollout_only_N16384": 337117184,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 837,
+     "registers(188x256KiB=47MiB)": 2144,
+     "SMEM+registers(65.4MiB)": 2982,
+     "L2_persisting(80MiB)": 3650,
+     "L2(128MiB)": 5840,
+     "DRAM(95GiB total)": 4437400
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 825,
+     "SMEM+registers(65.4MiB)": 1662,
+     "L2_persisting(80MiB)": 2330,
+     "L2(128MiB)": 4521,
+     "DRAM(95GiB total)": 4436080
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 657,
+     "L2(128MiB)": 2848,
+     "DRAM(95GiB total)": 4434407
+    }
+   },
+   "lean_(ii)_latent256_bf16": {
+    "bytes_per_env_step": 899,
+    "description": "256 features bf16 + bf16 raw frame",
+    "provenance": "derived",
+    "per_env_bytes": 31172,
+    "rollout_bytes_per_env": 28768,
+    "learner_bytes": 24443376,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 62240240,
+    "rollout_only_N1024": 29458432,
+    "working_set_N4096": 158000624,
+    "rollout_only_N4096": 117833728,
+    "working_set_N16384": 541042160,
+    "rollout_only_N16384": 471334912,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 617,
+     "registers(188x256KiB=47MiB)": 1581,
+     "SMEM+registers(65.4MiB)": 2198,
+     "L2_persisting(80MiB)": 2691,
+     "L2(128MiB)": 4305,
+     "DRAM(95GiB total)": 3271251
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 608,
+     "SMEM+registers(65.4MiB)": 1225,
+     "L2_persisting(80MiB)": 1718,
+     "L2(128MiB)": 3333,
+     "DRAM(95GiB total)": 3270279
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 485,
+     "L2(128MiB)": 2099,
+     "DRAM(95GiB total)": 3269045
+    }
+   },
+   "lean_(ii)_latent256_fp32": {
+    "bytes_per_env_step": 1601,
+    "description": "256 features fp32",
+    "provenance": "derived",
+    "per_env_bytes": 53636,
+    "rollout_bytes_per_env": 51232,
+    "learner_bytes": 24443376,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 85243376,
+    "rollout_only_N1024": 52461568,
+    "working_set_N4096": 250013168,
+    "rollout_only_N4096": 209846272,
+    "working_set_N16384": 909092336,
+    "rollout_only_N16384": 839385088,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 358,
+     "registers(188x256KiB=47MiB)": 918,
+     "SMEM+registers(65.4MiB)": 1277,
+     "L2_persisting(80MiB)": 1563,
+     "L2(128MiB)": 2502,
+     "DRAM(95GiB total)": 1901175
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 353,
+     "SMEM+registers(65.4MiB)": 712,
+     "L2_persisting(80MiB)": 998,
+     "L2(128MiB)": 1937,
+     "DRAM(95GiB total)": 1900610
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 281,
+     "L2(128MiB)": 1220,
+     "DRAM(95GiB total)": 1899893
+    }
+   },
+   "lean_(iii)_depth64_fp32": {
+    "bytes_per_env_step": 16961,
+    "description": "fp32 depth (stock dtype)",
+    "provenance": "derived",
+    "per_env_bytes": 545156,
+    "rollout_bytes_per_env": 542752,
+    "learner_bytes": 24410608,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 588527088,
+    "rollout_only_N1024": 555778048,
+    "working_set_N4096": 2263246320,
+    "rollout_only_N4096": 2223112192,
+    "working_set_N16384": 8962123248,
+    "rollout_only_N16384": 8892448768,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 35,
+     "registers(188x256KiB=47MiB)": 90,
+     "SMEM+registers(65.4MiB)": 125,
+     "L2_persisting(80MiB)": 153,
+     "L2(128MiB)": 246,
+     "DRAM(95GiB total)": 187050
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 34,
+     "SMEM+registers(65.4MiB)": 70,
+     "L2_persisting(80MiB)": 98,
+     "L2(128MiB)": 190,
+     "DRAM(95GiB total)": 186994
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 27,
+     "L2(128MiB)": 120,
+     "DRAM(95GiB total)": 186923
+    }
+   },
+   "lean_(iii)_depth64_fp16": {
+    "bytes_per_env_step": 8769,
+    "description": "fp16 depth",
+    "provenance": "derived",
+    "per_env_bytes": 283012,
+    "rollout_bytes_per_env": 280608,
+    "learner_bytes": 24410608,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 320091632,
+    "rollout_only_N1024": 287342592,
+    "working_set_N4096": 1189504496,
+    "rollout_only_N4096": 1149370368,
+    "working_set_N16384": 4667155952,
+    "rollout_only_N16384": 4597481472,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 68,
+     "registers(188x256KiB=47MiB)": 174,
+     "SMEM+registers(65.4MiB)": 242,
+     "L2_persisting(80MiB)": 296,
+     "L2(128MiB)": 474,
+     "DRAM(95GiB total)": 360307
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 67,
+     "SMEM+registers(65.4MiB)": 135,
+     "L2_persisting(80MiB)": 189,
+     "L2(128MiB)": 367,
+     "DRAM(95GiB total)": 360200
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 53,
+     "L2(128MiB)": 231,
+     "DRAM(95GiB total)": 360065
+    }
+   },
+   "lean_(iii)_depth64_uint8": {
+    "bytes_per_env_step": 4673,
+    "description": "8-bit quantized depth (2.5 m / 256 = 1 cm steps)",
+    "provenance": "derived",
+    "per_env_bytes": 151940,
+    "rollout_bytes_per_env": 149536,
+    "learner_bytes": 24410608,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 185873904,
+    "rollout_only_N1024": 153124864,
+    "working_set_N4096": 652633584,
+    "rollout_only_N4096": 612499456,
+    "working_set_N16384": 2519672304,
+    "rollout_only_N16384": 2449997824,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 126,
+     "registers(188x256KiB=47MiB)": 324,
+     "SMEM+registers(65.4MiB)": 451,
+     "L2_persisting(80MiB)": 552,
+     "L2(128MiB)": 883,
+     "DRAM(95GiB total)": 671129
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 125,
+     "SMEM+registers(65.4MiB)": 251,
+     "L2_persisting(80MiB)": 352,
+     "L2(128MiB)": 684,
+     "DRAM(95GiB total)": 670930
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 99,
+     "L2(128MiB)": 430,
+     "DRAM(95GiB total)": 670677
+    }
+   },
+   "lean_(iv)_state_replay_rerender": {
+    "bytes_per_env_step": 701,
+    "description": "store qpos (+object id) per step, re-render images inside each PPO epoch",
+    "provenance": "derived",
+    "per_env_bytes": 24836,
+    "rollout_bytes_per_env": 22432,
+    "learner_bytes": 24443376,
+    "fixed_bytes": 5876736,
+    "working_set_N1024": 55752176,
+    "rollout_only_N1024": 22970368,
+    "working_set_N4096": 132048368,
+    "rollout_only_N4096": 91881472,
+    "working_set_N16384": 437233136,
+    "rollout_only_N16384": 367525888,
+    "max_envs_per_tier(A: per-env rollout+state only)": {
+     "SMEM(188x100KiB=18.4MiB)": 775,
+     "registers(188x256KiB=47MiB)": 1984,
+     "SMEM+registers(65.4MiB)": 2759,
+     "L2_persisting(80MiB)": 3377,
+     "L2(128MiB)": 5404,
+     "DRAM(95GiB total)": 4105792
+    },
+    "max_envs_per_tier(B: +learner+lean fixed)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 763,
+     "SMEM+registers(65.4MiB)": 1538,
+     "L2_persisting(80MiB)": 2156,
+     "L2(128MiB)": 4183,
+     "DRAM(95GiB total)": 4104571
+    },
+    "max_envs_per_tier(C: B + stock visual-mesh scene)": {
+     "SMEM(188x100KiB=18.4MiB)": 0,
+     "registers(188x256KiB=47MiB)": 0,
+     "SMEM+registers(65.4MiB)": 0,
+     "L2_persisting(80MiB)": 608,
+     "L2(128MiB)": 2635,
+     "DRAM(95GiB total)": 4103023
+    }
+   }
+  }
+ },
+ "labperf_derived_camera_overhead": {
+  "rgb64": {
+   "256": {
+    "us_per_env_step_state": 43.46578807820365,
+    "us_per_env_step_camera": 50.34055384677342,
+    "camera_overhead_us_per_env_step": 6.874765768569766,
+    "camera_overhead_ms_per_step_all_envs": 1.75994003675386,
+    "overhead_fraction": 0.15816498613117735
+   },
+   "1024": {
+    "us_per_env_step_state": 14.230985979632614,
+    "us_per_env_step_camera": 16.060696584532263,
+    "camera_overhead_us_per_env_step": 1.829710604899649,
+    "camera_overhead_ms_per_step_all_envs": 1.8736236594172406,
+    "overhead_fraction": 0.12857230043781442
+   },
+   "4096": {
+    "us_per_env_step_state": 5.374636338668735,
+    "us_per_env_step_camera": 7.731410789183756,
+    "camera_overhead_us_per_env_step": 2.3567744505150214,
+    "camera_overhead_ms_per_step_all_envs": 9.653348149309528,
+    "overhead_fraction": 0.43849933316581935
+   }
+  },
+  "depth64": {
+   "256": {
+    "us_per_env_step_state": 43.46578807820365,
+    "us_per_env_step_camera": 46.368639961421295,
+    "camera_overhead_us_per_env_step": 2.902851883217643,
+    "camera_overhead_ms_per_step_all_envs": 0.7431300821037167,
+    "overhead_fraction": 0.06678475213643513
+   },
+   "1024": {
+    "us_per_env_step_state": 14.230985979632614,
+    "us_per_env_step_camera": 16.605337619724484,
+    "camera_overhead_us_per_env_step": 2.37435164009187,
+    "camera_overhead_ms_per_step_all_envs": 2.431336079454075,
+    "overhead_fraction": 0.16684379026794383
+   },
+   "4096": {
+    "us_per_env_step_state": 5.374636338668735,
+    "us_per_env_step_camera": 7.009049383659242,
+    "camera_overhead_us_per_env_step": 1.6344130449905077,
+    "camera_overhead_ms_per_step_all_envs": 6.694555832281119,
+    "overhead_fraction": 0.3040974201791933
+   }
+  }
+ },
+ "nn_flops_derived": {
+  "state": {
+   "actor_fwd_flop_per_sample": 1966848,
+   "critic_fwd_flop_per_sample": 1961216,
+   "cnn_fwd_flop_per_sample": 0,
+   "rollout_inference_tflop_per_iter_4096": 0.514859204608,
+   "update_tflop_per_iter_4096_assume_bwd_2x": 7.72288806912
+  },
+  "rgb64": {
+   "actor_fwd_flop_per_sample": 3316480,
+   "critic_fwd_flop_per_sample": 1961216,
+   "cnn_fwd_flop_per_sample": 2267136,
+   "rollout_inference_tflop_per_iter_4096": 0.691758170112,
+   "update_tflop_per_iter_4096_assume_bwd_2x": 10.37637255168
+  },
+  "depth64": {
+   "actor_fwd_flop_per_sample": 2394880,
+   "critic_fwd_flop_per_sample": 1961216,
+   "cnn_fwd_flop_per_sample": 1345536,
+   "rollout_inference_tflop_per_iter_4096": 0.570962214912,
+   "update_tflop_per_iter_4096_assume_bwd_2x": 8.56443322368
+  }
+ },
+ "render_flops_assumed": {
+  "rays_per_env_step": 4096,
+  "visible_shapes_per_world": 28,
+  "visible_tris_per_world": 207556.5,
+  "mean_tris_per_visible_mesh": 7687.277777777777,
+  "flop_per_ray": 2281.2850471395273,
+  "flop_per_env_step": 9344143.553083504,
+  "tflop_per_ppo_iter_4096": 1.224755583789761,
+  "proxy_scene_flop_per_ray": 425.75424759098894
+ },
+ "stock_max_envs_in_DRAM": {
+  "state": {
+   "per_env_bytes_smi_slope_plus_rollout_plus_update": 832773.9498463566,
+   "fixed": 1302581798.2089548,
+   "max_envs_in_DRAM": 120846
+  },
+  "rgb64": {
+   "per_env_bytes_smi_slope_plus_rollout_plus_update": 2224967.497292947,
+   "fixed": 1336303167.6815913,
+   "max_envs_in_DRAM": 45218
+  },
+  "depth64": {
+   "per_env_bytes_smi_slope_plus_rollout_plus_update": 2244875.7106379867,
+   "fixed": 1339120237.5323381,
+   "max_envs_in_DRAM": 44816
+  }
+ },
+ "stock_training_footprint": {
+  "state": {
+   "N1024": {
+    "env_sim_render": 719006056.7374891,
+    "rollout_storage": 218791936.0,
+    "learner": 31453936,
+    "update_transient_scaled": 335720064.0,
+    "total": 1304971992.7374892
+   },
+   "N4096": {
+    "env_sim_render": 1395831393.9947329,
+    "rollout_storage": 875167744.0,
+    "learner": 31453936,
+    "update_transient_scaled": 1342880256.0,
+    "total": 3645333329.994733
+   },
+   "N16384": {
+    "env_sim_render": 4103132743.0237074,
+    "rollout_storage": 3500670976.0,
+    "learner": 31453936,
+    "update_transient_scaled": 5371521024.0,
+    "total": 13006778679.023708
+   }
+  },
+  "rgb64": {
+   "N1024": {
+    "env_sim_render": 802942638.6654963,
+    "rollout_storage": 621445120.0,
+    "learner": 24443376,
+    "update_transient_scaled": 1280241920.0,
+    "total": 2729073054.6654963
+   },
+   "N4096": {
+    "env_sim_render": 1615942367.4381046,
+    "rollout_storage": 2485780480.0,
+    "learner": 24443376,
+    "update_transient_scaled": 5120967680.0,
+    "total": 9247133903.438105
+   },
+   "N16384": {
+    "env_sim_render": 4867941282.528537,
+    "rollout_storage": 9943121920.0,
+    "learner": 24443376,
+    "update_transient_scaled": 20483870720.0,
+    "total": 35319377298.528534
+   }
+  },
+  "depth64": {
+   "N1024": {
+    "env_sim_render": 807136942.6654959,
+    "rollout_storage": 755662848.0,
+    "learner": 24410608,
+    "update_transient_scaled": 1162609920.0,
+    "total": 2749820318.665496
+   },
+   "N4096": {
+    "env_sim_render": 1632719583.4381042,
+    "rollout_storage": 3022651392.0,
+    "learner": 24410608,
+    "update_transient_scaled": 4650439680.0,
+    "total": 9330221263.438105
+   },
+   "N16384": {
+    "env_sim_render": 4935050146.528537,
+    "rollout_storage": 12090605568.0,
+    "learner": 24410608,
+    "update_transient_scaled": 18601758720.0,
+    "total": 35651825042.528534
+   }
+  }
+ }
+}

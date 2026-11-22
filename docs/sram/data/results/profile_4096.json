@@ -1,0 +1,32 @@
+{
+ "num_envs": 4096,
+ "iterations": 100,
+ "describe": {
+  "num_envs": 4096,
+  "num_ctas": 188,
+  "num_sms": 188,
+  "envs_per_cta_max": 22,
+  "threads_per_cta": 256,
+  "rollout_storage": "shared memory (SRAM)",
+  "dynamic_smem_bytes_per_cta": 72696,
+  "rollout_buffer_bytes_total": 3145728,
+  "params": 2499,
+  "mini_batch_size": 16384,
+  "registers_per_thread": 242,
+  "local_mem_bytes_per_thread": 32,
+  "nvrtc_compile_s": 1.593633819022216
+ },
+ "event_time_per_iteration_us": 498.524169921875,
+ "event_time_per_iteration_us_normal_build": 492.042236328125,
+ "implied_sm_clock_ghz": 2.420242663130147,
+ "phases_us": {
+  "rollout: 16 control steps (policy + value MLPs, sampling, 2 physics substeps, reward, reset)": 38.76904635613983,
+  "bootstrap value of the last observation": 1.865515416607301,
+  "GAE + global advantage normalization (1 all-reduce)": 8.966043087569973,
+  "mini-batch permutation": 1.9634394816650929,
+  "update: forward + backward on this SM's samples (20 mini-batches)": 308.2137222699999,
+  "update: deterministic gradient all-reduce across SMs (20x, 2 grid barriers each)": 89.18072691142929,
+  "update: KL-adaptive LR, gradient clipping, Adam (20x)": 48.776720532362525
+ },
+ "phases_sum_us": 497.7352140557739
+}

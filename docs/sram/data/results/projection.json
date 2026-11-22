@@ -1,0 +1,146 @@
+{
+ "scenarios": {
+  "conservative": {
+   "physics_eff": 0.02,
+   "learner_eff": 0.08,
+   "pad": 3.0
+  },
+  "expected": {
+   "physics_eff": 0.05,
+   "learner_eff": 0.25,
+   "pad": 2.0
+  },
+  "optimistic": {
+   "physics_eff": 0.12,
+   "learner_eff": 0.45,
+   "pad": 1.5
+  }
+ },
+ "rows": [
+  {
+   "task": "ANYmal-C flat (IsaacContrib-Velocity-Flat-AnymalC)",
+   "working_set_mib": 42.78755569458008,
+   "fits": "fits L2 and the 80 MiB persisting window (fp32)",
+   "flops_gflop": {
+    "physics": 36.686717552951606,
+    "actuator": 8.650752,
+    "inference": 15.627976704,
+    "update": 222.34005504
+   },
+   "stock_s": {
+    "collection": 0.5694999999999999,
+    "learning": 0.079,
+    "iteration": 0.6484999999999999
+   },
+   "measured_update": {
+    "update_gflop": 222.34005504,
+    "tf32_on": {
+     "stock_s": 0.09601951501099393,
+     "stock_returns_s": 0.00323468804359436,
+     "stock_update_s": 0.09280715179443359,
+     "stock_kernel_s": 0.01872345700000011,
+     "graphed_s": 0.020703417947515845,
+     "graphed_kernel_s": 0.018074494499999996,
+     "stock_tflops": 2.3189022637169763,
+     "graphed_tflops": 10.754739690057622,
+     "stock_gpu_kernels": 4654,
+     "graphed_gpu_kernels": 4893,
+     "stock_host_launches": 4654,
+     "graphed_host_launches": 4,
+     "act_stock_s_per_step": 0.0007340139709413052,
+     "act_graphed_s_per_step": 9.289750596508384e-05,
+     "equivalence_passed": true
+    }
+   },
+   "scenarios": {
+    "conservative": {
+     "physics_s": 0.06033718823530799,
+     "inference_s": 0.0017318236595744681,
+     "update_s": 0.024727947234042553,
+     "iteration_s": 0.086796959128925,
+     "speedup_vs_stock": 7.471459904911437,
+     "learner_only_speedup": 1.0881606975376894
+    },
+    "expected": {
+     "physics_s": 0.016125116862748798,
+     "inference_s": 0.0005541835710638298,
+     "update_s": 0.007973599114893617,
+     "iteration_s": 0.024652899548706246,
+     "speedup_vs_stock": 26.305222179596814,
+     "learner_only_speedup": 1.1219183911655162
+    },
+    "optimistic": {
+     "physics_s": 0.005072099019608999,
+     "inference_s": 0.00030787976170212764,
+     "update_s": 0.0044694217304964545,
+     "iteration_s": 0.009849400511807582,
+     "speedup_vs_stock": 65.84157068468991,
+     "learner_only_speedup": 1.129245398198643
+    }
+   }
+  },
+  {
+   "task": "Unitree G1 flat (Isaac-Velocity-Flat-G1)",
+   "working_set_mib": 96.6144905090332,
+   "fits": "fits L2; 80 MiB window needs a bf16 rollout",
+   "flops_gflop": {
+    "physics": 96.64959186634545,
+    "actuator": 0.0,
+    "inference": 32.665239552,
+    "update": 428.07066624
+   },
+   "stock_s": {
+    "collection": 0.434,
+    "learning": 0.0785,
+    "iteration": 0.5125
+   },
+   "measured_update": {
+    "update_gflop": 428.07066624,
+    "tf32_on": {
+     "stock_s": 0.09596620552474633,
+     "stock_returns_s": 0.003154128074645996,
+     "stock_update_s": 0.09288230514526367,
+     "stock_kernel_s": 0.0235032289999997,
+     "graphed_s": 0.024117961060255766,
+     "graphed_kernel_s": 0.02310784900000001,
+     "stock_tflops": 4.4675343299412305,
+     "graphed_tflops": 17.776474413606728,
+     "stock_gpu_kernels": 4644,
+     "graphed_gpu_kernels": 4893,
+     "stock_host_launches": 4644,
+     "graphed_host_launches": 4,
+     "act_stock_s_per_step": 0.000788857985753566,
+     "act_graphed_s_per_step": 0.00010954553727060556,
+     "equivalence_passed": true
+    }
+   },
+   "scenarios": {
+    "conservative": {
+     "physics_s": 0.12857139343928914,
+     "inference_s": 0.0036198182127659575,
+     "update_s": 0.04752610893617021,
+     "iteration_s": 0.17971732058822532,
+     "speedup_vs_stock": 2.851700650346652,
+     "learner_only_speedup": 1.056383185594932
+    },
+    "expected": {
+     "physics_s": 0.03432090491714378,
+     "inference_s": 0.0011583418280851064,
+     "update_s": 0.015269010859574467,
+     "iteration_s": 0.05074825760480335,
+     "speedup_vs_stock": 10.098868891047237,
+     "learner_only_speedup": 1.1378083434364243
+    },
+    "optimistic": {
+     "physics_s": 0.010758282786607428,
+     "inference_s": 0.0006435232378250591,
+     "update_s": 0.008522428255319148,
+     "iteration_s": 0.019924234279751638,
+     "speedup_vs_stock": 25.72244397471462,
+     "learner_only_speedup": 1.1564516594139302
+    }
+   }
+  }
+ ],
+ "markdown": "| task | working set @4096 (lean) | stock iteration | SRAM learner only (expected) | everything SRAM-resident: conservative / expected / optimistic |\n|---|---|---|---|---|\n| ANYmal-C flat (IsaacContrib-Velocity-Flat-AnymalC) | 42.8 MiB (fits L2 and the 80 MiB persisting window (fp32)) | 648 ms | 578 ms (1.12x) | 86.8 ms (7x) / 24.7 ms (26x) / 9.8 ms (66x) |\n| Unitree G1 flat (Isaac-Velocity-Flat-G1) | 96.6 MiB (fits L2; 80 MiB window needs a bf16 rollout) | 512 ms | 450 ms (1.14x) | 179.7 ms (3x) / 50.7 ms (10x) / 19.9 ms (26x) |"
+}

@@ -1,0 +1,1784 @@
+{
+ "cartpole": {
+  "task": "Isaac-Cartpole-Direct",
+  "num_envs": 4096,
+  "num_steps_per_env": 16,
+  "samples_per_update": 65536,
+  "update_gflop": 4.48790528,
+  "update_gflop_6x_fwd_macs": 4.65567744,
+  "timing": "median synchronized wall time, compute_returns + update(); act = PPO.act per env step",
+  "tf32_on": {
+   "stock_s": 0.06958097050664946,
+   "stock_returns_s": 0.0016724160313606263,
+   "stock_update_s": 0.06791592025756836,
+   "stock_kernel_s": 0.0072775184999996564,
+   "graphed_s": 0.007319138501770794,
+   "graphed_kernel_s": 0.007153036500000001,
+   "stock_tflops": 0.06463842880102096,
+   "graphed_tflops": 0.6144991800485602,
+   "stock_gpu_kernels": 4320,
+   "graphed_gpu_kernels": 4567,
+   "stock_host_launches": 4320,
+   "graphed_host_launches": 4,
+   "act_stock_s_per_step": 0.0005238790181465447,
+   "act_graphed_s_per_step": 6.376201054081321e-05,
+   "equivalence_passed": true
+  }
+ },
+ "anymal_c": {
+  "task": "IsaacContrib-Velocity-Flat-AnymalC",
+  "num_envs": 4096,
+  "num_steps_per_env": 24,
+  "samples_per_update": 98304,
+  "update_gflop": 222.34005504,
+  "update_gflop_6x_fwd_macs": 234.41965056,
+  "timing": "median synchronized wall time, compute_returns + update(); act = PPO.act per env step",
+  "tf32_on": {
+   "stock_s": 0.09601951501099393,
+   "stock_returns_s": 0.00323468804359436,
+   "stock_update_s": 0.09280715179443359,
+   "stock_kernel_s": 0.01872345700000011,
+   "graphed_s": 0.020703417947515845,
+   "graphed_kernel_s": 0.018074494499999996,
+   "stock_tflops": 2.3189022637169763,
+   "graphed_tflops": 10.754739690057622,
+   "stock_gpu_kernels": 4654,
+   "graphed_gpu_kernels": 4893,
+   "stock_host_launches": 4654,
+   "graphed_host_launches": 4,
+   "act_stock_s_per_step": 0.0007340139709413052,
+   "act_graphed_s_per_step": 9.289750596508384e-05,
+   "equivalence_passed": true
+  }
+ },
+ "g1": {
+  "task": "Isaac-Velocity-Flat-G1",
+  "num_envs": 4096,
+  "num_steps_per_env": 24,
+  "samples_per_update": 98304,
+  "update_gflop": 428.07066624,
+  "update_gflop_6x_fwd_macs": 489.97859328,
+  "timing": "median synchronized wall time, compute_returns + update(); act = PPO.act per env step",
+  "tf32_on": {
+   "stock_s": 0.09596620552474633,
+   "stock_returns_s": 0.003154128074645996,
+   "stock_update_s": 0.09288230514526367,
+   "stock_kernel_s": 0.0235032289999997,
+   "graphed_s": 0.024117961060255766,
+   "graphed_kernel_s": 0.02310784900000001,
+   "stock_tflops": 4.4675343299412305,
+   "graphed_tflops": 17.776474413606728,
+   "stock_gpu_kernels": 4644,
+   "graphed_gpu_kernels": 4893,
+   "stock_host_launches": 4644,
+   "graphed_host_launches": 4,
+   "act_stock_s_per_step": 0.000788857985753566,
+   "act_graphed_s_per_step": 0.00010954553727060556,
+   "equivalence_passed": true
+  }
+ },
+ "meta": {
+  "script": "scripts/sram/projection/measure_update_cost.py",
+  "started_utc": "2026-11-22T21:49:59+00:00",
+  "cpu": "x86_64",
+  "cpu_count": 16,
+  "omp_num_threads": "1",
+  "python": "3.12.13",
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "rsl_rl_lib": "5.5.1",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "sm_count": 188,
+  "args": {
+   "tasks": [
+    "cartpole",
+    "anymal_c",
+    "g1"
+   ],
+   "repeats": 20,
+   "tf32": "on",
+   "num_envs": 4096,
+   "warmup": 3,
+   "profile_runs": 2,
+   "graphed_adam": "fused",
+   "physics": "newton_mjwarp",
+   "device": "cuda:0",
+   "seed": 0
+  },
+  "notes": [
+   "wall = synchronized host wall time (includes launch overhead and host syncs); gpu_span = CUDA events",
+   "kernel_ms = sum of GPU kernel durations from torch.profiler (busy time, excludes launch gaps)",
+   "host launches = cudaLaunchKernel-family + cudaGraphLaunch API calls seen by the profiler",
+   "FLOPs = 2 x MACs of all nn.Linear layers, fwd + bwd (dW, dX except first layer), actor + critic"
+  ],
+  "loadavg_end": [
+   2.14013671875,
+   3.138671875,
+   3.619140625
+  ],
+  "finished_utc": "2026-11-22T21:50:22+00:00"
+ },
+ "table": [
+  "    task  TF32  samples/upd  GFLOP/upd  stock ms  graphed ms    x  TFLOP/s st/gr  kernel ms st/gr  GPU kernels st/gr  host launches st/gr  syncs st/gr  act ms/step st/gr  check",
+  "--------  ----  -----------  ---------  --------  ----------  ---  -------------  ---------------  -----------------  -------------------  -----------  -----------------  -----",
+  "cartpole    on        65536        4.5     69.58       7.319  9.5       0.06/0.6        7.28/7.15          4320/4567               4320/4        160/1        0.524/0.064   PASS",
+  "anymal_c    on        98304      222.7     96.02      20.703  4.6      2.32/10.8      18.72/18.07          4654/4893               4654/4        145/1        0.734/0.093   PASS",
+  "      g1    on        98304      428.7     95.97      24.118  4.0      4.47/17.8      23.50/23.11          4644/4893               4644/4        135/1        0.789/0.110   PASS",
+  "ms = median synchronized wall time of compute_returns + update(); kernel ms = summed GPU kernel time;",
+  "GFLOP/TFLOP/s = GEMM FLOPs of the learning phase; host launches = kernel + graph launch API calls;",
+  "check: allclose(rtol=0.0001, atol=1e-05) + same LR for graph replay vs eager (whole update) and for every step of a stock PPO.update, teacher-forced from the stock state before the step."
+ ],
+ "details": {
+  "cartpole": {
+   "task": "Isaac-Cartpole-Direct",
+   "physics": "newton_mjwarp",
+   "num_envs": 4096,
+   "num_steps_per_env": 16,
+   "obs_dim": 4,
+   "act_dim": 1,
+   "actor": {
+    "class_name": "MLPModel",
+    "hidden_dims": [
+     32,
+     32
+    ],
+    "activation": "elu",
+    "obs_normalization": false
+   },
+   "critic": {
+    "class_name": "MLPModel",
+    "hidden_dims": [
+     32,
+     32
+    ],
+    "activation": "elu",
+    "obs_normalization": false
+   },
+   "actor_distribution": {
+    "class_name": "GaussianDistribution",
+    "init_std": 1.0,
+    "std_type": "scalar",
+    "std_range": [
+     1e-06,
+     1000000.0
+    ]
+   },
+   "obs_groups": {
+    "actor": [
+     "policy"
+    ],
+    "critic": [
+     "policy"
+    ]
+   },
+   "algorithm": {
+    "class_name": "PPO",
+    "num_learning_epochs": 5,
+    "num_mini_batches": 4,
+    "learning_rate": 0.001,
+    "schedule": "adaptive",
+    "desired_kl": 0.01,
+    "clip_param": 0.2,
+    "gamma": 0.99,
+    "lam": 0.95,
+    "entropy_coef": 0.005,
+    "value_loss_coef": 1.0,
+    "max_grad_norm": 1.0,
+    "optimizer": "adam",
+    "use_clipped_value_loss": true,
+    "normalize_advantage_per_mini_batch": false,
+    "use_mixed_precision": false
+   },
+   "mini_batch_size": 16384,
+   "actor_params": 1250,
+   "critic_params": 1249,
+   "flops": {
+    "actor_layers": [
+     [
+      4,
+      32
+     ],
+     [
+      32,
+      32
+     ],
+     [
+      32,
+      1
+     ]
+    ],
+    "actor_fwd_macs_per_sample": 1184,
+    "actor_train_macs_per_sample": 3424,
+    "critic_layers": [
+     [
+      4,
+      32
+     ],
+     [
+      32,
+      32
+     ],
+     [
+      32,
+      1
+     ]
+    ],
+    "critic_fwd_macs_per_sample": 1184,
+    "critic_train_macs_per_sample": 3424,
+    "samples_per_update": 65536,
+    "samples_processed_per_update": 327680,
+    "update_flops": 4487905280,
+    "update_flops_6x_fwd_macs": 4655677440,
+    "returns_flops": 9699328,
+    "learning_phase_flops": 4497604608,
+    "act_flops_per_env_step": 19398656
+   },
+   "footprint_crosscheck": {
+    "file": "<path>",
+    "checked": true,
+    "match": true,
+    "mismatches": {}
+   },
+   "modes": {
+    "tf32_on": {
+     "tf32": true,
+     "torch_matmul_allow_tf32": true,
+     "torch_matmul_fp32_precision": "tf32",
+     "nvidia_smi_before": {
+      "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition, 0 %, 2762 MiB, 2422 MHz, 2430 MHz, 90.92 W",
+      "compute_apps": [
+       "17145, /usr/lib/x86_64-linux-gnu/dcv/dcvagent, 1155 MiB",
+       "17552, /usr/libexec/gnome-remote-desktop-daemon, 558 MiB",
+       "1066495, <path>, 644 MiB"
+      ]
+     },
+     "loadavg_before": [
+      2.66943359375,
+      3.310546875,
+      3.6865234375
+     ],
+     "graphed_adam": {
+      "class": "Adam",
+      "fused": true,
+      "capturable": true
+     },
+     "graph_capture_s": 0.21145024406723678,
+     "equivalence": {
+      "criterion": "allclose(rtol=0.0001, atol=1e-05) and same LR: graph replay vs eager same code (whole update) and every teacher-forced step vs stock PPO.update",
+      "passed": true,
+      "graph_vs_eager": {
+       "max_abs_param_diff": 0.0,
+       "max_abs_param_change_by_update": 0.061708495020866394,
+       "param_diff_norm_over_update_norm": 0.0,
+       "allclose": true,
+       "same_lr": true
+      },
+      "per_step_vs_stock": {
+       "steps": 20,
+       "steps_passed": 20,
+       "lr_mismatches": 0,
+       "worst_step": {
+        "max_abs_param_diff": 1.1920928955078125e-07,
+        "max_abs_param_change_by_update": 0.005658984184265137,
+        "param_diff_norm_over_update_norm": 7.602255859348152e-06,
+        "allclose": true,
+        "step": 6
+       }
+      },
+      "max_abs_advantage_diff": 0.0,
+      "free_running": {
+       "stock_vs_graphed": {
+        "max_abs_param_diff": 1.2218952178955078e-05,
+        "max_abs_param_change_by_update": 0.06170833110809326,
+        "param_diff_norm_over_update_norm": 0.00012617292262435633,
+        "allclose": true
+       },
+       "control_stock_vs_stock_with_graph_adam": {
+        "max_abs_param_diff": 8.910894393920898e-06,
+        "max_abs_param_change_by_update": 0.06170833110809326,
+        "param_diff_norm_over_update_norm": 0.00011658166248873619,
+        "allclose": true
+       },
+       "lr_stock": 0.01,
+       "lr_graphed": 0.009999999776482582,
+       "losses_stock": {
+        "value": 5.050493764877319,
+        "surrogate": 1.37668801471591e-05,
+        "entropy": 1.4354397475719451
+       },
+       "losses_graphed": {
+        "value": 5.05049467086792,
+        "surrogate": 1.37496745082899e-05,
+        "entropy": 1.4354398250579834
+       }
+      }
+     },
+     "stock": {
+      "learning_phase_wall_ms": {
+       "median": 69.58097050664946,
+       "min": 68.23195400647819,
+       "mean": 70.30621390440501,
+       "p90": 71.19499298278242,
+       "max": 75.77710505574942,
+       "n": 20
+      },
+      "returns_gpu_span_ms": {
+       "median": 1.6724160313606262,
+       "min": 1.5990400314331055,
+       "mean": 1.6740703999996185,
+       "p90": 1.7322239875793457,
+       "max": 1.7802879810333252,
+       "n": 20
+      },
+      "update_gpu_span_ms": {
+       "median": 67.91592025756836,
+       "min": 66.52095794677734,
+       "mean": 68.59603881835938,
+       "p90": 69.55216217041016,
+       "max": 73.94608306884766,
+       "n": 20
+      },
+      "kernel_ms": 7.2775184999996565,
+      "tflops_wall": 0.06463842880102096,
+      "tflops_kernel": 0.6180134901752861
+     },
+     "graphed": {
+      "learning_phase_wall_ms": {
+       "median": 7.319138501770794,
+       "min": 7.301438949070871,
+       "mean": 7.565861550392583,
+       "p90": 7.945581921376288,
+       "max": 7.955611101351678,
+       "n": 20
+      },
+      "returns_gpu_span_ms": {
+       "median": 0.25203199684619904,
+       "min": 0.2502079904079437,
+       "mean": 0.26200159788131716,
+       "p90": 0.27772799134254456,
+       "max": 0.2791360020637512,
+       "n": 20
+      },
+      "update_gpu_span_ms": {
+       "median": 7.046047925949097,
+       "min": 7.026656150817871,
+       "mean": 7.28002233505249,
+       "p90": 7.641983985900879,
+       "max": 7.653855800628662,
+       "n": 20
+      },
+      "kernel_ms": 7.153036500000002,
+      "tflops_wall": 0.6144991800485602,
+      "tflops_kernel": 0.6287685807279187,
+      "speedup_vs_stock_wall": 9.506715918794955
+     },
+     "act": {
+      "stock_act_wall_ms": {
+       "median": 0.5238790181465447,
+       "min": 0.48597902059555054,
+       "mean": 0.5297308583976701,
+       "p90": 0.5581610603258014,
+       "max": 0.6851120851933956,
+       "n": 80
+      },
+      "stock_act_gpu_span_ms": {
+       "median": 0.5065599977970123,
+       "min": 0.4700160026550293,
+       "mean": 0.5119456008076668,
+       "p90": 0.5400320291519165,
+       "max": 0.6530240178108215,
+       "n": 80
+      },
+      "stock_process_env_step_wall_ms": {
+       "median": 0.17701246542856097,
+       "min": 0.1653099898248911,
+       "mean": 0.1815438285120763,
+       "p90": 0.2002560067921877,
+       "max": 0.23389700800180435,
+       "n": 80
+      },
+      "graphed_act_wall_ms": {
+       "median": 0.06376201054081321,
+       "min": 0.06160896737128496,
+       "mean": 0.06449676911870483,
+       "p90": 0.06640201900154352,
+       "max": 0.11943804565817118,
+       "n": 320
+      },
+      "graphed_act_gpu_span_ms": {
+       "median": 0.05400000140070915,
+       "min": 0.05251200124621391,
+       "mean": 0.054471899988129735,
+       "p90": 0.05593600124120712,
+       "max": 0.10812799632549286,
+       "n": 320
+      },
+      "flops_per_env_step": 19398656,
+      "stock_tflops_wall": 0.037028885158698246,
+      "graphed_tflops_wall": 0.30423532500724987
+     },
+     "profile": {
+      "stock_returns": {
+       "kernel_ms": 0.2266614999999988,
+       "gemm_kernel_ms": 0.008560500000000047,
+       "memcpy_ms": 0.015808000000001696,
+       "memset_ms": 0.0,
+       "gpu_active_span_ms": 3.0544270000000004,
+       "gpu_kernels": 189,
+       "gemm_kernels": 4,
+       "gpu_memcpy": 17,
+       "gpu_memset": 0,
+       "host_kernel_launches": 189,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 17,
+       "host_memset_calls": 1,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaMemcpyAsync": 17,
+        "cudaDeviceGetAttribute": 2,
+        "cuLaunchKernel": 2,
+        "cudaLaunchKernelExC": 1,
+        "cudaLaunchKernel": 186,
+        "cudaMemsetAsync": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {
+        "aten::copy_": 16,
+        "aten::cat": 1
+       },
+       "kernel_ms_runs": [
+        0.22675899999999957,
+        0.22656399999999804
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_update": {
+       "kernel_ms": 7.050856999999658,
+       "gemm_kernel_ms": 1.5697294999999607,
+       "memcpy_ms": 0.17134450000002244,
+       "memset_ms": 0.029200500000041305,
+       "gpu_active_span_ms": 109.106667,
+       "gpu_kernels": 4131,
+       "gemm_kernels": 440,
+       "gpu_memcpy": 280,
+       "gpu_memset": 87,
+       "host_kernel_launches": 4131,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 280,
+       "host_memset_calls": 167,
+       "host_syncs": 160,
+       "host_api_calls": {
+        "cudaLaunchKernel": 3851,
+        "cudaStreamIsCapturing": 64,
+        "cudaMemsetAsync": 167,
+        "cudaDeviceGetAttribute": 201,
+        "cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags": 1,
+        "cudaPeekAtLastError": 7,
+        "cudaMemcpyAsync": 280,
+        "cuLaunchKernel": 200,
+        "cudaStreamSynchronize": 160,
+        "cudaLaunchKernelExC": 80,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::is_nonzero > aten::item > aten::_local_scalar_dense": 60,
+        "aten::item > aten::_local_scalar_dense": 60,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 40
+       },
+       "memcpy_sources": {
+        "aten::is_nonzero > aten::item > aten::_local_scalar_dense": 60,
+        "autograd::engine::evaluate_function: PowBackward0 > PowBackward0 > aten::pow > aten::copy_": 60,
+        "aten::item > aten::_local_scalar_dense": 60,
+        "aten::cat": 40,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 40,
+        "autograd::engine::evaluate_function: SliceBackward0 > SliceBackward0 > aten::slice_backward > aten::copy_": 20
+       },
+       "kernel_ms_runs": [
+        7.053915999999438,
+        7.047797999999878
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "graphed_returns": {
+       "kernel_ms": 0.2348565000000005,
+       "gemm_kernel_ms": 0.009136499999999843,
+       "memcpy_ms": 0.0,
+       "memset_ms": 0.0,
+       "gpu_active_span_ms": 0.258664,
+       "gpu_kernels": 206,
+       "gemm_kernels": 4,
+       "gpu_memcpy": 0,
+       "gpu_memset": 0,
+       "host_kernel_launches": 0,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 0,
+       "host_memset_calls": 0,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 1,
+        "cudaGraphLaunch": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {},
+       "kernel_ms_runs": [
+        0.2350040000000006,
+        0.2347090000000004
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "graphed_update": {
+       "kernel_ms": 6.918180000000001,
+       "gemm_kernel_ms": 1.5390810000000053,
+       "memcpy_ms": 0.00044800000000032016,
+       "memset_ms": 0.0256154999999992,
+       "gpu_active_span_ms": 8.105352,
+       "gpu_kernels": 4361,
+       "gemm_kernels": 440,
+       "gpu_memcpy": 1,
+       "gpu_memset": 81,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 1,
+       "host_memset_calls": 0,
+       "host_syncs": 1,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 3,
+        "cudaLaunchKernel": 2,
+        "cudaGraphLaunch": 1,
+        "cudaMemcpyAsync": 1,
+        "cudaStreamSynchronize": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::to > aten::_to_copy > aten::copy_": 1
+       },
+       "memcpy_sources": {
+        "aten::to > aten::_to_copy > aten::copy_": 1
+       },
+       "kernel_ms_runs": [
+        6.917870000000034,
+        6.918489999999969
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_act": {
+       "kernel_ms": 0.050748999999997754,
+       "gemm_kernel_ms": 0.016958999999999377,
+       "memcpy_ms": 0.002607999999999947,
+       "memset_ms": 0.0,
+       "gpu_active_span_ms": 1.215563,
+       "gpu_kernels": 34,
+       "gemm_kernels": 8,
+       "gpu_memcpy": 4,
+       "gpu_memset": 0,
+       "host_kernel_launches": 34,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 4,
+       "host_memset_calls": 2,
+       "host_syncs": 2,
+       "host_api_calls": {
+        "cudaMemcpyAsync": 4,
+        "cudaDeviceGetAttribute": 4,
+        "cuLaunchKernel": 4,
+        "cudaLaunchKernelExC": 2,
+        "cudaLaunchKernel": 28,
+        "cudaMemsetAsync": 2,
+        "cudaStreamSynchronize": 2,
+        "cudaStreamIsCapturing": 2,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::normal > aten::item > aten::_local_scalar_dense": 2
+       },
+       "memcpy_sources": {
+        "aten::cat": 2,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 2
+       },
+       "kernel_ms_runs": [
+        0.05110199999999759,
+        0.050395999999997915
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "graphed_act": {
+       "kernel_ms": 0.0436025000000002,
+       "gemm_kernel_ms": 0.01678449999999998,
+       "memcpy_ms": 0.0,
+       "memset_ms": 0.0,
+       "gpu_active_span_ms": 0.15919499999999992,
+       "gpu_kernels": 30,
+       "gemm_kernels": 8,
+       "gpu_memcpy": 0,
+       "gpu_memset": 0,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 0,
+       "host_memset_calls": 0,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 2,
+        "cudaLaunchKernel": 2,
+        "cudaGraphLaunch": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {},
+       "kernel_ms_runs": [
+        0.043555000000001204,
+        0.04364999999999918
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_learning_phase": {
+       "kernel_ms": 7.2775184999996565,
+       "gemm_kernel_ms": 1.5782899999999607,
+       "memcpy_ms": 0.18715250000002415,
+       "memset_ms": 0.029200500000041305,
+       "gpu_active_span_ms": 112.161094,
+       "gpu_kernels": 4320,
+       "gemm_kernels": 444,
+       "gpu_memcpy": 297,
+       "gpu_memset": 87,
+       "host_kernel_launches": 4320,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 297,
+       "host_memset_calls": 168,
+       "host_syncs": 160
+      },
+      "graphed_learning_phase": {
+       "kernel_ms": 7.153036500000002,
+       "gemm_kernel_ms": 1.5482175000000051,
+       "memcpy_ms": 0.00044800000000032016,
+       "memset_ms": 0.0256154999999992,
+       "gpu_active_span_ms": 8.364016,
+       "gpu_kernels": 4567,
+       "gemm_kernels": 444,
+       "gpu_memcpy": 1,
+       "gpu_memset": 81,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 2,
+       "host_memcpy_calls": 1,
+       "host_memset_calls": 0,
+       "host_syncs": 1
+      }
+     }
+    }
+   },
+   "setup_and_measure_s": 7.854589605005458
+  },
+  "anymal_c": {
+   "task": "IsaacContrib-Velocity-Flat-AnymalC",
+   "physics": "newton_mjwarp",
+   "num_envs": 4096,
+   "num_steps_per_env": 24,
+   "obs_dim": 48,
+   "act_dim": 12,
+   "actor": {
+    "class_name": "MLPModel",
+    "hidden_dims": [
+     128,
+     128,
+     128
+    ],
+    "activation": "elu",
+    "obs_normalization": false
+   },
+   "critic": {
+    "class_name": "MLPModel",
+    "hidden_dims": [
+     128,
+     128,
+     128
+    ],
+    "activation": "elu",
+    "obs_normalization": false
+   },
+   "actor_distribution": {
+    "class_name": "GaussianDistribution",
+    "init_std": 1.0,
+    "std_type": "scalar",
+    "std_range": [
+     1e-06,
+     1000000.0
+    ]
+   },
+   "obs_groups": {
+    "actor": [
+     "policy"
+    ],
+    "critic": [
+     "policy"
+    ]
+   },
+   "algorithm": {
+    "class_name": "PPO",
+    "num_learning_epochs": 5,
+    "num_mini_batches": 4,
+    "learning_rate": 0.001,
+    "schedule": "adaptive",
+    "desired_kl": 0.01,
+    "clip_param": 0.2,
+    "gamma": 0.99,
+    "lam": 0.95,
+    "entropy_coef": 0.005,
+    "value_loss_coef": 1.0,
+    "max_grad_norm": 1.0,
+    "optimizer": "adam",
+    "use_clipped_value_loss": true,
+    "normalize_advantage_per_mini_batch": false,
+    "use_mixed_precision": false
+   },
+   "mini_batch_size": 24576,
+   "actor_params": 40856,
+   "critic_params": 39425,
+   "flops": {
+    "actor_layers": [
+     [
+      48,
+      128
+     ],
+     [
+      128,
+      128
+     ],
+     [
+      128,
+      128
+     ],
+     [
+      128,
+      12
+     ]
+    ],
+    "actor_fwd_macs_per_sample": 40448,
+    "actor_train_macs_per_sample": 115200,
+    "critic_layers": [
+     [
+      48,
+      128
+     ],
+     [
+      128,
+      128
+     ],
+     [
+      128,
+      128
+     ],
+     [
+      128,
+      1
+     ]
+    ],
+    "critic_fwd_macs_per_sample": 39040,
+    "critic_train_macs_per_sample": 110976,
+    "samples_per_update": 98304,
+    "samples_processed_per_update": 491520,
+    "update_flops": 222340055040,
+    "update_flops_6x_fwd_macs": 234419650560,
+    "returns_flops": 319815680,
+    "learning_phase_flops": 222659870720,
+    "act_flops_per_env_step": 651165696
+   },
+   "footprint_crosscheck": {
+    "file": "<path>",
+    "checked": true,
+    "match": true,
+    "mismatches": {}
+   },
+   "modes": {
+    "tf32_on": {
+     "tf32": true,
+     "torch_matmul_allow_tf32": true,
+     "torch_matmul_fp32_precision": "tf32",
+     "nvidia_smi_before": {
+      "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition, 0 %, 3046 MiB, 2422 MHz, 2430 MHz, 94.56 W",
+      "compute_apps": [
+       "17145, /usr/lib/x86_64-linux-gnu/dcv/dcvagent, 1155 MiB",
+       "17552, /usr/libexec/gnome-remote-desktop-daemon, 558 MiB",
+       "1066495, <path>, 928 MiB"
+      ]
+     },
+     "loadavg_before": [
+      2.56005859375,
+      3.2666015625,
+      3.66796875
+     ],
+     "graphed_adam": {
+      "class": "Adam",
+      "fused": true,
+      "capturable": true
+     },
+     "graph_capture_s": 0.27513071603607386,
+     "equivalence": {
+      "criterion": "allclose(rtol=0.0001, atol=1e-05) and same LR: graph replay vs eager same code (whole update) and every teacher-forced step vs stock PPO.update",
+      "passed": true,
+      "graph_vs_eager": {
+       "max_abs_param_diff": 0.0,
+       "max_abs_param_change_by_update": 0.0760643407702446,
+       "param_diff_norm_over_update_norm": 0.0,
+       "allclose": true,
+       "same_lr": true
+      },
+      "per_step_vs_stock": {
+       "steps": 20,
+       "steps_passed": 20,
+       "lr_mismatches": 0,
+       "worst_step": {
+        "max_abs_param_diff": 1.1920928955078125e-07,
+        "max_abs_param_change_by_update": 0.005571119487285614,
+        "param_diff_norm_over_update_norm": 6.351564459273119e-06,
+        "allclose": true,
+        "step": 4
+       }
+      },
+      "max_abs_advantage_diff": 0.0,
+      "free_running": {
+       "stock_vs_graphed": {
+        "max_abs_param_diff": 0.002564825117588043,
+        "max_abs_param_change_by_update": 0.07606228440999985,
+        "param_diff_norm_over_update_norm": 0.02535608017719697,
+        "allclose": false
+       },
+       "control_stock_vs_stock_with_graph_adam": {
+        "max_abs_param_diff": 0.0029036924242973328,
+        "max_abs_param_change_by_update": 0.07606228440999985,
+        "param_diff_norm_over_update_norm": 0.025874897225926712,
+        "allclose": false
+       },
+       "lr_stock": 0.005062500000000001,
+       "lr_graphed": 0.005062500014901161,
+       "losses_stock": {
+        "value": 5.909018731117248,
+        "surrogate": -0.0034828083691536447,
+        "entropy": 17.085269165039062
+       },
+       "losses_graphed": {
+        "value": 5.9090189933776855,
+        "surrogate": -0.0034825578331947327,
+        "entropy": 17.08522605895996
+       }
+      }
+     },
+     "stock": {
+      "learning_phase_wall_ms": {
+       "median": 96.01951501099393,
+       "min": 93.15387404058129,
+       "mean": 96.3001330383122,
+       "p90": 99.1055880440399,
+       "max": 103.27895998489112,
+       "n": 20
+      },
+      "returns_gpu_span_ms": {
+       "median": 3.2346880435943604,
+       "min": 3.0694079399108887,
+       "mean": 3.2854655981063843,
+       "p90": 3.497056007385254,
+       "max": 3.5521600246429443,
+       "n": 20
+      },
+      "update_gpu_span_ms": {
+       "median": 92.8071517944336,
+       "min": 90.00131225585938,
+       "mean": 92.97312965393067,
+       "p90": 95.68621063232422,
+       "max": 99.99359893798828,
+       "n": 20
+      },
+      "kernel_ms": 18.72345700000011,
+      "tflops_wall": 2.3189022637169763,
+      "tflops_kernel": 11.892027776708044
+     },
+     "graphed": {
+      "learning_phase_wall_ms": {
+       "median": 20.703417947515845,
+       "min": 18.94816104322672,
+       "mean": 20.115237042773515,
+       "p90": 20.735858008265495,
+       "max": 20.75247501488775,
+       "n": 20
+      },
+      "returns_gpu_span_ms": {
+       "median": 0.5934720039367676,
+       "min": 0.4745280146598816,
+       "mean": 0.5737184077501297,
+       "p90": 0.6125760078430176,
+       "max": 0.6400319933891296,
+       "n": 20
+      },
+      "update_gpu_span_ms": {
+       "median": 20.06094455718994,
+       "min": 18.42767906188965,
+       "mean": 19.50197124481201,
+       "p90": 20.085664749145508,
+       "max": 20.116575241088867,
+       "n": 20
+      },
+      "kernel_ms": 18.074494499999997,
+      "tflops_wall": 10.754739690057622,
+      "tflops_kernel": 12.319009570087841,
+      "speedup_vs_stock_wall": 4.637858118616355
+     },
+     "act": {
+      "stock_act_wall_ms": {
+       "median": 0.7340139709413052,
+       "min": 0.6803309079259634,
+       "mean": 0.7383638973503063,
+       "p90": 0.7814930286258459,
+       "max": 0.8542420109733939,
+       "n": 120
+      },
+      "stock_act_gpu_span_ms": {
+       "median": 0.705344021320343,
+       "min": 0.6543999910354614,
+       "mean": 0.7090023989478748,
+       "p90": 0.7513279914855957,
+       "max": 0.8102080225944519,
+       "n": 120
+      },
+      "stock_process_env_step_wall_ms": {
+       "median": 0.23489451268687844,
+       "min": 0.21483597811311483,
+       "mean": 0.23730015673208982,
+       "p90": 0.25414605624973774,
+       "max": 0.2724919468164444,
+       "n": 120
+      },
+      "graphed_act_wall_ms": {
+       "median": 0.09289750596508384,
+       "min": 0.08947600144892931,
+       "mean": 0.09378134127473459,
+       "p90": 0.09663891978561878,
+       "max": 0.15402608551084995,
+       "n": 480
+      },
+      "graphed_act_gpu_span_ms": {
+       "median": 0.08070400357246399,
+       "min": 0.07817599922418594,
+       "mean": 0.08120893342420459,
+       "p90": 0.08300799876451492,
+       "max": 0.1404159963130951,
+       "n": 480
+      },
+      "flops_per_env_step": 651165696,
+      "stock_tflops_wall": 0.8871298391840419,
+      "graphed_tflops_wall": 7.009506759468279
+     },
+     "profile": {
+      "stock_returns": {
+       "kernel_ms": 0.35200100000000023,
+       "gemm_kernel_ms": 0.012111999999999852,
+       "memcpy_ms": 0.023695999999998888,
+       "memset_ms": 0.0,
+       "gpu_active_span_ms": 4.1750005,
+       "gpu_kernels": 278,
+       "gemm_kernels": 4,
+       "gpu_memcpy": 25,
+       "gpu_memset": 0,
+       "host_kernel_launches": 278,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 25,
+       "host_memset_calls": 3,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaMemcpyAsync": 25,
+        "cudaDeviceGetAttribute": 3,
+        "cudaMemsetAsync": 3,
+        "cuLaunchKernel": 3,
+        "cudaLaunchKernel": 275,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {
+        "aten::copy_": 24,
+        "aten::cat": 1
+       },
+       "kernel_ms_runs": [
+        0.36918600000000107,
+        0.33481599999999945
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_update": {
+       "kernel_ms": 18.37145600000011,
+       "gemm_kernel_ms": 6.881400500000092,
+       "memcpy_ms": 0.24329549999997707,
+       "memset_ms": 0.07342299999998403,
+       "gpu_active_span_ms": 126.15447549999999,
+       "gpu_kernels": 4376,
+       "gemm_kernels": 600,
+       "gpu_memcpy": 265,
+       "gpu_memset": 207,
+       "host_kernel_launches": 4376,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 265,
+       "host_memset_calls": 347,
+       "host_syncs": 145,
+       "host_api_calls": {
+        "cudaLaunchKernel": 3836,
+        "cudaStreamIsCapturing": 64,
+        "cudaMemsetAsync": 347,
+        "cudaDeviceGetAttribute": 381,
+        "cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags": 1,
+        "cudaPeekAtLastError": 7,
+        "cudaMemcpyAsync": 265,
+        "cuLaunchKernel": 380,
+        "cudaStreamSynchronize": 145,
+        "cudaLaunchKernelExC": 160,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::item > aten::_local_scalar_dense": 60,
+        "aten::is_nonzero > aten::item > aten::_local_scalar_dense": 45,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 40
+       },
+       "memcpy_sources": {
+        "autograd::engine::evaluate_function: PowBackward0 > PowBackward0 > aten::pow > aten::copy_": 60,
+        "aten::item > aten::_local_scalar_dense": 60,
+        "aten::is_nonzero > aten::item > aten::_local_scalar_dense": 45,
+        "aten::cat": 40,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 40,
+        "autograd::engine::evaluate_function: SliceBackward0 > SliceBackward0 > aten::slice_backward > aten::copy_": 20
+       },
+       "kernel_ms_runs": [
+        18.377975000000582,
+        18.36493699999963
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "graphed_returns": {
+       "kernel_ms": 0.3456620000000025,
+       "gemm_kernel_ms": 0.014128499999999804,
+       "memcpy_ms": 0.01905699999999956,
+       "memset_ms": 0.0007839999999997645,
+       "gpu_active_span_ms": 0.40096149999999986,
+       "gpu_kernels": 278,
+       "gemm_kernels": 4,
+       "gpu_memcpy": 24,
+       "gpu_memset": 1,
+       "host_kernel_launches": 0,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 0,
+       "host_memset_calls": 0,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 1,
+        "cudaGraphLaunch": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {},
+       "kernel_ms_runs": [
+        0.3651229999999996,
+        0.32620100000000546
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "graphed_update": {
+       "kernel_ms": 17.728832499999996,
+       "gemm_kernel_ms": 6.801590000000031,
+       "memcpy_ms": 0.06990550000001497,
+       "memset_ms": 0.06766650000000174,
+       "gpu_active_span_ms": 19.562443000000002,
+       "gpu_kernels": 4615,
+       "gemm_kernels": 600,
+       "gpu_memcpy": 81,
+       "gpu_memset": 167,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 1,
+       "host_memset_calls": 0,
+       "host_syncs": 1,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 3,
+        "cudaLaunchKernel": 2,
+        "cudaGraphLaunch": 1,
+        "cudaMemcpyAsync": 1,
+        "cudaStreamSynchronize": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::to > aten::_to_copy > aten::copy_": 1
+       },
+       "memcpy_sources": {
+        "aten::to > aten::_to_copy > aten::copy_": 1
+       },
+       "kernel_ms_runs": [
+        17.730987000000056,
+        17.726677999999936
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_act": {
+       "kernel_ms": 0.07435450000000016,
+       "gemm_kernel_ms": 0.027232499999999847,
+       "memcpy_ms": 0.0035684999999998582,
+       "memset_ms": 0.0,
+       "gpu_active_span_ms": 1.2857495,
+       "gpu_kernels": 35,
+       "gemm_kernels": 8,
+       "gpu_memcpy": 4,
+       "gpu_memset": 0,
+       "host_kernel_launches": 35,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 4,
+       "host_memset_calls": 7,
+       "host_syncs": 2,
+       "host_api_calls": {
+        "cudaMemcpyAsync": 4,
+        "cudaDeviceGetAttribute": 7,
+        "cudaMemsetAsync": 7,
+        "cuLaunchKernel": 7,
+        "cudaLaunchKernel": 28,
+        "cudaStreamSynchronize": 2,
+        "cudaStreamIsCapturing": 2,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::normal > aten::item > aten::_local_scalar_dense": 2
+       },
+       "memcpy_sources": {
+        "aten::cat": 2,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 2
+       },
+       "kernel_ms_runs": [
+        0.0767390000000014,
+        0.0719699999999989
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "graphed_act": {
+       "kernel_ms": 0.05677099999999928,
+       "gemm_kernel_ms": 0.024704999999999245,
+       "memcpy_ms": 0.0,
+       "memset_ms": 0.0,
+       "gpu_active_span_ms": 0.17453649999999993,
+       "gpu_kernels": 31,
+       "gemm_kernels": 8,
+       "gpu_memcpy": 0,
+       "gpu_memset": 0,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 0,
+       "host_memset_calls": 0,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 2,
+        "cudaLaunchKernel": 2,
+        "cudaGraphLaunch": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {},
+       "kernel_ms_runs": [
+        0.0573149999999996,
+        0.05622699999999895
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_learning_phase": {
+       "kernel_ms": 18.72345700000011,
+       "gemm_kernel_ms": 6.893512500000092,
+       "memcpy_ms": 0.26699149999997596,
+       "memset_ms": 0.07342299999998403,
+       "gpu_active_span_ms": 130.329476,
+       "gpu_kernels": 4654,
+       "gemm_kernels": 604,
+       "gpu_memcpy": 290,
+       "gpu_memset": 207,
+       "host_kernel_launches": 4654,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 290,
+       "host_memset_calls": 350,
+       "host_syncs": 145
+      },
+      "graphed_learning_phase": {
+       "kernel_ms": 18.074494499999997,
+       "gemm_kernel_ms": 6.815718500000031,
+       "memcpy_ms": 0.08896250000001453,
+       "memset_ms": 0.06845050000000151,
+       "gpu_active_span_ms": 19.963404500000003,
+       "gpu_kernels": 4893,
+       "gemm_kernels": 604,
+       "gpu_memcpy": 105,
+       "gpu_memset": 168,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 2,
+       "host_memcpy_calls": 1,
+       "host_memset_calls": 0,
+       "host_syncs": 1
+      }
+     }
+    }
+   },
+   "setup_and_measure_s": 7.553348915069364
+  },
+  "g1": {
+   "task": "Isaac-Velocity-Flat-G1",
+   "physics": "newton_mjwarp",
+   "num_envs": 4096,
+   "num_steps_per_env": 24,
+   "obs_dim": 123,
+   "act_dim": 37,
+   "actor": {
+    "class_name": "MLPModel",
+    "hidden_dims": [
+     256,
+     128,
+     128
+    ],
+    "activation": "elu",
+    "obs_normalization": false
+   },
+   "critic": {
+    "class_name": "MLPModel",
+    "hidden_dims": [
+     256,
+     128,
+     128
+    ],
+    "activation": "elu",
+    "obs_normalization": false
+   },
+   "actor_distribution": {
+    "class_name": "GaussianDistribution",
+    "init_std": 1.0,
+    "std_type": "scalar",
+    "std_range": [
+     1e-06,
+     1000000.0
+    ]
+   },
+   "obs_groups": {
+    "actor": [
+     "policy"
+    ],
+    "critic": [
+     "policy"
+    ]
+   },
+   "algorithm": {
+    "class_name": "PPO",
+    "num_learning_epochs": 5,
+    "num_mini_batches": 4,
+    "learning_rate": 0.001,
+    "schedule": "adaptive",
+    "desired_kl": 0.01,
+    "clip_param": 0.2,
+    "gamma": 0.99,
+    "lam": 0.95,
+    "entropy_coef": 0.008,
+    "value_loss_coef": 1.0,
+    "max_grad_norm": 1.0,
+    "optimizer": "adam",
+    "use_clipped_value_loss": true,
+    "normalize_advantage_per_mini_batch": false,
+    "use_mixed_precision": false
+   },
+   "mini_batch_size": 24576,
+   "actor_params": 85962,
+   "critic_params": 81281,
+   "flops": {
+    "actor_layers": [
+     [
+      123,
+      256
+     ],
+     [
+      256,
+      128
+     ],
+     [
+      128,
+      128
+     ],
+     [
+      128,
+      37
+     ]
+    ],
+    "actor_fwd_macs_per_sample": 85376,
+    "actor_train_macs_per_sample": 224640,
+    "critic_layers": [
+     [
+      123,
+      256
+     ],
+     [
+      256,
+      128
+     ],
+     [
+      128,
+      128
+     ],
+     [
+      128,
+      1
+     ]
+    ],
+    "critic_fwd_macs_per_sample": 80768,
+    "critic_train_macs_per_sample": 210816,
+    "samples_per_update": 98304,
+    "samples_processed_per_update": 491520,
+    "update_flops": 428070666240,
+    "update_flops_6x_fwd_macs": 489978593280,
+    "returns_flops": 661651456,
+    "learning_phase_flops": 428732317696,
+    "act_flops_per_env_step": 1361051648
+   },
+   "footprint_crosscheck": {
+    "file": "<path>",
+    "checked": true,
+    "match": true,
+    "mismatches": {}
+   },
+   "modes": {
+    "tf32_on": {
+     "tf32": true,
+     "torch_matmul_allow_tf32": true,
+     "torch_matmul_fp32_precision": "tf32",
+     "nvidia_smi_before": {
+      "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition, 0 %, 3154 MiB, 2422 MHz, 2430 MHz, 105.38 W",
+      "compute_apps": [
+       "17145, /usr/lib/x86_64-linux-gnu/dcv/dcvagent, 1155 MiB",
+       "17552, /usr/libexec/gnome-remote-desktop-daemon, 558 MiB",
+       "1066495, <path>, 1036 MiB"
+      ]
+     },
+     "loadavg_before": [
+      2.43505859375,
+      3.228515625,
+      3.6533203125
+     ],
+     "graphed_adam": {
+      "class": "Adam",
+      "fused": true,
+      "capturable": true
+     },
+     "graph_capture_s": 0.28363840701058507,
+     "equivalence": {
+      "criterion": "allclose(rtol=0.0001, atol=1e-05) and same LR: graph replay vs eager same code (whole update) and every teacher-forced step vs stock PPO.update",
+      "passed": true,
+      "graph_vs_eager": {
+       "max_abs_param_diff": 0.0,
+       "max_abs_param_change_by_update": 0.017674751579761505,
+       "param_diff_norm_over_update_norm": 0.0,
+       "allclose": true,
+       "same_lr": true
+      },
+      "per_step_vs_stock": {
+       "steps": 20,
+       "steps_passed": 20,
+       "lr_mismatches": 0,
+       "worst_step": {
+        "max_abs_param_diff": 1.1920928955078125e-07,
+        "max_abs_param_change_by_update": 0.0032484419643878937,
+        "param_diff_norm_over_update_norm": 7.003106729548822e-06,
+        "allclose": true,
+        "step": 2
+       }
+      },
+      "max_abs_advantage_diff": 0.0,
+      "free_running": {
+       "stock_vs_graphed": {
+        "max_abs_param_diff": 0.00012492388486862183,
+        "max_abs_param_change_by_update": 0.017675042152404785,
+        "param_diff_norm_over_update_norm": 0.005500764234454011,
+        "allclose": false
+       },
+       "control_stock_vs_stock_with_graph_adam": {
+        "max_abs_param_diff": 0.0001267939805984497,
+        "max_abs_param_change_by_update": 0.017675042152404785,
+        "param_diff_norm_over_update_norm": 0.005512985161314105,
+        "allclose": false
+       },
+       "lr_stock": 0.00013168724279835395,
+       "lr_graphed": 0.00013168726582080126,
+       "losses_stock": {
+        "value": 5.899179363250733,
+        "surrogate": -0.010723851365037262,
+        "entropy": 53.02426242828369
+       },
+       "losses_graphed": {
+        "value": 5.899178981781006,
+        "surrogate": -0.010722476989030838,
+        "entropy": 53.02423858642578
+       }
+      }
+     },
+     "stock": {
+      "learning_phase_wall_ms": {
+       "median": 95.96620552474633,
+       "min": 93.32713193725795,
+       "mean": 96.10204940545373,
+       "p90": 98.83841697592288,
+       "max": 101.12661006860435,
+       "n": 20
+      },
+      "returns_gpu_span_ms": {
+       "median": 3.154128074645996,
+       "min": 3.0135040283203125,
+       "mean": 3.153294396400452,
+       "p90": 3.2372798919677734,
+       "max": 3.464735984802246,
+       "n": 20
+      },
+      "update_gpu_span_ms": {
+       "median": 92.88230514526367,
+       "min": 90.2070083618164,
+       "mean": 92.90992279052735,
+       "p90": 95.62995147705078,
+       "max": 97.83865356445312,
+       "n": 20
+      },
+      "kernel_ms": 23.5032289999997,
+      "tflops_wall": 4.4675343299412305,
+      "tflops_kernel": 18.24142196359511
+     },
+     "graphed": {
+      "learning_phase_wall_ms": {
+       "median": 24.117961060255766,
+       "min": 24.070021929219365,
+       "mean": 24.848043295787647,
+       "p90": 25.859971065074205,
+       "max": 25.88964393362403,
+       "n": 20
+      },
+      "returns_gpu_span_ms": {
+       "median": 0.5061440169811249,
+       "min": 0.48265600204467773,
+       "mean": 0.5485311999917031,
+       "p90": 0.6283519864082336,
+       "max": 0.6495360136032104,
+       "n": 20
+      },
+      "update_gpu_span_ms": {
+       "median": 23.57974338531494,
+       "min": 23.549312591552734,
+       "mean": 24.260895919799804,
+       "p90": 25.208480834960938,
+       "max": 25.215007781982422,
+       "n": 20
+      },
+      "kernel_ms": 23.10784900000001,
+      "tflops_wall": 17.776474413606728,
+      "tflops_kernel": 18.553536406439207,
+      "speedup_vs_stock_wall": 3.9790347652103155
+     },
+     "act": {
+      "stock_act_wall_ms": {
+       "median": 0.788857985753566,
+       "min": 0.7317409617826343,
+       "mean": 0.8031892289485162,
+       "p90": 0.864083063788712,
+       "max": 0.9663759265094995,
+       "n": 120
+      },
+      "stock_act_gpu_span_ms": {
+       "median": 0.7598080039024353,
+       "min": 0.6926720142364502,
+       "mean": 0.7716626659035682,
+       "p90": 0.8343679904937744,
+       "max": 0.9341760277748108,
+       "n": 120
+      },
+      "stock_process_env_step_wall_ms": {
+       "median": 0.24362449767068028,
+       "min": 0.22121507208794355,
+       "mean": 0.24802505310314396,
+       "p90": 0.26631203945726156,
+       "max": 0.3600239288061857,
+       "n": 120
+      },
+      "graphed_act_wall_ms": {
+       "median": 0.10954553727060556,
+       "min": 0.10588101577013731,
+       "mean": 0.1106454571223973,
+       "p90": 0.11409400030970573,
+       "max": 0.17489492893218994,
+       "n": 480
+      },
+      "graphed_act_gpu_span_ms": {
+       "median": 0.09745599702000618,
+       "min": 0.09440000355243683,
+       "mean": 0.09833153358971079,
+       "p90": 0.10028800368309021,
+       "max": 0.15932799875736237,
+       "n": 480
+      },
+      "flops_per_env_step": 1361051648,
+      "stock_tflops_wall": 1.725344323794655,
+      "graphed_tflops_wall": 12.424528482961872
+     },
+     "profile": {
+      "stock_returns": {
+       "kernel_ms": 0.3583440000000012,
+       "gemm_kernel_ms": 0.01806400000000008,
+       "memcpy_ms": 0.02433600000000115,
+       "memset_ms": 0.0,
+       "gpu_active_span_ms": 4.149096,
+       "gpu_kernels": 278,
+       "gemm_kernels": 4,
+       "gpu_memcpy": 25,
+       "gpu_memset": 0,
+       "host_kernel_launches": 278,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 25,
+       "host_memset_calls": 3,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaMemcpyAsync": 25,
+        "cudaDeviceGetAttribute": 3,
+        "cudaMemsetAsync": 3,
+        "cuLaunchKernel": 3,
+        "cudaLaunchKernel": 275,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {
+        "aten::copy_": 24,
+        "aten::cat": 1
+       },
+       "kernel_ms_runs": [
+        0.3752689999999982,
+        0.3414190000000042
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_update": {
+       "kernel_ms": 23.144884999999697,
+       "gemm_kernel_ms": 9.13183849999998,
+       "memcpy_ms": 0.5011989999999622,
+       "memset_ms": 0.07007999999996184,
+       "gpu_active_span_ms": 116.8008855,
+       "gpu_kernels": 4366,
+       "gemm_kernels": 600,
+       "gpu_memcpy": 255,
+       "gpu_memset": 207,
+       "host_kernel_launches": 4366,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 255,
+       "host_memset_calls": 347,
+       "host_syncs": 135,
+       "host_api_calls": {
+        "cudaLaunchKernel": 3826,
+        "cudaStreamIsCapturing": 64,
+        "cudaMemsetAsync": 347,
+        "cudaDeviceGetAttribute": 381,
+        "cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags": 1,
+        "cudaPeekAtLastError": 7,
+        "cudaMemcpyAsync": 255,
+        "cuLaunchKernel": 380,
+        "cudaStreamSynchronize": 135,
+        "cudaLaunchKernelExC": 160,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::item > aten::_local_scalar_dense": 60,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 40,
+        "aten::is_nonzero > aten::item > aten::_local_scalar_dense": 35
+       },
+       "memcpy_sources": {
+        "autograd::engine::evaluate_function: PowBackward0 > PowBackward0 > aten::pow > aten::copy_": 60,
+        "aten::item > aten::_local_scalar_dense": 60,
+        "aten::cat": 40,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 40,
+        "aten::is_nonzero > aten::item > aten::_local_scalar_dense": 35,
+        "autograd::engine::evaluate_function: SliceBackward0 > SliceBackward0 > aten::slice_backward > aten::copy_": 20
+       },
+       "kernel_ms_runs": [
+        23.15070499999924,
+        23.139065000000155
+       ],
+       "counts_stable_across_runs": false,
+       "profiler_runs": 2
+      },
+      "graphed_returns": {
+       "kernel_ms": 0.35430399999999973,
+       "gemm_kernel_ms": 0.021007000000000175,
+       "memcpy_ms": 0.01902449999999942,
+       "memset_ms": 0.0007999999999999545,
+       "gpu_active_span_ms": 0.40948699999999993,
+       "gpu_kernels": 278,
+       "gemm_kernels": 4,
+       "gpu_memcpy": 24,
+       "gpu_memset": 1,
+       "host_kernel_launches": 0,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 0,
+       "host_memset_calls": 0,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 1,
+        "cudaGraphLaunch": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {},
+       "kernel_ms_runs": [
+        0.3744170000000006,
+        0.3341909999999989
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "graphed_update": {
+       "kernel_ms": 22.75354500000001,
+       "gemm_kernel_ms": 9.40613799999998,
+       "memcpy_ms": 0.1767059999999906,
+       "memset_ms": 0.06684850000000028,
+       "gpu_active_span_ms": 24.682373999999996,
+       "gpu_kernels": 4615,
+       "gemm_kernels": 600,
+       "gpu_memcpy": 81,
+       "gpu_memset": 167,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 1,
+       "host_memset_calls": 0,
+       "host_syncs": 1,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 3,
+        "cudaLaunchKernel": 2,
+        "cudaGraphLaunch": 1,
+        "cudaMemcpyAsync": 1,
+        "cudaStreamSynchronize": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::to > aten::_to_copy > aten::copy_": 1
+       },
+       "memcpy_sources": {
+        "aten::to > aten::_to_copy > aten::copy_": 1
+       },
+       "kernel_ms_runs": [
+        22.752320000000026,
+        22.75476999999999
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_act": {
+       "kernel_ms": 0.09204499999999996,
+       "gemm_kernel_ms": 0.044638500000000025,
+       "memcpy_ms": 0.004144000000000233,
+       "memset_ms": 0.00096000000000015,
+       "gpu_active_span_ms": 1.3082,
+       "gpu_kernels": 35,
+       "gemm_kernels": 8,
+       "gpu_memcpy": 4,
+       "gpu_memset": 3,
+       "host_kernel_launches": 35,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 4,
+       "host_memset_calls": 9,
+       "host_syncs": 2,
+       "host_api_calls": {
+        "cudaMemcpyAsync": 4,
+        "cudaDeviceGetAttribute": 7,
+        "cudaMemsetAsync": 9,
+        "cuLaunchKernel": 7,
+        "cudaLaunchKernel": 28,
+        "cudaStreamSynchronize": 2,
+        "cudaStreamIsCapturing": 2,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {
+        "aten::normal > aten::item > aten::_local_scalar_dense": 2
+       },
+       "memcpy_sources": {
+        "aten::cat": 2,
+        "aten::normal > aten::item > aten::_local_scalar_dense": 2
+       },
+       "kernel_ms_runs": [
+        0.09586899999999969,
+        0.08822100000000023
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "graphed_act": {
+       "kernel_ms": 0.0762830000000003,
+       "gemm_kernel_ms": 0.04080550000000005,
+       "memcpy_ms": 0.0,
+       "memset_ms": 0.00032000000000005,
+       "gpu_active_span_ms": 0.17077450000000005,
+       "gpu_kernels": 31,
+       "gemm_kernels": 8,
+       "gpu_memcpy": 0,
+       "gpu_memset": 1,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 1,
+       "host_memcpy_calls": 0,
+       "host_memset_calls": 0,
+       "host_syncs": 0,
+       "host_api_calls": {
+        "cudaStreamIsCapturing": 2,
+        "cudaLaunchKernel": 2,
+        "cudaGraphLaunch": 1,
+        "cudaDeviceSynchronize": 1
+       },
+       "sync_sources": {},
+       "memcpy_sources": {},
+       "kernel_ms_runs": [
+        0.07705200000000025,
+        0.07551400000000034
+       ],
+       "counts_stable_across_runs": true,
+       "profiler_runs": 2
+      },
+      "stock_learning_phase": {
+       "kernel_ms": 23.5032289999997,
+       "gemm_kernel_ms": 9.14990249999998,
+       "memcpy_ms": 0.5255349999999633,
+       "memset_ms": 0.07007999999996184,
+       "gpu_active_span_ms": 120.9499815,
+       "gpu_kernels": 4644,
+       "gemm_kernels": 604,
+       "gpu_memcpy": 280,
+       "gpu_memset": 207,
+       "host_kernel_launches": 4644,
+       "host_graph_launches": 0,
+       "host_memcpy_calls": 280,
+       "host_memset_calls": 350,
+       "host_syncs": 135
+      },
+      "graphed_learning_phase": {
+       "kernel_ms": 23.10784900000001,
+       "gemm_kernel_ms": 9.427144999999982,
+       "memcpy_ms": 0.19573049999999,
+       "memset_ms": 0.06764850000000024,
+       "gpu_active_span_ms": 25.091860999999994,
+       "gpu_kernels": 4893,
+       "gemm_kernels": 604,
+       "gpu_memcpy": 105,
+       "gpu_memset": 168,
+       "host_kernel_launches": 2,
+       "host_graph_launches": 2,
+       "host_memcpy_calls": 1,
+       "host_memset_calls": 0,
+       "host_syncs": 1
+      }
+     }
+    }
+   },
+   "setup_and_measure_s": 7.400959072983824
+  }
+ }
+}

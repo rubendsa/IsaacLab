@@ -1,0 +1,198 @@
+{
+ "rep1": [
+  {
+   "num_envs": 4096,
+   "storage": "shared memory (SRAM)",
+   "describe": {
+    "num_envs": 4096,
+    "num_ctas": 188,
+    "num_sms": 188,
+    "envs_per_cta_max": 22,
+    "threads_per_cta": 256,
+    "rollout_storage": "shared memory (SRAM)",
+    "dynamic_smem_bytes_per_cta": 72696,
+    "rollout_buffer_bytes_total": 3145728,
+    "params": 2499,
+    "mini_batch_size": 16384,
+    "registers_per_thread": 223,
+    "local_mem_bytes_per_thread": 32,
+    "nvrtc_compile_s": 0.001763154985383153
+   },
+   "gpu_s": 0.024664031982421876,
+   "iterations": 50,
+   "env_steps_per_s": 132857433.94816324,
+   "ms_per_iteration": 0.4932806396484375,
+   "final_return": 4.788488048602976
+  },
+  {
+   "num_envs": 4096,
+   "storage": "global memory (L2/DRAM)",
+   "describe": {
+    "num_envs": 4096,
+    "num_ctas": 188,
+    "num_sms": 188,
+    "envs_per_cta_max": 22,
+    "threads_per_cta": 256,
+    "rollout_storage": "global memory (L2/DRAM)",
+    "dynamic_smem_bytes_per_cta": 55800,
+    "rollout_buffer_bytes_total": 3145728,
+    "params": 2499,
+    "mini_batch_size": 16384,
+    "registers_per_thread": 223,
+    "local_mem_bytes_per_thread": 32,
+    "nvrtc_compile_s": 0.0011825120309367776
+   },
+   "gpu_s": 0.024828800201416014,
+   "iterations": 50,
+   "env_steps_per_s": 131975769.00285019,
+   "ms_per_iteration": 0.4965760040283203,
+   "final_return": 4.788489088365189
+  },
+  {
+   "num_envs": 8192,
+   "storage": "shared memory (SRAM)",
+   "describe": {
+    "num_envs": 8192,
+    "num_ctas": 188,
+    "num_sms": 188,
+    "envs_per_cta_max": 44,
+    "threads_per_cta": 256,
+    "rollout_storage": "shared memory (SRAM)",
+    "dynamic_smem_bytes_per_cta": 91616,
+    "rollout_buffer_bytes_total": 6291456,
+    "params": 2499,
+    "mini_batch_size": 32768,
+    "registers_per_thread": 223,
+    "local_mem_bytes_per_thread": 32,
+    "nvrtc_compile_s": 0.0011472799815237522
+   },
+   "gpu_s": 0.04148896026611328,
+   "iterations": 50,
+   "env_steps_per_s": 157960092.4671219,
+   "ms_per_iteration": 0.8297792053222657,
+   "final_return": 4.872054273717108
+  },
+  {
+   "num_envs": 8192,
+   "storage": "global memory (L2/DRAM)",
+   "describe": {
+    "num_envs": 8192,
+    "num_ctas": 188,
+    "num_sms": 188,
+    "envs_per_cta_max": 44,
+    "threads_per_cta": 256,
+    "rollout_storage": "global memory (L2/DRAM)",
+    "dynamic_smem_bytes_per_cta": 57824,
+    "rollout_buffer_bytes_total": 6291456,
+    "params": 2499,
+    "mini_batch_size": 32768,
+    "registers_per_thread": 223,
+    "local_mem_bytes_per_thread": 32,
+    "nvrtc_compile_s": 0.0009580280166119337
+   },
+   "gpu_s": 0.041852638244628905,
+   "iterations": 50,
+   "env_steps_per_s": 156587500.21191427,
+   "ms_per_iteration": 0.8370527648925781,
+   "final_return": 4.872054210053048
+  }
+ ],
+ "rep2": [
+  {
+   "num_envs": 4096,
+   "storage": "shared memory (SRAM)",
+   "describe": {
+    "num_envs": 4096,
+    "num_ctas": 188,
+    "num_sms": 188,
+    "envs_per_cta_max": 22,
+    "threads_per_cta": 256,
+    "rollout_storage": "shared memory (SRAM)",
+    "dynamic_smem_bytes_per_cta": 72696,
+    "rollout_buffer_bytes_total": 3145728,
+    "params": 2499,
+    "mini_batch_size": 16384,
+    "registers_per_thread": 223,
+    "local_mem_bytes_per_thread": 32,
+    "nvrtc_compile_s": 0.0019196629291400313
+   },
+   "gpu_s": 0.024670015335083006,
+   "iterations": 50,
+   "env_steps_per_s": 132825211.31391808,
+   "ms_per_iteration": 0.49340030670166013,
+   "final_return": 4.788488598616091
+  },
+  {
+   "num_envs": 4096,
+   "storage": "global memory (L2/DRAM)",
+   "describe": {
+    "num_envs": 4096,
+    "num_ctas": 188,
+    "num_sms": 188,
+    "envs_per_cta_max": 22,
+    "threads_per_cta": 256,
+    "rollout_storage": "global memory (L2/DRAM)",
+    "dynamic_smem_bytes_per_cta": 55800,
+    "rollout_buffer_bytes_total": 3145728,
+    "params": 2499,
+    "mini_batch_size": 16384,
+    "registers_per_thread": 223,
+    "local_mem_bytes_per_thread": 32,
+    "nvrtc_compile_s": 0.001150056952610612
+   },
+   "gpu_s": 0.024821855545043944,
+   "iterations": 50,
+   "env_steps_per_s": 132012693.17088835,
+   "ms_per_iteration": 0.4964371109008789,
+   "final_return": 4.788488903366243
+  },
+  {
+   "num_envs": 8192,
+   "storage": "shared memory (SRAM)",
+   "describe": {
+    "num_envs": 8192,
+    "num_ctas": 188,
+    "num_sms": 188,
+    "envs_per_cta_max": 44,
+    "threads_per_cta": 256,
+    "rollout_storage": "shared memory (SRAM)",
+    "dynamic_smem_bytes_per_cta": 91616,
+    "rollout_buffer_bytes_total": 6291456,
+    "params": 2499,
+    "mini_batch_size": 32768,
+    "registers_per_thread": 223,
+    "local_mem_bytes_per_thread": 32,
+    "nvrtc_compile_s": 0.0010172181064262986
+   },
+   "gpu_s": 0.04148588943481445,
+   "iterations": 50,
+   "env_steps_per_s": 157971784.84741125,
+   "ms_per_iteration": 0.8297177886962891,
+   "final_return": 4.87205415638464
+  },
+  {
+   "num_envs": 8192,
+   "storage": "global memory (L2/DRAM)",
+   "describe": {
+    "num_envs": 8192,
+    "num_ctas": 188,
+    "num_sms": 188,
+    "envs_per_cta_max": 44,
+    "threads_per_cta": 256,
+    "rollout_storage": "global memory (L2/DRAM)",
+    "dynamic_smem_bytes_per_cta": 57824,
+    "rollout_buffer_bytes_total": 6291456,
+    "params": 2499,
+    "mini_batch_size": 32768,
+    "registers_per_thread": 223,
+    "local_mem_bytes_per_thread": 32,
+    "nvrtc_compile_s": 0.0009877280099317431
+   },
+   "gpu_s": 0.04185747146606445,
+   "iterations": 50,
+   "env_steps_per_s": 156569419.28069568,
+   "ms_per_iteration": 0.8371494293212891,
+   "final_return": 4.872054053006312
+  }
+ ]
+}

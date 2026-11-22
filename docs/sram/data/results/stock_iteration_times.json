@@ -1,0 +1,50 @@
+[
+ {
+  "task_key": "anymal_c",
+  "task": "IsaacContrib-Velocity-Flat-AnymalC",
+  "num_envs": 4096,
+  "returncode": 0,
+  "process_wall_s": 22.34592613799032,
+  "collection_s": 0.5694999999999999,
+  "learning_s": 0.079,
+  "iteration_s": 0.65,
+  "steps_per_s": 151144.0,
+  "iterations_measured": 10
+ },
+ {
+  "task_key": "g1",
+  "task": "Isaac-Velocity-Flat-G1",
+  "num_envs": 4096,
+  "returncode": 0,
+  "process_wall_s": 21.243901459034532,
+  "collection_s": 0.434,
+  "learning_s": 0.0785,
+  "iteration_s": 0.51,
+  "steps_per_s": 192029.5,
+  "iterations_measured": 10
+ },
+ {
+  "task_key": "dex_state",
+  "task": "Isaac-Lift-KukaAllegro",
+  "num_envs": 4096,
+  "returncode": 0,
+  "process_wall_s": 29.111294661997817,
+  "collection_s": 0.7175,
+  "learning_s": 0.155,
+  "iteration_s": 0.87,
+  "steps_per_s": 150238.0,
+  "iterations_measured": 10
+ },
+ {
+  "task_key": "dex_rgb64",
+  "task": "Isaac-Lift-KukaAllegro-Camera",
+  "num_envs": 4096,
+  "returncode": 0,
+  "process_wall_s": 42.4339492439758,
+  "collection_s": 0.963,
+  "learning_s": 0.486,
+  "iteration_s": 1.45,
+  "steps_per_s": 90440.5,
+  "iterations_measured": 10
+ }
+]

@@ -1,0 +1,224 @@
+{
+ "task": "IsaacContrib-Velocity-Rough-AnymalC",
+ "num_envs": 4096,
+ "num_steps_per_env": 24,
+ "rsl_rl_version": "5.5.1",
+ "num_actions": 12,
+ "obs_dim": 235,
+ "actor_params": 286616,
+ "critic_params": 285185,
+ "actor_param_shapes": {
+  "distribution.std_param": [
+   12
+  ],
+  "mlp.0.weight": [
+   512,
+   235
+  ],
+  "mlp.0.bias": [
+   512
+  ],
+  "mlp.2.weight": [
+   256,
+   512
+  ],
+  "mlp.2.bias": [
+   256
+  ],
+  "mlp.4.weight": [
+   128,
+   256
+  ],
+  "mlp.4.bias": [
+   128
+  ],
+  "mlp.6.weight": [
+   12,
+   128
+  ],
+  "mlp.6.bias": [
+   12
+  ]
+ },
+ "critic_param_shapes": {
+  "mlp.0.weight": [
+   512,
+   235
+  ],
+  "mlp.0.bias": [
+   512
+  ],
+  "mlp.2.weight": [
+   256,
+   512
+  ],
+  "mlp.2.bias": [
+   256
+  ],
+  "mlp.4.weight": [
+   128,
+   256
+  ],
+  "mlp.4.bias": [
+   128
+  ],
+  "mlp.6.weight": [
+   1,
+   128
+  ],
+  "mlp.6.bias": [
+   1
+  ]
+ },
+ "alg_cfg": {
+  "num_learning_epochs": 5,
+  "num_mini_batches": 4,
+  "learning_rate": 0.001,
+  "clip_param": 0.2,
+  "gamma": 0.99,
+  "lam": 0.95,
+  "desired_kl": 0.01,
+  "schedule": "adaptive",
+  "entropy_coef": 0.005,
+  "max_grad_norm": 1.0,
+  "optimizer": "adam"
+ },
+ "actor_cfg": {
+  "hidden_dims": [
+   512,
+   256,
+   128
+  ],
+  "activation": "elu",
+  "obs_normalization": false
+ },
+ "critic_cfg": {
+  "hidden_dims": [
+   512,
+   256,
+   128
+  ],
+  "activation": "elu",
+  "obs_normalization": false
+ },
+ "obs_groups": {
+  "actor": [
+   "policy"
+  ],
+  "critic": [
+   "policy"
+  ]
+ },
+ "t_act_total_s(contended)": 0.30049517762381583,
+ "storage": {
+  "rewards": {
+   "shape": [
+    24,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 393216
+  },
+  "actions": {
+   "shape": [
+    24,
+    4096,
+    12
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 4718592
+  },
+  "dones": {
+   "shape": [
+    24,
+    4096,
+    1
+   ],
+   "dtype": "torch.uint8",
+   "nbytes": 98304
+  },
+  "values": {
+   "shape": [
+    24,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 393216
+  },
+  "actions_log_prob": {
+   "shape": [
+    24,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 393216
+  },
+  "returns": {
+   "shape": [
+    24,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 393216
+  },
+  "advantages": {
+   "shape": [
+    24,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 393216
+  },
+  "observations[policy]": {
+   "shape": [
+    24,
+    4096,
+    235
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 92405760
+  },
+  "distribution_params[0]": {
+   "shape": [
+    24,
+    4096,
+    12
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 4718592
+  },
+  "distribution_params[1]": {
+   "shape": [
+    24,
+    4096,
+    12
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 4718592
+  }
+ },
+ "storage_total_bytes": 108625920,
+ "storage_bytes_per_env_per_step": 1105.0,
+ "t_returns_plus_update_s(contended,incl. first-call overheads)": 0.43572382093407214,
+ "update_peak_transient_bytes": 500461056,
+ "t_update2_s(contended)": 0.0835680419113487,
+ "optimizer_class": "Adam",
+ "optimizer_state_bytes": 4574476,
+ "optimizer_state_detail": {
+  "step": 68,
+  "exp_avg": 2287204,
+  "exp_avg_sq": 2287204
+ },
+ "params_bytes_fp32": 2287204,
+ "grads_bytes_fp32": 2287204,
+ "mini_batch_size": 24576,
+ "mlp_flops_per_sample_forward": {
+  "actor": 571392,
+  "critic": 568576
+ }
+}

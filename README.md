@@ -13,6 +13,15 @@
 [![License](https://img.shields.io/badge/license-BSD--3-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![License](https://img.shields.io/badge/license-Apache--2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
 
+> [!NOTE]
+> **Prototype branch `sram-megakernel`: SRAM-resident RL training.** Cartpole's whole PPO training loop (physics,
+> policy and value networks, GAE, PPO update and Adam) runs inside one persistent CUDA kernel with its working set
+> on-chip. On an RTX PRO 6000 Blackwell at 4,096 envs it takes 0.49 ms per PPO iteration instead of 134 ms.
+> Each of its PPO optimizer steps matches RSL-RL and `torch.optim.Adam` to fp32 rounding, and its policies score the
+> same as stock-trained ones. The report covers results, verification, how it works, projections for G1, ANYmal and
+> the perceptive DexSuite tasks, and a gated proposal: [docs/sram/SRAM_TRAINING.md](docs/sram/SRAM_TRAINING.md).
+> The code is in [source/isaaclab_sram](source/isaaclab_sram) and [scripts/sram](scripts/sram).
+
 
 For workflows that use Isaac Sim, this branch targets Isaac Sim 6.2. For release installation instructions, see the
 [Isaac Lab v3.0.0 EA documentation](https://isaac-sim.github.io/IsaacLab/v3.0.0-EA/source/setup/installation/index.html).

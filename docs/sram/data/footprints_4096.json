@@ -1,0 +1,2624 @@
+{
+ "device": {
+  "multiProcessorCount": 188,
+  "maxRegistersPerMultiprocessor(32bit)": 65536,
+  "maxRegistersPerBlock(32bit)": 65536,
+  "maxSharedMemoryPerMultiprocessor(B)": 102400,
+  "maxSharedMemoryPerBlockOptin(B)": 101376,
+  "maxSharedMemoryPerBlock(B)": 49152,
+  "reservedSharedMemoryPerBlock(B)": 1024,
+  "l2CacheSize(B)": 134217728,
+  "maxPersistingL2CacheSize(B)": 83886080,
+  "maxThreadsPerMultiProcessor": 1536,
+  "maxBlocksPerMultiprocessor": 24,
+  "computeCapabilityMajor": 12,
+  "computeCapabilityMinor": 0,
+  "globalMemoryBusWidth(bit)": 512,
+  "memoryClockRate(kHz)": 12481000,
+  "clockRate(kHz)": 2430000,
+  "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "totalGlobalMem(B)": 101971460096,
+  "derived": {
+   "register_file_per_SM_KiB": 256.0,
+   "register_file_total_MiB": 47.0,
+   "max_shared_per_SM_KiB": 100.0,
+   "max_shared_total_MiB": 18.359375,
+   "L1+smem_per_SM_KiB(assumed 128, not queryable)": 128,
+   "L1+smem_total_MiB(assumed 128KiB/SM)": 23.5,
+   "RF+L1smem_total_MiB": 70.5,
+   "L2_MiB": 128.0
+  }
+ },
+ "tasks": {
+  "cartpole": {
+   "task_id": "Isaac-Cartpole-Direct",
+   "mdp": {
+    "obs_policy": 4,
+    "obs_critic": 4,
+    "obs_groups_rsl": {
+     "actor": [
+      "policy"
+     ],
+     "critic": [
+      "policy"
+     ]
+    },
+    "obs_terms": null,
+    "action_dim": 1,
+    "physics_dt": 0.008333333333333333,
+    "decimation": 2,
+    "control_dt": 0.016666666666666666,
+    "newton_num_substeps": 1,
+    "solver_dt": 0.008333333333333333,
+    "mjwarp_steps_per_env_step": 2,
+    "episode_length_s": 5.0,
+    "max_episode_length_steps": 300,
+    "solver_cfg": {
+     "njmax": 5,
+     "nconmax": 3,
+     "iterations": 100,
+     "ls_iterations": 50,
+     "solver": "newton",
+     "integrator": "implicitfast",
+     "cone": "pyramidal",
+     "impratio": 1,
+     "use_mujoco_contacts": true,
+     "tolerance": 1e-06
+    }
+   },
+   "rsl_rl": {
+    "actor_hidden": [
+     32,
+     32
+    ],
+    "critic_hidden": [
+     32,
+     32
+    ],
+    "activation": "elu",
+    "num_steps_per_env": 16,
+    "epochs": 5,
+    "mini_batches": 4,
+    "mini_batch_size_at_4096": 16384,
+    "actor_params": 1250,
+    "critic_params": 1249,
+    "total_params": 2499,
+    "actor_param_shapes": {
+     "distribution.std_param": [
+      1
+     ],
+     "mlp.0.weight": [
+      32,
+      4
+     ],
+     "mlp.0.bias": [
+      32
+     ],
+     "mlp.2.weight": [
+      32,
+      32
+     ],
+     "mlp.2.bias": [
+      32
+     ],
+     "mlp.4.weight": [
+      1,
+      32
+     ],
+     "mlp.4.bias": [
+      1
+     ]
+    },
+    "critic_param_shapes": {
+     "mlp.0.weight": [
+      32,
+      4
+     ],
+     "mlp.0.bias": [
+      32
+     ],
+     "mlp.2.weight": [
+      32,
+      32
+     ],
+     "mlp.2.bias": [
+      32
+     ],
+     "mlp.4.weight": [
+      1,
+      32
+     ],
+     "mlp.4.bias": [
+      1
+     ]
+    }
+   },
+   "stock_footprint": {
+    "total_unique_bytes_by_N": {
+     "16": 144568,
+     "64": 571096,
+     "256": 2277208,
+     "1024": 9101656,
+     "4096": 36399448
+    },
+    "per_env_bytes_at_4096_by_category": {
+     "newton_model": 2287.1376953125,
+     "newton_state_0": 244.0,
+     "newton_state_1": 244.0,
+     "newton_control": 32.0,
+     "newton_contacts": 288.0029296875,
+     "newton_collision_pipeline": 0.0,
+     "mjw_model": 1244.40087890625,
+     "mjw_data": 3364.001953125,
+     "mjw_solver_other": 80.0126953125,
+     "isaaclab_env": 1029.027587890625,
+     "newton_manager_misc": 74.000244140625
+    },
+    "marginal_per_env_bytes_1024_to_4096": {
+     "newton_model": 2287.0,
+     "newton_state_0": 244.0,
+     "newton_state_1": 244.0,
+     "newton_control": 32.0,
+     "newton_contacts": 288.0,
+     "newton_collision_pipeline": 0.0,
+     "mjw_model": 1244.0,
+     "mjw_data": 3364.0,
+     "mjw_solver_other": 80.0,
+     "isaaclab_env": 1029.0,
+     "newton_manager_misc": 74.0
+    },
+    "per_env_total_at_4096": 8886.583984375,
+    "solver_context_transient_per_env": 251.0,
+    "warp_mempool_used_after_steps_by_N": {
+     "16": 142764,
+     "64": 563964,
+     "256": 2248764,
+     "1024": 8987964,
+     "4096": 35944764
+    },
+    "torch_allocated_after_steps_by_N": {
+     "16": 12800,
+     "64": 13824,
+     "256": 32256,
+     "1024": 119808,
+     "4096": 473088
+    },
+    "nvidia_smi_proc_MiB_by_N": {
+     "16": 714.0,
+     "64": 714.0,
+     "256": 714.0,
+     "1024": 714.0,
+     "4096": 746.0
+    },
+    "marginal_total_per_env": 8886.0,
+    "fixed_intercept_bytes": 2392.0
+   },
+   "mjw_data_by_class_per_env": {
+    "state": 60.0,
+    "input(per-step)": 108.0,
+    "scratch:compact": 64.0,
+    "scratch:contact(naconmax-sized)": 456.0,
+    "scratch:efc(njmax-sized)": 636.0,
+    "scratch:island": 128.0,
+    "scratch:kinematics/dynamics": 1860.001953125,
+    "scratch:mass-matrix/factor": 52.0
+   },
+   "mjw_data_top_arrays_per_env": [
+    [
+     "mjw_data.efc.J",
+     [
+      4096,
+      16,
+      4
+     ],
+     "float32",
+     256.0
+    ],
+    [
+     "mjw_data.cinert",
+     [
+      4096,
+      4
+     ],
+     "vec10f",
+     160.0
+    ],
+    [
+     "mjw_data.crb",
+     [
+      4096,
+      4
+     ],
+     "vec10f",
+     160.0
+    ],
+    [
+     "mjw_data.xmat",
+     [
+      4096,
+      4
+     ],
+     "mat33f",
+     144.0
+    ],
+    [
+     "mjw_data.ximat",
+     [
+      4096,
+      4
+     ],
+     "mat33f",
+     144.0
+    ],
+    [
+     "mjw_data.geom_xmat",
+     [
+      4096,
+      4
+     ],
+     "mat33f",
+     144.0
+    ],
+    [
+     "mjw_data.contact.frame",
+     [
+      12288
+     ],
+     "mat33f",
+     108.0
+    ],
+    [
+     "mjw_data.xfrc_applied",
+     [
+      4096,
+      4
+     ],
+     "spatial_vectorf",
+     96.0
+    ],
+    [
+     "mjw_data.cvel",
+     [
+      4096,
+      4
+     ],
+     "spatial_vectorf",
+     96.0
+    ],
+    [
+     "mjw_data.cacc",
+     [
+      4096,
+      4
+     ],
+     "spatial_vectorf",
+     96.0
+    ],
+    [
+     "mjw_data.cfrc_int",
+     [
+      4096,
+      4
+     ],
+     "spatial_vectorf",
+     96.0
+    ],
+    [
+     "mjw_data.cfrc_ext",
+     [
+      4096,
+      4
+     ],
+     "spatial_vectorf",
+     96.0
+    ]
+   ],
+   "isaaclab_env_per_env_by_group": {
+    "scene/other": 20.0,
+    "_cart_dof_idx": 0.001953125,
+    "_pole_dof_idx": 0.001953125,
+    "actions": 4.0,
+    "cartpole": 974.022705078125,
+    "episode_length_buf": 8.0,
+    "extras": 0.0009765625,
+    "obs_buf": 16.0,
+    "reset_buf": 1.0,
+    "reset_terminated": 1.0,
+    "reset_time_outs": 1.0,
+    "reward_buf": 4.0
+   },
+   "newton_state0_arrays_per_env": [
+    [
+     "newton_state_0.body_q",
+     [
+      12288
+     ],
+     "transformf",
+     84.0
+    ],
+    [
+     "newton_state_0.body_qd",
+     [
+      12288
+     ],
+     "spatial_vectorf",
+     72.0
+    ],
+    [
+     "newton_state_0.body_f",
+     [
+      12288
+     ],
+     "spatial_vectorf",
+     72.0
+    ],
+    [
+     "newton_state_0.joint_q",
+     [
+      8192
+     ],
+     "float32",
+     8.0
+    ],
+    [
+     "newton_state_0.joint_qd",
+     [
+      8192
+     ],
+     "float32",
+     8.0
+    ]
+   ],
+   "model_counts": {
+    "mj_nbody_incl_world": 4,
+    "nbody_moving": 3,
+    "njnt": 2,
+    "nq": 2,
+    "nv": 2,
+    "nu_mjwarp_actuators": 1,
+    "ngeom": 4,
+    "geom_types": {
+     "mjGEOM_PLANE": 1,
+     "mjGEOM_BOX": 3
+    },
+    "nM": 3,
+    "nv_pad": 4,
+    "jacobian": "dense",
+    "cone": "pyramidal",
+    "integrator_id": 3,
+    "newton_shapes_per_world": 3.0,
+    "newton_bodies_per_world": 3.0,
+    "newton_dofs_per_world": 2.0,
+    "newton_coords_per_world": 2.0,
+    "broadphase_candidate_pairs_per_world": 3.0,
+    "newton_rigid_contact_max_per_world": 3.0,
+    "mjw_nconmax_per_world": 3.0,
+    "mjw_njmax": 5,
+    "observed_random_actions": {
+     "ncon_max_per_world": 0,
+     "ncon_mean_per_world": 0.0,
+     "nefc_max": 0,
+     "nefc_mean": 0.0,
+     "solver_iters_max": 1,
+     "solver_iters_mean": 1.0
+    }
+   },
+   "flops": {
+    "physics_per_mjwarp_step_mean_contacts": {
+     "kinematics": 635,
+     "com_pos+cdof": 500,
+     "crb+M": 156,
+     "factor_M(LDL)": 5,
+     "rne+cvel+passive": 788,
+     "actuation": 12,
+     "smooth_acc(solve)": 20,
+     "collision(broad+narrow)": 75.0,
+     "make_constraint": 0.0,
+     "solver(init)": 6.0,
+     "solver(iterations)": 38.666666666666664,
+     "integrate(implicitfast)": 81,
+     "newton<->mjwarp glue": 220,
+     "_total": 2536.6666666666665,
+     "_per_iter": 38.666666666666664
+    },
+    "physics_per_mjwarp_step_max_contacts": {
+     "kinematics": 635,
+     "com_pos+cdof": 500,
+     "crb+M": 156,
+     "factor_M(LDL)": 5,
+     "rne+cvel+passive": 788,
+     "actuation": 12,
+     "smooth_acc(solve)": 20,
+     "collision(broad+narrow)": 75.0,
+     "make_constraint": 0.0,
+     "solver(init)": 6,
+     "solver(iterations)": 38.666666666666664,
+     "integrate(implicitfast)": 81,
+     "newton<->mjwarp glue": 220,
+     "_total": 2536.6666666666665,
+     "_per_iter": 38.666666666666664
+    },
+    "physics_per_env_step_mean": 5073.333333333333,
+    "rough_terrain_extra_per_env_step": 0.0,
+    "lstm_actuator_per_env_step": 0.0,
+    "policy_value_inference_per_env_step": 4736,
+    "ppo_update_per_env_step_amortized": 71040,
+    "per_iteration_at_4096": {
+     "physics": 332485973.3333333,
+     "actuator_net": 0.0,
+     "rollout_inference": 310378496,
+     "ppo_update": 4655677440
+    }
+   },
+   "minimal_persistent_state_per_env_bytes": {
+    "physics_qpos_qvel_warmstart": 24,
+    "actuator_state": 0,
+    "mdp_state": 8,
+    "domain_rand_params": 0,
+    "rng_counter": 8,
+    "total": 40
+   },
+   "lean_scratch_per_world_bytes": {
+    "observed_max": 1672,
+    "configured_caps": 2372
+   },
+   "working_set_4096": {
+    "rollout_storage": 3211264,
+    "rollout_storage_per_env_per_step": 49.0,
+    "params_fp32": 9996,
+    "grads_fp32": 9996,
+    "adam_m_v": 20044,
+    "ppo_update_transient_peak_pytorch": 30554624,
+    "sim_stock_allocated": 36399448,
+    "sim_stock_solver_ctx_transient": 1028096,
+    "sim_minimal_persistent": 163840,
+    "learner_state(params+grads+adam)": 40036,
+    "lean_total(rollout+learner+minimal_sim)": 3415140,
+    "stock_total(rollout+learner+sim_alloc+update_peak)": 70205372,
+    "rollout_storage_bf16_obs_act_dist": 2293760
+   },
+   "max_envs_fitting_lean_working_set": {
+    "per_env_bytes_fp32_rollout": 824.0,
+    "per_env_bytes_bf16_rollout": 600,
+    "learner_bytes": 40036,
+    "fp32": {
+     "smem_total(18.4MiB)": 23314,
+     "RF+L1smem(70.5MiB)": 89665,
+     "L2_persisting_window(80MiB)": 101754,
+     "L2(128MiB)": 162837,
+     "RF+L1smem+L2(198.5MiB)": 252551
+    },
+    "bf16": {
+     "smem_total(18.4MiB)": 32018,
+     "RF+L1smem(70.5MiB)": 123140,
+     "L2_persisting_window(80MiB)": 139743,
+     "L2(128MiB)": 223629,
+     "RF+L1smem+L2(198.5MiB)": 346837
+    }
+   },
+   "indicative_timing_contended": {
+    "ms_per_env_step_4096": 2.317972269374877,
+    "env_steps_per_s": 1767061.6918573536,
+    "achieved_useful_physics_GFLOPs": 8.964892983356307,
+    "fraction_of_fp32_peak": 7.665509416039659e-05,
+    "smi_before": "0 %, 2117 MiB",
+    "smi_after": "30 %, 2888 MiB"
+   }
+  },
+  "anymalc": {
+   "task_id": "IsaacContrib-Velocity-Flat-AnymalC",
+   "mdp": {
+    "obs_policy": 48,
+    "obs_critic": 48,
+    "obs_groups_rsl": {
+     "actor": [
+      "policy"
+     ],
+     "critic": [
+      "policy"
+     ]
+    },
+    "obs_terms": {
+     "policy": {
+      "base_lin_vel": [
+       3
+      ],
+      "base_ang_vel": [
+       3
+      ],
+      "projected_gravity": [
+       3
+      ],
+      "velocity_commands": [
+       3
+      ],
+      "joint_pos": [
+       12
+      ],
+      "joint_vel": [
+       12
+      ],
+      "actions": [
+       12
+      ]
+     }
+    },
+    "action_dim": 12,
+    "physics_dt": 0.005,
+    "decimation": 4,
+    "control_dt": 0.02,
+    "newton_num_substeps": 2,
+    "solver_dt": 0.0025,
+    "mjwarp_steps_per_env_step": 8,
+    "episode_length_s": 20.0,
+    "max_episode_length_steps": 1000,
+    "solver_cfg": {
+     "njmax": 120,
+     "nconmax": 15,
+     "iterations": 100,
+     "ls_iterations": 50,
+     "solver": "newton",
+     "integrator": "implicitfast",
+     "cone": "elliptic",
+     "impratio": 100.0,
+     "use_mujoco_contacts": false,
+     "tolerance": 1e-06
+    }
+   },
+   "rsl_rl": {
+    "actor_hidden": [
+     128,
+     128,
+     128
+    ],
+    "critic_hidden": [
+     128,
+     128,
+     128
+    ],
+    "activation": "elu",
+    "num_steps_per_env": 24,
+    "epochs": 5,
+    "mini_batches": 4,
+    "mini_batch_size_at_4096": 24576,
+    "actor_params": 40856,
+    "critic_params": 39425,
+    "total_params": 80281,
+    "actor_param_shapes": {
+     "distribution.std_param": [
+      12
+     ],
+     "mlp.0.weight": [
+      128,
+      48
+     ],
+     "mlp.0.bias": [
+      128
+     ],
+     "mlp.2.weight": [
+      128,
+      128
+     ],
+     "mlp.2.bias": [
+      128
+     ],
+     "mlp.4.weight": [
+      128,
+      128
+     ],
+     "mlp.4.bias": [
+      128
+     ],
+     "mlp.6.weight": [
+      12,
+      128
+     ],
+     "mlp.6.bias": [
+      12
+     ]
+    },
+    "critic_param_shapes": {
+     "mlp.0.weight": [
+      128,
+      48
+     ],
+     "mlp.0.bias": [
+      128
+     ],
+     "mlp.2.weight": [
+      128,
+      128
+     ],
+     "mlp.2.bias": [
+      128
+     ],
+     "mlp.4.weight": [
+      128,
+      128
+     ],
+     "mlp.4.bias": [
+      128
+     ],
+     "mlp.6.weight": [
+      1,
+      128
+     ],
+     "mlp.6.bias": [
+      1
+     ]
+    }
+   },
+   "stock_footprint": {
+    "total_unique_bytes_by_N": {
+     "16": 1975319,
+     "64": 7815767,
+     "256": 31177559,
+     "1024": 130277215,
+     "4096": 521023327
+    },
+    "per_env_bytes_at_4096_by_category": {
+     "newton_model": 14906.0869140625,
+     "newton_state_0": 1440.0,
+     "newton_state_1": 1440.0,
+     "newton_control": 364.0,
+     "newton_contacts": 49800.00390625,
+     "newton_collision_pipeline": 6560.041015625,
+     "mjw_model": 4933.561279296875,
+     "mjw_data": 33592.0009765625,
+     "mjw_solver_other": 556.0361328125,
+     "isaaclab_env": 12485.228271484375,
+     "newton_manager_misc": 1126.002197265625
+    },
+    "marginal_per_env_bytes_1024_to_4096": {
+     "newton_model": 14905.0,
+     "newton_state_0": 1440.0,
+     "newton_state_1": 1440.0,
+     "newton_control": 364.0,
+     "newton_contacts": 49800.0,
+     "newton_collision_pipeline": 6560.0,
+     "mjw_model": 4928.0,
+     "mjw_data": 33592.0,
+     "mjw_solver_other": 556.0,
+     "isaaclab_env": 12485.0,
+     "newton_manager_misc": 1126.0
+    },
+    "per_env_total_at_4096": 127202.96069335938,
+    "solver_context_transient_per_env": 4251.0,
+    "warp_mempool_used_after_steps_by_N": {
+     "16": 1889439,
+     "64": 7485087,
+     "256": 29867679,
+     "1024": 123477671,
+     "4096": 493837991
+    },
+    "torch_allocated_after_steps_by_N": {
+     "16": 8634880,
+     "64": 8878080,
+     "256": 9868288,
+     "1024": 15429632,
+     "4096": 36896768
+    },
+    "nvidia_smi_proc_MiB_by_N": {
+     "16": 772.0,
+     "64": 772.0,
+     "256": 778.0,
+     "1024": 904.0,
+     "4096": 1378.0
+    },
+    "marginal_total_per_env": 127196.0,
+    "fixed_intercept_bytes": 28511.0
+   },
+   "mjw_data_by_class_per_env": {
+    "state": 228.0,
+    "input(per-step)": 504.0,
+    "scratch:compact": 128.0,
+    "scratch:contact(naconmax-sized)": 2280.0,
+    "scratch:efc(njmax-sized)": 17100.0,
+    "scratch:island": 1764.0,
+    "scratch:kinematics/dynamics": 8888.001953125,
+    "scratch:mass-matrix/factor": 2700.0
+   },
+   "mjw_data_top_arrays_per_env": [
+    [
+     "mjw_data.efc.J",
+     [
+      4096,
+      128,
+      20
+     ],
+     "float32",
+     10240.0
+    ],
+    [
+     "mjw_data.qLD",
+     [
+      4096,
+      324
+     ],
+     "float32",
+     1296.0
+    ],
+    [
+     "mjw_data.qLU",
+     [
+      4096,
+      216
+     ],
+     "float32",
+     864.0
+    ],
+    [
+     "mjw_data.cinert",
+     [
+      4096,
+      18
+     ],
+     "vec10f",
+     720.0
+    ],
+    [
+     "mjw_data.crb",
+     [
+      4096,
+      18
+     ],
+     "vec10f",
+     720.0
+    ],
+    [
+     "mjw_data.xmat",
+     [
+      4096,
+      18
+     ],
+     "mat33f",
+     648.0
+    ],
+    [
+     "mjw_data.ximat",
+     [
+      4096,
+      18
+     ],
+     "mat33f",
+     648.0
+    ],
+    [
+     "mjw_data.contact.frame",
+     [
+      61440
+     ],
+     "mat33f",
+     540.0
+    ],
+    [
+     "mjw_data.efc.D",
+     [
+      4096,
+      128
+     ],
+     "float32",
+     512.0
+    ],
+    [
+     "mjw_data.efc.state",
+     [
+      4096,
+      128
+     ],
+     "int32",
+     512.0
+    ],
+    [
+     "mjw_data.geom_xmat",
+     [
+      4096,
+      14
+     ],
+     "mat33f",
+     504.0
+    ],
+    [
+     "mjw_data.map_efc2iefc",
+     [
+      4096,
+      120
+     ],
+     "int32",
+     480.0
+    ]
+   ],
+   "isaaclab_env_per_env_by_group": {
+    "scene/articulation.actuator_adapter": 3072.01171875,
+    "scene/articulation.actuators": 145.0146484375,
+    "scene/articulation.data": 2216.0166015625,
+    "scene/other": 2893.113037109375,
+    "scene/sensors(contact)": 2391.0,
+    "action_manager": 240.0,
+    "command_manager": 54.0,
+    "episode_length_buf": 8.0,
+    "event_manager": 1175.0390625,
+    "extras": 0.015625,
+    "obs_buf": 192.0,
+    "reset_buf": 1.0,
+    "reset_terminated": 1.0,
+    "reset_time_outs": 1.0,
+    "reward_buf": 4.0,
+    "reward_manager": 88.015625,
+    "termination_manager": 4.001953125
+   },
+   "newton_state0_arrays_per_env": [
+    [
+     "newton_state_0.body_q",
+     [
+      69632
+     ],
+     "transformf",
+     476.0
+    ],
+    [
+     "newton_state_0.body_qd",
+     [
+      69632
+     ],
+     "spatial_vectorf",
+     408.0
+    ],
+    [
+     "newton_state_0.body_f",
+     [
+      69632
+     ],
+     "spatial_vectorf",
+     408.0
+    ],
+    [
+     "newton_state_0.joint_q",
+     [
+      77824
+     ],
+     "float32",
+     76.0
+    ],
+    [
+     "newton_state_0.joint_qd",
+     [
+      73728
+     ],
+     "float32",
+     72.0
+    ]
+   ],
+   "model_counts": {
+    "mj_nbody_incl_world": 18,
+    "nbody_moving": 17,
+    "njnt": 13,
+    "nq": 19,
+    "nv": 18,
+    "nu_mjwarp_actuators": 0,
+    "ngeom": 14,
+    "geom_types": {
+     "mjGEOM_PLANE": 1,
+     "mjGEOM_SPHERE": 4,
+     "mjGEOM_CYLINDER": 9
+    },
+    "nM": 117,
+    "nv_pad": 20,
+    "jacobian": "dense",
+    "cone": "elliptic",
+    "integrator_id": 3,
+    "newton_shapes_per_world": 13.0,
+    "newton_bodies_per_world": 17.0,
+    "newton_dofs_per_world": 18.0,
+    "newton_coords_per_world": 19.0,
+    "broadphase_candidate_pairs_per_world": 83.0,
+    "newton_rigid_contact_max_per_world": 415.0,
+    "mjw_nconmax_per_world": 15.0,
+    "mjw_njmax": 120,
+    "observed_random_actions": {
+     "ncon_max_per_world": 12,
+     "ncon_mean_per_world": 3.3295504662298385,
+     "nefc_max": 21,
+     "nefc_mean": 6.360335811491935,
+     "solver_iters_max": 18,
+     "solver_iters_mean": 3.878717237903226
+    }
+   },
+   "flops": {
+    "physics_per_mjwarp_step_mean_contacts": {
+     "kinematics": 2905,
+     "com_pos+cdof": 2520,
+     "crb+M": 2304,
+     "factor_M(LDL)": 867,
+     "rne+cvel+passive": 3924,
+     "actuation": 0,
+     "smooth_acc(solve)": 540,
+     "collision(broad+narrow)": 2574.432569934476,
+     "make_constraint": 2672.8621314264115,
+     "solver(init)": 462.97208921370964,
+     "solver(iterations)": 25368.306920759136,
+     "integrate(implicitfast)": 1431,
+     "newton<->mjwarp glue": 1080,
+     "_total": 46649.57371133373,
+     "_per_iter": 6540.385742187499
+    },
+    "physics_per_mjwarp_step_max_contacts": {
+     "kinematics": 2905,
+     "com_pos+cdof": 2520,
+     "crb+M": 2304,
+     "factor_M(LDL)": 867,
+     "rne+cvel+passive": 3924,
+     "actuation": 0,
+     "smooth_acc(solve)": 540,
+     "collision(broad+narrow)": 3875.0,
+     "make_constraint": 9564.0,
+     "solver(init)": 990,
+     "solver(iterations)": 232092.0,
+     "integrate(implicitfast)": 1431,
+     "newton<->mjwarp glue": 1080,
+     "_total": 262092.0,
+     "_per_iter": 12894.0
+    },
+    "physics_per_env_step_mean": 373196.58969066985,
+    "rough_terrain_extra_per_env_step": 0.0,
+    "lstm_actuator_per_env_step": 88320,
+    "policy_value_inference_per_env_step": 158976,
+    "ppo_update_per_env_step_amortized": 2384640,
+    "per_iteration_at_4096": {
+     "physics": 36686717552.95161,
+     "actuator_net": 8682209280,
+     "rollout_inference": 15627976704,
+     "ppo_update": 234419650560
+    }
+   },
+   "minimal_persistent_state_per_env_bytes": {
+    "physics_qpos_qvel_warmstart": 220,
+    "actuator_state": 1536,
+    "mdp_state": 292,
+    "domain_rand_params": 16,
+    "rng_counter": 8,
+    "total": 2072
+   },
+   "lean_scratch_per_world_bytes": {
+    "observed_max": 14676,
+    "configured_caps": 28104
+   },
+   "working_set_4096": {
+    "rollout_storage": 35094528,
+    "rollout_storage_per_env_per_step": 357.0,
+    "params_fp32": 321124,
+    "grads_fp32": 321124,
+    "adam_m_v": 642316,
+    "ppo_update_transient_peak_pytorch": 213281280,
+    "sim_stock_allocated": 521023327,
+    "sim_stock_solver_ctx_transient": 17412096,
+    "sim_minimal_persistent": 8486912,
+    "learner_state(params+grads+adam)": 1284564,
+    "lean_total(rollout+learner+minimal_sim)": 44866004,
+    "stock_total(rollout+learner+sim_alloc+update_peak)": 770683699,
+    "rollout_storage_bf16_obs_act_dist": 18579456
+   },
+   "max_envs_fitting_lean_working_set": {
+    "per_env_bytes_fp32_rollout": 10640.0,
+    "per_env_bytes_bf16_rollout": 6608,
+    "learner_bytes": 1284564,
+    "fp32": {
+     "smem_total(18.4MiB)": 1688,
+     "RF+L1smem(70.5MiB)": 6827,
+     "L2_persisting_window(80MiB)": 7763,
+     "L2(128MiB)": 12493,
+     "RF+L1smem+L2(198.5MiB)": 19441
+    },
+    "bf16": {
+     "smem_total(18.4MiB)": 2718,
+     "RF+L1smem(70.5MiB)": 10992,
+     "L2_persisting_window(80MiB)": 12500,
+     "L2(128MiB)": 20117,
+     "RF+L1smem+L2(198.5MiB)": 31304
+    }
+   },
+   "indicative_timing_contended": {
+    "ms_per_env_step_4096": 26.22704243985936,
+    "env_steps_per_s": 156174.68151021775,
+    "achieved_useful_physics_GFLOPs": 72.07720640662221,
+    "fraction_of_fp32_peak": 0.0006163023980515454,
+    "smi_before": "0 %, 2117 MiB",
+    "smi_after": "74 %, 3448 MiB"
+   }
+  },
+  "g1": {
+   "task_id": "Isaac-Velocity-Flat-G1",
+   "mdp": {
+    "obs_policy": 123,
+    "obs_critic": 123,
+    "obs_groups_rsl": {
+     "actor": [
+      "policy"
+     ],
+     "critic": [
+      "policy"
+     ]
+    },
+    "obs_terms": {
+     "policy": {
+      "base_lin_vel": [
+       3
+      ],
+      "base_ang_vel": [
+       3
+      ],
+      "projected_gravity": [
+       3
+      ],
+      "velocity_commands": [
+       3
+      ],
+      "joint_pos": [
+       37
+      ],
+      "joint_vel": [
+       37
+      ],
+      "actions": [
+       37
+      ]
+     }
+    },
+    "action_dim": 37,
+    "physics_dt": 0.005,
+    "decimation": 4,
+    "control_dt": 0.02,
+    "newton_num_substeps": 2,
+    "solver_dt": 0.0025,
+    "mjwarp_steps_per_env_step": 8,
+    "episode_length_s": 20.0,
+    "max_episode_length_steps": 1000,
+    "solver_cfg": {
+     "njmax": 95,
+     "nconmax": 10,
+     "iterations": 100,
+     "ls_iterations": 50,
+     "solver": "newton",
+     "integrator": "implicitfast",
+     "cone": "pyramidal",
+     "impratio": 1.0,
+     "use_mujoco_contacts": false,
+     "tolerance": 1e-06
+    }
+   },
+   "rsl_rl": {
+    "actor_hidden": [
+     256,
+     128,
+     128
+    ],
+    "critic_hidden": [
+     256,
+     128,
+     128
+    ],
+    "activation": "elu",
+    "num_steps_per_env": 24,
+    "epochs": 5,
+    "mini_batches": 4,
+    "mini_batch_size_at_4096": 24576,
+    "actor_params": 85962,
+    "critic_params": 81281,
+    "total_params": 167243,
+    "actor_param_shapes": {
+     "distribution.std_param": [
+      37
+     ],
+     "mlp.0.weight": [
+      256,
+      123
+     ],
+     "mlp.0.bias": [
+      256
+     ],
+     "mlp.2.weight": [
+      128,
+      256
+     ],
+     "mlp.2.bias": [
+      128
+     ],
+     "mlp.4.weight": [
+      128,
+      128
+     ],
+     "mlp.4.bias": [
+      128
+     ],
+     "mlp.6.weight": [
+      37,
+      128
+     ],
+     "mlp.6.bias": [
+      37
+     ]
+    },
+    "critic_param_shapes": {
+     "mlp.0.weight": [
+      256,
+      123
+     ],
+     "mlp.0.bias": [
+      256
+     ],
+     "mlp.2.weight": [
+      128,
+      256
+     ],
+     "mlp.2.bias": [
+      128
+     ],
+     "mlp.4.weight": [
+      128,
+      128
+     ],
+     "mlp.4.bias": [
+      128
+     ],
+     "mlp.6.weight": [
+      1,
+      128
+     ],
+     "mlp.6.bias": [
+      1
+     ]
+    }
+   },
+   "stock_footprint": {
+    "total_unique_bytes_by_N": {
+     "16": 2374058,
+     "64": 8855978,
+     "256": 35124458,
+     "1024": 140217578,
+     "4096": 560590058
+    },
+    "per_env_bytes_at_4096_by_category": {
+     "newton_model": 20121.7373046875,
+     "newton_state_0": 3692.0,
+     "newton_state_1": 3692.0,
+     "newton_control": 692.0,
+     "newton_contacts": 1800.00390625,
+     "newton_collision_pipeline": 336.0390625,
+     "mjw_model": 23180.913818359375,
+     "mjw_data": 56580.0009765625,
+     "mjw_solver_other": 1072.4501953125,
+     "isaaclab_env": 23029.65966796875,
+     "newton_manager_misc": 2666.002197265625
+    },
+    "marginal_per_env_bytes_1024_to_4096": {
+     "newton_model": 20121.0,
+     "newton_state_0": 3692.0,
+     "newton_state_1": 3692.0,
+     "newton_control": 692.0,
+     "newton_contacts": 1800.0,
+     "newton_collision_pipeline": 336.0,
+     "mjw_model": 23160.0,
+     "mjw_data": 56580.0,
+     "mjw_solver_other": 1072.0,
+     "isaaclab_env": 23029.0,
+     "newton_manager_misc": 2666.0
+    },
+    "per_env_total_at_4096": 136862.80712890625,
+    "solver_context_transient_per_env": 21283.0,
+    "warp_mempool_used_after_steps_by_N": {
+     "16": 2305870,
+     "64": 8582926,
+     "256": 34031950,
+     "1024": 135847246,
+     "4096": 543108430
+    },
+    "torch_allocated_after_steps_by_N": {
+     "16": 99840,
+     "64": 305664,
+     "256": 1143808,
+     "1024": 4533248,
+     "4096": 18099200
+    },
+    "nvidia_smi_proc_MiB_by_N": {
+     "16": 726.0,
+     "64": 726.0,
+     "256": 758.0,
+     "1024": 878.0,
+     "4096": 1432.0
+    },
+    "marginal_total_per_env": 136840.0,
+    "fixed_intercept_bytes": 93418.0
+   },
+   "mjw_data_by_class_per_env": {
+    "state": 528.0,
+    "input(per-step)": 1548.0,
+    "scratch:compact": 192.0,
+    "scratch:contact(naconmax-sized)": 1520.0,
+    "scratch:efc(njmax-sized)": 15680.0,
+    "scratch:island": 1864.0,
+    "scratch:kinematics/dynamics": 22644.001953125,
+    "scratch:mass-matrix/factor": 12604.0
+   },
+   "mjw_data_top_arrays_per_env": [
+    [
+     "mjw_data.qLD",
+     [
+      4096,
+      1849
+     ],
+     "float32",
+     7396.0
+    ],
+    [
+     "mjw_data.efc.J_colind",
+     [
+      4096,
+      1,
+      1177
+     ],
+     "int32",
+     4708.0
+    ],
+    [
+     "mjw_data.efc.J",
+     [
+      4096,
+      1,
+      1177
+     ],
+     "float32",
+     4708.0
+    ],
+    [
+     "mjw_data.qLU",
+     [
+      4096,
+      825
+     ],
+     "float32",
+     3300.0
+    ],
+    [
+     "mjw_data.cinert",
+     [
+      4096,
+      45
+     ],
+     "vec10f",
+     1800.0
+    ],
+    [
+     "mjw_data.crb",
+     [
+      4096,
+      45
+     ],
+     "vec10f",
+     1800.0
+    ],
+    [
+     "mjw_data.M",
+     [
+      4096,
+      434
+     ],
+     "float32",
+     1736.0
+    ],
+    [
+     "mjw_data.xmat",
+     [
+      4096,
+      45
+     ],
+     "mat33f",
+     1620.0
+    ],
+    [
+     "mjw_data.ximat",
+     [
+      4096,
+      45
+     ],
+     "mat33f",
+     1620.0
+    ],
+    [
+     "mjw_data.xfrc_applied",
+     [
+      4096,
+      45
+     ],
+     "spatial_vectorf",
+     1080.0
+    ],
+    [
+     "mjw_data.cvel",
+     [
+      4096,
+      45
+     ],
+     "spatial_vectorf",
+     1080.0
+    ],
+    [
+     "mjw_data.cacc",
+     [
+      4096,
+      45
+     ],
+     "spatial_vectorf",
+     1080.0
+    ]
+   ],
+   "isaaclab_env_per_env_by_group": {
+    "scene/articulation.actuators": 1481.117431640625,
+    "scene/articulation.data": 4736.04296875,
+    "scene/other": 7429.279541015625,
+    "scene/sensors(contact)": 6171.0,
+    "action_manager": 740.0,
+    "command_manager": 54.0,
+    "episode_length_buf": 8.0,
+    "event_manager": 1779.08984375,
+    "extras": 0.0205078125,
+    "obs_buf": 492.0,
+    "reset_buf": 1.0,
+    "reset_terminated": 1.0,
+    "reset_time_outs": 1.0,
+    "reward_buf": 4.0,
+    "reward_manager": 128.107421875,
+    "termination_manager": 4.001953125
+   },
+   "newton_state0_arrays_per_env": [
+    [
+     "newton_state_0.body_q",
+     [
+      180224
+     ],
+     "transformf",
+     1232.0
+    ],
+    [
+     "newton_state_0.body_qd",
+     [
+      180224
+     ],
+     "spatial_vectorf",
+     1056.0
+    ],
+    [
+     "newton_state_0.body_f",
+     [
+      180224
+     ],
+     "spatial_vectorf",
+     1056.0
+    ],
+    [
+     "newton_state_0.joint_q",
+     [
+      180224
+     ],
+     "float32",
+     176.0
+    ],
+    [
+     "newton_state_0.joint_qd",
+     [
+      176128
+     ],
+     "float32",
+     172.0
+    ]
+   ],
+   "model_counts": {
+    "mj_nbody_incl_world": 45,
+    "nbody_moving": 44,
+    "njnt": 38,
+    "nq": 44,
+    "nv": 43,
+    "nu_mjwarp_actuators": 74,
+    "ngeom": 4,
+    "geom_types": {
+     "mjGEOM_PLANE": 1,
+     "mjGEOM_MESH": 3
+    },
+    "nM": 434,
+    "nv_pad": 48,
+    "jacobian": "sparse",
+    "cone": "pyramidal",
+    "integrator_id": 3,
+    "newton_shapes_per_world": 3.0,
+    "newton_bodies_per_world": 44.0,
+    "newton_dofs_per_world": 43.0,
+    "newton_coords_per_world": 44.0,
+    "broadphase_candidate_pairs_per_world": 3.0,
+    "newton_rigid_contact_max_per_world": 15.0,
+    "mjw_nconmax_per_world": 10.0,
+    "mjw_njmax": 95,
+    "observed_random_actions": {
+     "ncon_max_per_world": 10,
+     "ncon_mean_per_world": 1.9551883820564515,
+     "nefc_max": 42,
+     "nefc_mean": 3.786195816532258,
+     "solver_iters_max": 9,
+     "solver_iters_mean": 1.6471144153225807
+    }
+   },
+   "flops": {
+    "physics_per_mjwarp_step_mean_contacts": {
+     "kinematics": 5455,
+     "com_pos+cdof": 6240,
+     "crb+M": 7378,
+     "factor_M(LDL)": 4918,
+     "rne+cvel+passive": 9726,
+     "actuation": 888,
+     "smooth_acc(solve)": 1908,
+     "collision(broad+narrow)": 368.27825730846774,
+     "make_constraint": 3523.7553992990433,
+     "solver(init)": 1193.6128402217741,
+     "solver(iterations)": 71817.66477527744,
+     "integrate(implicitfast)": 6800,
+     "newton<->mjwarp glue": 2680,
+     "_total": 122896.31127210673,
+     "_per_iter": 43602.11051957325
+    },
+    "physics_per_mjwarp_step_max_contacts": {
+     "kinematics": 5455,
+     "com_pos+cdof": 6240,
+     "crb+M": 7378,
+     "factor_M(LDL)": 4918,
+     "rne+cvel+passive": 9726,
+     "actuation": 888,
+     "smooth_acc(solve)": 1908,
+     "collision(broad+narrow)": 1575.0,
+     "make_constraint": 19969.20930232558,
+     "solver(init)": 4480,
+     "solver(iterations)": 1100559.0,
+     "integrate(implicitfast)": 6800,
+     "newton<->mjwarp glue": 2680,
+     "_total": 1172576.2093023255,
+     "_per_iter": 122284.33333333333
+    },
+    "physics_per_env_step_mean": 983170.4901768538,
+    "rough_terrain_extra_per_env_step": 0.0,
+    "lstm_actuator_per_env_step": 0.0,
+    "policy_value_inference_per_env_step": 332288,
+    "ppo_update_per_env_step_amortized": 4984320,
+    "per_iteration_at_4096": {
+     "physics": 96649591866.34544,
+     "actuator_net": 0.0,
+     "rollout_inference": 32665239552,
+     "ppo_update": 489978593280
+    }
+   },
+   "minimal_persistent_state_per_env_bytes": {
+    "physics_qpos_qvel_warmstart": 520,
+    "actuator_state": 0,
+    "mdp_state": 580,
+    "domain_rand_params": 4,
+    "rng_counter": 8,
+    "total": 1112
+   },
+   "lean_scratch_per_world_bytes": {
+    "observed_max": 40664,
+    "configured_caps": 52960
+   },
+   "working_set_4096": {
+    "rollout_storage": 94076928,
+    "rollout_storage_per_env_per_step": 957.0,
+    "params_fp32": 668972,
+    "grads_fp32": 668972,
+    "adam_m_v": 1338012,
+    "ppo_update_transient_peak_pytorch": 306726400,
+    "sim_stock_allocated": 560590058,
+    "sim_stock_solver_ctx_transient": 87175168,
+    "sim_minimal_persistent": 4554752,
+    "learner_state(params+grads+adam)": 2675956,
+    "lean_total(rollout+learner+minimal_sim)": 101307636,
+    "stock_total(rollout+learner+sim_alloc+update_peak)": 964069342,
+    "rollout_storage_bf16_obs_act_dist": 48070656
+   },
+   "max_envs_fitting_lean_working_set": {
+    "per_env_bytes_fp32_rollout": 24080.0,
+    "per_env_bytes_bf16_rollout": 12848,
+    "learner_bytes": 2675956,
+    "fp32": {
+     "smem_total(18.4MiB)": 688,
+     "RF+L1smem(70.5MiB)": 2958,
+     "L2_persisting_window(80MiB)": 3372,
+     "L2(128MiB)": 5462,
+     "RF+L1smem+L2(198.5MiB)": 8532
+    },
+    "bf16": {
+     "smem_total(18.4MiB)": 1290,
+     "RF+L1smem(70.5MiB)": 5545,
+     "L2_persisting_window(80MiB)": 6320,
+     "L2(128MiB)": 10238,
+     "RF+L1smem+L2(198.5MiB)": 15992
+    }
+   },
+   "indicative_timing_contended": {
+    "ms_per_env_step_4096": 20.95281895948574,
+    "env_steps_per_s": 195486.82246145513,
+    "achieved_useful_physics_GFLOPs": 192.19687506254445,
+    "fraction_of_fp32_peak": 0.0016433960318997117,
+    "smi_before": "0 %, 2117 MiB",
+    "smi_after": "79 %, 3624 MiB"
+   }
+  },
+  "anymalc-rough": {
+   "task_id": "IsaacContrib-Velocity-Rough-AnymalC",
+   "mdp": {
+    "obs_policy": 235,
+    "obs_critic": 235,
+    "obs_groups_rsl": {
+     "actor": [
+      "policy"
+     ],
+     "critic": [
+      "policy"
+     ]
+    },
+    "obs_terms": {
+     "policy": {
+      "base_lin_vel": [
+       3
+      ],
+      "base_ang_vel": [
+       3
+      ],
+      "projected_gravity": [
+       3
+      ],
+      "velocity_commands": [
+       3
+      ],
+      "joint_pos": [
+       12
+      ],
+      "joint_vel": [
+       12
+      ],
+      "actions": [
+       12
+      ],
+      "height_scan": [
+       187
+      ]
+     }
+    },
+    "action_dim": 12,
+    "physics_dt": 0.005,
+    "decimation": 4,
+    "control_dt": 0.02,
+    "newton_num_substeps": 2,
+    "solver_dt": 0.0025,
+    "mjwarp_steps_per_env_step": 8,
+    "episode_length_s": 20.0,
+    "max_episode_length_steps": 1000,
+    "solver_cfg": {
+     "njmax": 1000,
+     "nconmax": 300,
+     "iterations": 100,
+     "ls_iterations": 50,
+     "solver": "newton",
+     "integrator": "implicitfast",
+     "cone": "pyramidal",
+     "impratio": 1.0,
+     "use_mujoco_contacts": false,
+     "tolerance": 1e-06
+    }
+   },
+   "rsl_rl": {
+    "actor_hidden": [
+     512,
+     256,
+     128
+    ],
+    "critic_hidden": [
+     512,
+     256,
+     128
+    ],
+    "activation": "elu",
+    "num_steps_per_env": 24,
+    "epochs": 5,
+    "mini_batches": 4,
+    "mini_batch_size_at_4096": 24576,
+    "actor_params": 286616,
+    "critic_params": 285185,
+    "total_params": 571801,
+    "actor_param_shapes": {
+     "distribution.std_param": [
+      12
+     ],
+     "mlp.0.weight": [
+      512,
+      235
+     ],
+     "mlp.0.bias": [
+      512
+     ],
+     "mlp.2.weight": [
+      256,
+      512
+     ],
+     "mlp.2.bias": [
+      256
+     ],
+     "mlp.4.weight": [
+      128,
+      256
+     ],
+     "mlp.4.bias": [
+      128
+     ],
+     "mlp.6.weight": [
+      12,
+      128
+     ],
+     "mlp.6.bias": [
+      12
+     ]
+    },
+    "critic_param_shapes": {
+     "mlp.0.weight": [
+      512,
+      235
+     ],
+     "mlp.0.bias": [
+      512
+     ],
+     "mlp.2.weight": [
+      256,
+      512
+     ],
+     "mlp.2.bias": [
+      256
+     ],
+     "mlp.4.weight": [
+      128,
+      256
+     ],
+     "mlp.4.bias": [
+      128
+     ],
+     "mlp.6.weight": [
+      1,
+      128
+     ],
+     "mlp.6.bias": [
+      1
+     ]
+    }
+   },
+   "stock_footprint": {
+    "total_unique_bytes_by_N": {
+     "64": 355468852,
+     "256": 416293108,
+     "1024": 665242620,
+     "4096": 1655388156
+    },
+    "per_env_bytes_at_4096_by_category": {
+     "newton_model": 39899.6201171875,
+     "newton_state_0": 1440.0,
+     "newton_state_1": 1440.0,
+     "newton_control": 364.0,
+     "newton_contacts": 49800.00390625,
+     "newton_collision_pipeline": 56466.345703125,
+     "mjw_model": 13350.668701171875,
+     "mjw_data": 207200.0009765625,
+     "mjw_solver_other": 1700.037353515625,
+     "isaaclab_env": 31352.820068359375,
+     "newton_manager_misc": 1134.002197265625
+    },
+    "marginal_per_env_bytes_1024_to_4096": {
+     "newton_model": 15607.0,
+     "newton_state_0": 1440.0,
+     "newton_state_1": 1440.0,
+     "newton_control": 364.0,
+     "newton_contacts": 49800.0,
+     "newton_collision_pipeline": 7320.0,
+     "mjw_model": 4956.0,
+     "mjw_data": 207200.0,
+     "mjw_solver_other": 1700.0,
+     "isaaclab_env": 31352.0,
+     "newton_manager_misc": 1134.0
+    },
+    "per_env_total_at_4096": 404147.4990234375,
+    "solver_context_transient_per_env": 25859.0,
+    "warp_mempool_used_after_steps_by_N": {
+     "64": 454179520,
+     "256": 513225856,
+     "1024": 753490824,
+     "4096": 1710471048
+    },
+    "torch_allocated_after_steps_by_N": {
+     "64": 9218560,
+     "256": 11216384,
+     "1024": 20811264,
+     "4096": 57855488
+    },
+    "nvidia_smi_proc_MiB_by_N": {
+     "64": 1192.0,
+     "256": 1264.0,
+     "1024": 1540.0,
+     "4096": 2776.0
+    },
+    "marginal_total_per_env": 322313.0,
+    "fixed_intercept_bytes": 335194108.0
+   },
+   "mjw_data_by_class_per_env": {
+    "state": 228.0,
+    "input(per-step)": 504.0,
+    "scratch:compact": 128.0,
+    "scratch:contact(naconmax-sized)": 45600.0,
+    "scratch:efc(njmax-sized)": 136780.0,
+    "scratch:island": 12324.0,
+    "scratch:kinematics/dynamics": 8936.001953125,
+    "scratch:mass-matrix/factor": 2700.0
+   },
+   "mjw_data_top_arrays_per_env": [
+    [
+     "mjw_data.efc.J",
+     [
+      4096,
+      1008,
+      20
+     ],
+     "float32",
+     80640.0
+    ],
+    [
+     "mjw_data.contact.frame",
+     [
+      1228800
+     ],
+     "mat33f",
+     10800.0
+    ],
+    [
+     "mjw_data.contact.friction",
+     [
+      1228800
+     ],
+     "vec5f",
+     6000.0
+    ],
+    [
+     "mjw_data.contact.solimp",
+     [
+      1228800
+     ],
+     "vec5f",
+     6000.0
+    ],
+    [
+     "mjw_data.contact.efc_address",
+     [
+      1228800,
+      4
+     ],
+     "int32",
+     4800.0
+    ],
+    [
+     "mjw_data.efc.D",
+     [
+      4096,
+      1008
+     ],
+     "float32",
+     4032.0
+    ],
+    [
+     "mjw_data.efc.state",
+     [
+      4096,
+      1008
+     ],
+     "int32",
+     4032.0
+    ],
+    [
+     "mjw_data.map_efc2iefc",
+     [
+      4096,
+      1000
+     ],
+     "int32",
+     4000.0
+    ],
+    [
+     "mjw_data.map_iefc2efc",
+     [
+      4096,
+      1000
+     ],
+     "int32",
+     4000.0
+    ],
+    [
+     "mjw_data.efc_islandid",
+     [
+      4096,
+      1000
+     ],
+     "int32",
+     4000.0
+    ],
+    [
+     "mjw_data.efc.type",
+     [
+      4096,
+      1000
+     ],
+     "int32",
+     4000.0
+    ],
+    [
+     "mjw_data.efc.id",
+     [
+      4096,
+      1000
+     ],
+     "int32",
+     4000.0
+    ]
+   ],
+   "isaaclab_env_per_env_by_group": {
+    "scene/articulation.actuator_adapter": 3072.01171875,
+    "scene/articulation.actuators": 145.0146484375,
+    "scene/articulation.data": 2216.0166015625,
+    "scene/other": 2909.698974609375,
+    "scene/sensors(contact)": 20494.00390625,
+    "action_manager": 240.0,
+    "command_manager": 54.0,
+    "curriculum_manager": 0.0009765625,
+    "episode_length_buf": 8.0,
+    "event_manager": 1175.0390625,
+    "extras": 0.0166015625,
+    "obs_buf": 940.0,
+    "reset_buf": 1.0,
+    "reset_terminated": 1.0,
+    "reset_time_outs": 1.0,
+    "reward_buf": 4.0,
+    "reward_manager": 88.015625,
+    "termination_manager": 4.001953125
+   },
+   "newton_state0_arrays_per_env": [
+    [
+     "newton_state_0.body_q",
+     [
+      69632
+     ],
+     "transformf",
+     476.0
+    ],
+    [
+     "newton_state_0.body_qd",
+     [
+      69632
+     ],
+     "spatial_vectorf",
+     408.0
+    ],
+    [
+     "newton_state_0.body_f",
+     [
+      69632
+     ],
+     "spatial_vectorf",
+     408.0
+    ],
+    [
+     "newton_state_0.joint_q",
+     [
+      77824
+     ],
+     "float32",
+     76.0
+    ],
+    [
+     "newton_state_0.joint_qd",
+     [
+      73728
+     ],
+     "float32",
+     72.0
+    ]
+   ],
+   "model_counts": {
+    "mj_nbody_incl_world": 18,
+    "nbody_moving": 17,
+    "njnt": 13,
+    "nq": 19,
+    "nv": 18,
+    "nu_mjwarp_actuators": 0,
+    "ngeom": 14,
+    "geom_types": {
+     "mjGEOM_SPHERE": 4,
+     "mjGEOM_CYLINDER": 9,
+     "mjGEOM_MESH": 1
+    },
+    "nM": 117,
+    "nv_pad": 20,
+    "jacobian": "dense",
+    "cone": "pyramidal",
+    "integrator_id": 3,
+    "newton_shapes_per_world": 14.0,
+    "newton_bodies_per_world": 17.0,
+    "newton_dofs_per_world": 18.0,
+    "newton_coords_per_world": 19.0,
+    "broadphase_candidate_pairs_per_world": 83.0,
+    "newton_rigid_contact_max_per_world": 415.0,
+    "mjw_nconmax_per_world": 300.0,
+    "mjw_njmax": 1000,
+    "observed_random_actions": {
+     "ncon_max_per_world": 44,
+     "ncon_mean_per_world": 7.804385230654762,
+     "nefc_max": 60,
+     "nefc_mean": 10.000662667410714,
+     "solver_iters_max": 8,
+     "solver_iters_mean": 1.8242885044642858
+    }
+   },
+   "flops": {
+    "physics_per_mjwarp_step_mean_contacts": {
+     "kinematics": 2970,
+     "com_pos+cdof": 2520,
+     "crb+M": 2304,
+     "factor_M(LDL)": 867,
+     "rne+cvel+passive": 3924,
+     "actuation": 0,
+     "smooth_acc(solve)": 540,
+     "collision(broad+narrow)": 3245.657784598214,
+     "make_constraint": 7321.535481770833,
+     "solver(init)": 594.0238560267857,
+     "solver(iterations)": 14813.747317348205,
+     "integrate(implicitfast)": 1431,
+     "newton<->mjwarp glue": 1080,
+     "_total": 41610.964439744035,
+     "_per_iter": 8120.287597656248
+    },
+    "physics_per_mjwarp_step_max_contacts": {
+     "kinematics": 2970,
+     "com_pos+cdof": 2520,
+     "crb+M": 2304,
+     "factor_M(LDL)": 867,
+     "rne+cvel+passive": 3924,
+     "actuation": 0,
+     "smooth_acc(solve)": 540,
+     "collision(broad+narrow)": 8675.0,
+     "make_constraint": 41408.0,
+     "solver(init)": 2394,
+     "solver(iterations)": 238560.0,
+     "integrate(implicitfast)": 1431,
+     "newton<->mjwarp glue": 1080,
+     "_total": 306673.0,
+     "_per_iter": 29820.0
+    },
+    "physics_per_env_step_mean": 590687.7155179523,
+    "rough_terrain_extra_per_env_step": 257800.0,
+    "lstm_actuator_per_env_step": 88320,
+    "policy_value_inference_per_env_step": 1139968,
+    "ppo_update_per_env_step_amortized": 17099520,
+    "per_iteration_at_4096": {
+     "physics": 58066965186.27679,
+     "actuator_net": 8682209280,
+     "rollout_inference": 112063414272,
+     "ppo_update": 1680951214080
+    }
+   },
+   "minimal_persistent_state_per_env_bytes": {
+    "physics_qpos_qvel_warmstart": 220,
+    "actuator_state": 1536,
+    "mdp_state": 300,
+    "domain_rand_params": 16,
+    "rng_counter": 8,
+    "total": 2080
+   },
+   "lean_scratch_per_world_bytes": {
+    "observed_max": 23664,
+    "configured_caps": 178464
+   },
+   "working_set_4096": {
+    "rollout_storage": 108625920,
+    "rollout_storage_per_env_per_step": 1105.0,
+    "params_fp32": 2287204,
+    "grads_fp32": 2287204,
+    "adam_m_v": 4574476,
+    "ppo_update_transient_peak_pytorch": 500461056,
+    "sim_stock_allocated": 1655388156,
+    "sim_stock_solver_ctx_transient": 105918464,
+    "sim_minimal_persistent": 8519680,
+    "learner_state(params+grads+adam)": 9148884,
+    "lean_total(rollout+learner+minimal_sim)": 126294484,
+    "stock_total(rollout+learner+sim_alloc+update_peak)": 2273624016,
+    "rollout_storage_bf16_obs_act_dist": 55345152
+   },
+   "max_envs_fitting_lean_working_set": {
+    "per_env_bytes_fp32_rollout": 28600.0,
+    "per_env_bytes_bf16_rollout": 15592,
+    "learner_bytes": 9148884,
+    "fp32": {
+     "smem_total(18.4MiB)": 353,
+     "RF+L1smem(70.5MiB)": 2264,
+     "L2_persisting_window(80MiB)": 2613,
+     "L2(128MiB)": 4373,
+     "RF+L1smem+L2(198.5MiB)": 6957
+    },
+    "bf16": {
+     "smem_total(18.4MiB)": 647,
+     "RF+L1smem(70.5MiB)": 4154,
+     "L2_persisting_window(80MiB)": 4793,
+     "L2(128MiB)": 8021,
+     "RF+L1smem+L2(198.5MiB)": 12762
+    }
+   }
+  },
+  "g1-rough": {
+   "task_id": "Isaac-Velocity-Rough-G1",
+   "mdp": {
+    "obs_policy": 310,
+    "obs_critic": 310,
+    "obs_groups_rsl": {
+     "actor": [
+      "policy"
+     ],
+     "critic": [
+      "policy"
+     ]
+    },
+    "obs_terms": {
+     "policy": {
+      "base_lin_vel": [
+       3
+      ],
+      "base_ang_vel": [
+       3
+      ],
+      "projected_gravity": [
+       3
+      ],
+      "velocity_commands": [
+       3
+      ],
+      "joint_pos": [
+       37
+      ],
+      "joint_vel": [
+       37
+      ],
+      "actions": [
+       37
+      ],
+      "height_scan": [
+       187
+      ]
+     }
+    },
+    "action_dim": 37,
+    "physics_dt": 0.005,
+    "decimation": 4,
+    "control_dt": 0.02,
+    "newton_num_substeps": 2,
+    "solver_dt": 0.0025,
+    "mjwarp_steps_per_env_step": 8,
+    "episode_length_s": 20.0,
+    "max_episode_length_steps": 1000,
+    "solver_cfg": {
+     "njmax": 300,
+     "nconmax": 300,
+     "iterations": 100,
+     "ls_iterations": 50,
+     "solver": "newton",
+     "integrator": "implicitfast",
+     "cone": "pyramidal",
+     "impratio": 1.0,
+     "use_mujoco_contacts": false,
+     "tolerance": 1e-06
+    }
+   },
+   "rsl_rl": {
+    "actor_hidden": [
+     512,
+     256,
+     128
+    ],
+    "critic_hidden": [
+     512,
+     256,
+     128
+    ],
+    "activation": "elu",
+    "num_steps_per_env": 24,
+    "epochs": 5,
+    "mini_batches": 4,
+    "mini_batch_size_at_4096": 24576,
+    "actor_params": 328266,
+    "critic_params": 323585,
+    "total_params": 651851,
+    "actor_param_shapes": {
+     "distribution.std_param": [
+      37
+     ],
+     "mlp.0.weight": [
+      512,
+      310
+     ],
+     "mlp.0.bias": [
+      512
+     ],
+     "mlp.2.weight": [
+      256,
+      512
+     ],
+     "mlp.2.bias": [
+      256
+     ],
+     "mlp.4.weight": [
+      128,
+      256
+     ],
+     "mlp.4.bias": [
+      128
+     ],
+     "mlp.6.weight": [
+      37,
+      128
+     ],
+     "mlp.6.bias": [
+      37
+     ]
+    },
+    "critic_param_shapes": {
+     "mlp.0.weight": [
+      512,
+      310
+     ],
+     "mlp.0.bias": [
+      512
+     ],
+     "mlp.2.weight": [
+      256,
+      512
+     ],
+     "mlp.2.bias": [
+      256
+     ],
+     "mlp.4.weight": [
+      128,
+      256
+     ],
+     "mlp.4.bias": [
+      128
+     ],
+     "mlp.6.weight": [
+      1,
+      128
+     ],
+     "mlp.6.bias": [
+      1
+     ]
+    }
+   },
+   "stock_footprint": {
+    "total_unique_bytes_by_N": {
+     "64": 352606991,
+     "256": 404650703,
+     "1024": 612825551,
+     "4096": 1445524943
+    },
+    "per_env_bytes_at_4096_by_category": {
+     "newton_model": 44835.2802734375,
+     "newton_state_0": 3692.0,
+     "newton_state_1": 3692.0,
+     "newton_control": 692.0,
+     "newton_contacts": 36000.00390625,
+     "newton_collision_pipeline": 49602.34375,
+     "mjw_model": 31598.021240234375,
+     "mjw_data": 135992.0009765625,
+     "mjw_solver_other": 2236.451416015625,
+     "isaaclab_env": 41897.25927734375,
+     "newton_manager_misc": 2674.002197265625
+    },
+    "marginal_per_env_bytes_1024_to_4096": {
+     "newton_model": 20543.0,
+     "newton_state_0": 3692.0,
+     "newton_state_1": 3692.0,
+     "newton_control": 692.0,
+     "newton_contacts": 36000.0,
+     "newton_collision_pipeline": 456.0,
+     "mjw_model": 23188.0,
+     "mjw_data": 135992.0,
+     "mjw_solver_other": 2236.0,
+     "isaaclab_env": 41896.0,
+     "newton_manager_misc": 2674.0
+    },
+    "per_env_total_at_4096": 352911.3630371094,
+    "solver_context_transient_per_env": 26203.0,
+    "warp_mempool_used_after_steps_by_N": {
+     "64": 451321495,
+     "256": 501585751,
+     "1024": 702642775,
+     "4096": 1506870871
+    },
+    "torch_allocated_after_steps_by_N": {
+     "64": 645632,
+     "256": 2491904,
+     "1024": 9914880,
+     "4096": 39614976
+    },
+    "nvidia_smi_proc_MiB_by_N": {
+     "64": 1142.0,
+     "256": 1208.0,
+     "1024": 1422.0,
+     "4096": 2464.0
+    },
+    "marginal_total_per_env": 271061.0,
+    "fixed_intercept_bytes": 335259087.0
+   },
+   "mjw_data_by_class_per_env": {
+    "state": 528.0,
+    "input(per-step)": 1548.0,
+    "scratch:compact": 192.0,
+    "scratch:contact(naconmax-sized)": 45600.0,
+    "scratch:efc(njmax-sized)": 48504.0,
+    "scratch:island": 4324.0,
+    "scratch:kinematics/dynamics": 22692.001953125,
+    "scratch:mass-matrix/factor": 12604.0
+   },
+   "mjw_data_top_arrays_per_env": [
+    [
+     "mjw_data.efc.J_colind",
+     [
+      4096,
+      1,
+      3637
+     ],
+     "int32",
+     14548.0
+    ],
+    [
+     "mjw_data.efc.J",
+     [
+      4096,
+      1,
+      3637
+     ],
+     "float32",
+     14548.0
+    ],
+    [
+     "mjw_data.contact.frame",
+     [
+      1228800
+     ],
+     "mat33f",
+     10800.0
+    ],
+    [
+     "mjw_data.qLD",
+     [
+      4096,
+      1849
+     ],
+     "float32",
+     7396.0
+    ],
+    [
+     "mjw_data.contact.friction",
+     [
+      1228800
+     ],
+     "vec5f",
+     6000.0
+    ],
+    [
+     "mjw_data.contact.solimp",
+     [
+      1228800
+     ],
+     "vec5f",
+     6000.0
+    ],
+    [
+     "mjw_data.contact.efc_address",
+     [
+      1228800,
+      4
+     ],
+     "int32",
+     4800.0
+    ],
+    [
+     "mjw_data.contact.pos",
+     [
+      1228800
+     ],
+     "vec3f",
+     3600.0
+    ],
+    [
+     "mjw_data.qLU",
+     [
+      4096,
+      825
+     ],
+     "float32",
+     3300.0
+    ],
+    [
+     "mjw_data.contact.solref",
+     [
+      1228800
+     ],
+     "vec2f",
+     2400.0
+    ],
+    [
+     "mjw_data.contact.solreffriction",
+     [
+      1228800
+     ],
+     "vec2f",
+     2400.0
+    ],
+    [
+     "mjw_data.contact.geom",
+     [
+      1228800
+     ],
+     "vec2i",
+     2400.0
+    ]
+   ],
+   "isaaclab_env_per_env_by_group": {
+    "scene/articulation.actuators": 1481.117431640625,
+    "scene/articulation.data": 4736.04296875,
+    "scene/other": 7445.865478515625,
+    "scene/sensors(contact)": 24274.00390625,
+    "action_manager": 740.0,
+    "command_manager": 54.0,
+    "curriculum_manager": 0.0009765625,
+    "episode_length_buf": 8.0,
+    "event_manager": 1779.08984375,
+    "extras": 0.021484375,
+    "obs_buf": 1240.0,
+    "reset_buf": 1.0,
+    "reset_terminated": 1.0,
+    "reset_time_outs": 1.0,
+    "reward_buf": 4.0,
+    "reward_manager": 128.115234375,
+    "termination_manager": 4.001953125
+   },
+   "newton_state0_arrays_per_env": [
+    [
+     "newton_state_0.body_q",
+     [
+      180224
+     ],
+     "transformf",
+     1232.0
+    ],
+    [
+     "newton_state_0.body_qd",
+     [
+      180224
+     ],
+     "spatial_vectorf",
+     1056.0
+    ],
+    [
+     "newton_state_0.body_f",
+     [
+      180224
+     ],
+     "spatial_vectorf",
+     1056.0
+    ],
+    [
+     "newton_state_0.joint_q",
+     [
+      180224
+     ],
+     "float32",
+     176.0
+    ],
+    [
+     "newton_state_0.joint_qd",
+     [
+      176128
+     ],
+     "float32",
+     172.0
+    ]
+   ],
+   "model_counts": {
+    "mj_nbody_incl_world": 45,
+    "nbody_moving": 44,
+    "njnt": 38,
+    "nq": 44,
+    "nv": 43,
+    "nu_mjwarp_actuators": 74,
+    "ngeom": 4,
+    "geom_types": {
+     "mjGEOM_MESH": 4
+    },
+    "nM": 434,
+    "nv_pad": 48,
+    "jacobian": "sparse",
+    "cone": "pyramidal",
+    "integrator_id": 3,
+    "newton_shapes_per_world": 4.0,
+    "newton_bodies_per_world": 44.0,
+    "newton_dofs_per_world": 43.0,
+    "newton_coords_per_world": 44.0,
+    "broadphase_candidate_pairs_per_world": 3.0,
+    "newton_rigid_contact_max_per_world": 300.0,
+    "mjw_nconmax_per_world": 300.0,
+    "mjw_njmax": 300,
+    "observed_random_actions": {
+     "ncon_max_per_world": 31,
+     "ncon_mean_per_world": 3.2037179129464284,
+     "nefc_max": 68,
+     "nefc_mean": 4.023321242559524,
+     "solver_iters_max": 8,
+     "solver_iters_mean": 1.6530645461309523
+    }
+   },
+   "flops": {
+    "physics_per_mjwarp_step_mean_contacts": {
+     "kinematics": 5520,
+     "com_pos+cdof": 6240,
+     "crb+M": 7378,
+     "factor_M(LDL)": 4918,
+     "rne+cvel+passive": 9726,
+     "actuation": 888,
+     "smooth_acc(solve)": 1908,
+     "collision(broad+narrow)": 555.5576869419642,
+     "make_constraint": 5586.394071627561,
+     "solver(init)": 1214.005626860119,
+     "solver(iterations)": 72884.1973403441,
+     "integrate(implicitfast)": 6800,
+     "newton<->mjwarp glue": 2680,
+     "_total": 126298.15472577374,
+     "_per_iter": 44090.351771763395
+    },
+    "physics_per_mjwarp_step_max_contacts": {
+     "kinematics": 5520,
+     "com_pos+cdof": 6240,
+     "crb+M": 7378,
+     "factor_M(LDL)": 4918,
+     "rne+cvel+passive": 9726,
+     "actuation": 888,
+     "smooth_acc(solve)": 1908,
+     "collision(broad+narrow)": 4725.0,
+     "make_constraint": 56555.348837209305,
+     "solver(init)": 6716,
+     "solver(iterations)": 1406546.6666666667,
+     "integrate(implicitfast)": 6800,
+     "newton<->mjwarp glue": 2680,
+     "_total": 1520601.0155038761,
+     "_per_iter": 175818.33333333334
+    },
+    "physics_per_env_step_mean": 1164185.2378061898,
+    "rough_terrain_extra_per_env_step": 153800.0,
+    "lstm_actuator_per_env_step": 0.0,
+    "policy_value_inference_per_env_step": 1299968,
+    "ppo_update_per_env_step_amortized": 19499520,
+    "per_iteration_at_4096": {
+     "physics": 114444065617.29968,
+     "actuator_net": 0.0,
+     "rollout_inference": 127792054272,
+     "ppo_update": 1916880814080
+    }
+   },
+   "minimal_persistent_state_per_env_bytes": {
+    "physics_qpos_qvel_warmstart": 520,
+    "actuator_state": 0,
+    "mdp_state": 588,
+    "domain_rand_params": 4,
+    "rng_counter": 8,
+    "total": 1120
+   },
+   "lean_scratch_per_world_bytes": {
+    "observed_max": 49216,
+    "configured_caps": 135320
+   },
+   "working_set_4096": {
+    "rollout_storage": 167608320,
+    "rollout_storage_per_env_per_step": 1705.0,
+    "params_fp32": 2607404,
+    "grads_fp32": 2607404,
+    "adam_m_v": 5214876,
+    "ppo_update_transient_peak_pytorch": 542568960,
+    "sim_stock_allocated": 1445524943,
+    "sim_stock_solver_ctx_transient": 107327488,
+    "sim_minimal_persistent": 4587520,
+    "learner_state(params+grads+adam)": 10429684,
+    "lean_total(rollout+learner+minimal_sim)": 182625524,
+    "stock_total(rollout+learner+sim_alloc+update_peak)": 2166131907,
+    "rollout_storage_bf16_obs_act_dist": 84836352
+   },
+   "max_envs_fitting_lean_working_set": {
+    "per_env_bytes_fp32_rollout": 42040.0,
+    "per_env_bytes_bf16_rollout": 21832,
+    "learner_bytes": 10429684,
+    "fp32": {
+     "smem_total(18.4MiB)": 209,
+     "RF+L1smem(70.5MiB)": 1510,
+     "L2_persisting_window(80MiB)": 1747,
+     "L2(128MiB)": 2944,
+     "RF+L1smem+L2(198.5MiB)": 4702
+    },
+    "bf16": {
+     "smem_total(18.4MiB)": 404,
+     "RF+L1smem(70.5MiB)": 2908,
+     "L2_persisting_window(80MiB)": 3364,
+     "L2(128MiB)": 5670,
+     "RF+L1smem+L2(198.5MiB)": 9056
+    }
+   }
+  }
+ },
+ "quadcopter": {
+  "task_id": "Isaac-Quadcopter-Direct-v0 (NOT in v3.0.0; removed in ea8ecd6ef)",
+  "obs": 12,
+  "act": 4,
+  "decimation": 2,
+  "physics_dt": 0.01,
+  "episode_length_s": 10.0,
+  "hidden": [
+   64,
+   64
+  ],
+  "T": 24,
+  "epochs": 5,
+  "mini_batches": 4,
+  "actor_params": 5256,
+  "critic_params": 5057,
+  "rollout_bytes_per_env_step": 117,
+  "rollout_storage_4096": 11501568,
+  "mjwarp_data_proxy_bytes_per_world": {
+   "nconmax=4,njmax=16": 7568.0,
+   "nconmax=8,njmax=32": 10032.0
+  },
+  "proxy_model_counts": {
+   "nbody": 6,
+   "nq": 11,
+   "nv": 10,
+   "njnt": 5,
+   "ngeom": 6
+  },
+  "minimal_persistent_state_bytes": 180
+ },
+ "capacities": {
+  "this_gpu": {
+   "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+   "SMs": 188,
+   "RF_total": 49283072,
+   "smem_max_total": 19251200,
+   "L1_smem_total_assuming_128KiB_per_SM": 24641536,
+   "L2": 134217728,
+   "L2_persisting_max": 83886080,
+   "fp32_peak_TFLOPS_assuming_128_lanes_per_SM": 116.95104
+  },
+  "H100_SXM5_from_memory_unverified": {
+   "SMs": 132,
+   "RF_total": 34603008,
+   "L1_smem_total": 34603008,
+   "smem_max_total": 30818304,
+   "L2": 52428800.0
+  },
+  "B200_from_memory_unverified": {
+   "SMs": 148,
+   "RF_total": 38797312,
+   "L1_smem_total": 38797312,
+   "smem_max_total": 34553856,
+   "L2": "~126 MiB? (low confidence)"
+  }
+ }
+}

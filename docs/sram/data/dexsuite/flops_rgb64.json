@@ -1,0 +1,13 @@
+{
+ "rgb64": {
+  "actor": {
+   "fwd_flops_per_sample": 3318528.0,
+   "fwd_bwd_flops_per_sample": 8571136.0
+  },
+  "cnn_base_image_fwd_flops_per_sample": 2267136.0,
+  "critic": {
+   "fwd_flops_per_sample": 1961216.0,
+   "fwd_bwd_flops_per_sample": 4250368.0
+  }
+ }
+}
