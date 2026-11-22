@@ -1,0 +1,331 @@
+{
+  "backend": "sram_unified",
+  "task": "Isaac-Lift-KukaAllegro-Camera",
+  "camera": "rgb64",
+  "overrides": [
+    "physics=newton_mjwarp",
+    "renderer=newton_renderer",
+    "presets=single_camera,rgb64"
+  ],
+  "num_envs": 16,
+  "seed": 42,
+  "iterations": 3,
+  "warmup_iterations": 1,
+  "smoke_reset_bank": null,
+  "compact_history": true,
+  "precision": "Float32 with TF32 disabled",
+  "resume_checkpoint": null,
+  "resume_checkpoint_sha256": null,
+  "resume_scope": "Model and optimizer only; simulator, curriculum and reset-bank state initialize anew",
+  "started_utc": "2026-11-22T22:34:04.442723+00:00",
+  "process_id": 1231771,
+  "output": "/home/horde/sram-lab/scratch/production-unified/real16_3",
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "storage_scope": "Both actor and critic weights/Adam retained across one cooperative launch; phase-overlaid gradient arena, with critic gradient diagnostics exported before reuse; global rollout/activation/transport; GAE, normalization and RNG alignment outside the kernel",
+  "timing_scope": "Native runner collection/learning timers with CUDA synchronization before update returns; total iteration wall time is synchronized; split phases retain host-timer attribution. Initial compilation is included in warmup, logging/checkpoint IO excluded from iteration timings",
+  "convergence_claim": false,
+  "update_rng": "Native PPO samples",
+  "rows": [
+    {
+      "iteration": 0,
+      "collection_s": 2.5171592235565186,
+      "learning_s": 0.5126075744628906,
+      "iteration_s": 3.029766798019409,
+      "losses": {
+        "value": 0.0016776921693235636,
+        "surrogate": -0.08209624886512756,
+        "entropy": 32.63359832763672
+      },
+      "transitions_per_s": 168.98990388788334,
+      "task_metrics": {
+        "Episode_Reward/action_l2": 0.0,
+        "Episode_Reward/fingers_to_object": 0.0,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": 0.0,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 0.0,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.0,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 1,
+      "collection_s": 1.4635741710662842,
+      "learning_s": 0.3886845111846924,
+      "iteration_s": 1.8522586822509766,
+      "losses": {
+        "value": 0.0019935935270041227,
+        "surrogate": -0.09393981099128723,
+        "entropy": 32.630393981933594
+      },
+      "transitions_per_s": 276.4192738876984,
+      "mean_episode_reward": -0.3933146595954895,
+      "mean_episode_length": 51.333333333333336,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.023548632860183716,
+        "Episode_Reward/fingers_to_object": 0.00012472987873479724,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": 0.0,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 0.0,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.43232572078704834,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 2,
+      "collection_s": 0.9627406597137451,
+      "learning_s": 0.3882930278778076,
+      "iteration_s": 1.3510336875915527,
+      "losses": {
+        "value": 0.036653898656368256,
+        "surrogate": -0.05232032388448715,
+        "entropy": 32.63063049316406
+      },
+      "transitions_per_s": 378.96908471077955,
+      "mean_episode_reward": -0.8161934699331012,
+      "mean_episode_length": 74.71428571428571,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.046541519463062286,
+        "Episode_Reward/fingers_to_object": 0.00011710617400240153,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.01302083395421505,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 0.0,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.42213648557662964,
+        "Metrics/success_rate": 0.0
+      }
+    }
+  ],
+  "git_commit": "e8f75eff8a01332f15041c8a3f8eb7c627673389",
+  "git_status": [
+    "M  docs/sram/SRAM_TRAINING.md",
+    "A  docs/sram/data/actor_native_comparison/manifest.json",
+    "A  docs/sram/data/actor_native_comparison/screened_cycles.json.gz",
+    "A  docs/sram/data/actor_native_comparison/summary.json",
+    "A  docs/sram/data/critic_native_comparison/independent_audit.json",
+    "A  docs/sram/data/critic_native_comparison/manifest.json",
+    "A  docs/sram/data/critic_native_comparison/screened_pairs.json.gz",
+    "A  docs/sram/data/critic_native_comparison/summary.json",
+    "M  scripts/sram/train_kuka_perception.py",
+    "A  source/isaaclab_sram/changelog.d/unified-camera-backend.added.rst",
+    "A  source/isaaclab_sram/changelog.d/unified-resident-state.added.rst",
+    "A  source/isaaclab_sram/changelog.d/unified-resident-state.minor",
+    "A  source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_unified.cu",
+    "M  source/isaaclab_sram/isaaclab_sram/persistent_actor.py",
+    "M  source/isaaclab_sram/isaaclab_sram/persistent_critic.py",
+    "A  source/isaaclab_sram/isaaclab_sram/persistent_state.py",
+    "A  source/isaaclab_sram/isaaclab_sram/persistent_unified.py",
+    "A  source/isaaclab_sram/isaaclab_sram/unified_perception.py",
+    "M  source/isaaclab_sram/test/test_perception_update.py",
+    "A  source/isaaclab_sram/test/test_persistent_state.py"
+  ],
+  "source_sha256": {
+    "scripts/sram/train_kuka_perception.py": "82ca99427bbec05c987bbed7b9d0f24703b638899db13a780edf53e95f9e86af",
+    "source/isaaclab_sram/isaaclab_sram/__init__.py": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
+    "source/isaaclab_sram/isaaclab_sram/cartpole.py": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
+    "source/isaaclab_sram/isaaclab_sram/compact_history.py": "98caa9d2cbdaa8d9ae2db3ee50277a7eb8f16139881f7518d4fe43f0dd891625",
+    "source/isaaclab_sram/isaaclab_sram/compact_storage.py": "8d8a902300e18fb366e3f93e1445b5b15027eebf9adec41aea98ba349a597c46",
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+    "source/isaaclab_sram/isaaclab_sram/export.py": "8a3a3b69c2fe3b2fd244fafaa3d8e0561ceb23d59616bb7eaf9785cae88c05f0",
+    "source/isaaclab_sram/isaaclab_sram/kernels/cartpole_physics.cuh": "9e703f62392fa8adcd067a32cd55b417bcf230d4b8028468bbb4b276f8819da9",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_cartpole.cu": "50f06ad9493462237cfbf854b009ec1189128005e50c17040c9a2e44436eaf16",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu": "fc251d7834394fff81af27c062922c5bce80cf4ec86097aceaf4ef259419326c",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_critic.cu": "ceaf46623ba4af24f7bbbad5360ddf1981009809d9d90458ef432ebdd5236a73",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_unified.cu": "dbc6ddd63f2c068cd7797f52af9178bf5f19306bfcf122415582d7196462f092",
+    "source/isaaclab_sram/isaaclab_sram/kernels/sram_device.cuh": "e754c81eb12bf6304fe10e2d94bbc45dc3a98e51bac6bbd7fc7a0aee4c007948",
+    "source/isaaclab_sram/isaaclab_sram/megakernel.py": "2eeccbdd42d505034bb297a6c4010137644d8e9922476dbaa9d83931fdd4e8c2",
+    "source/isaaclab_sram/isaaclab_sram/perception.py": "306c980b7b03f7db3a04ec4b0c4f82998106c7292bf994d0a47dcf6021e9ddf2",
+    "source/isaaclab_sram/isaaclab_sram/persistent_actor.py": "ea8bd2bb8c99a058f78feb1b782615d849316b2c96aa81f547c17e897980f13a",
+    "source/isaaclab_sram/isaaclab_sram/persistent_critic.py": "a4f2a7cfe5f94c3fae74c83a3d05f811279feb91398ccfb4d4a60c6aab8943e1",
+    "source/isaaclab_sram/isaaclab_sram/persistent_full_perception.py": "e3abc05cae2b712b1bc64bacb1c96656fbfa748c30557c0ee3787186e239bc28",
+    "source/isaaclab_sram/isaaclab_sram/persistent_perception.py": "28f87b4d210d846e4399442fe318e846d63ddab1d2273790cec7012cc44889d7",
+    "source/isaaclab_sram/isaaclab_sram/persistent_state.py": "25533100b61c1a8aafdb01d53490f2cdeb29a9f6b21840f85d8e6732e5e86e5b",
+    "source/isaaclab_sram/isaaclab_sram/persistent_unified.py": "fb4f4e9ad325a277127247e216eaa553e109af3557935cec891990a48ac3d875",
+    "source/isaaclab_sram/isaaclab_sram/ppo_kernels.py": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+    "source/isaaclab_sram/isaaclab_sram/rl_backend.py": "25eea34640901f31ed63097173e2cb6f1b49f7dedb40a0b1ef07e5430fb5e79d",
+    "source/isaaclab_sram/isaaclab_sram/spatial_softmax.py": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b",
+    "source/isaaclab_sram/isaaclab_sram/unified_perception.py": "fd37aa8ea48a385409a77e410b390129c8cacbc63848f8249b8612531f99aae2"
+  },
+  "gpu_processes_start": [
+    "17145, /usr/lib/x86_64-linux-gnu/dcv/dcvagent, 1155 MiB",
+    "17552, /usr/libexec/gnome-remote-desktop-daemon, 558 MiB"
+  ],
+  "compact_history_layouts": {
+    "policy": {
+      "order": "term",
+      "terms": [
+        {
+          "name": "object_quat_b",
+          "frame_size": 4,
+          "history_length": 5
+        },
+        {
+          "name": "target_object_pose_b",
+          "frame_size": 7,
+          "history_length": 5
+        },
+        {
+          "name": "actions",
+          "frame_size": 23,
+          "history_length": 5
+        }
+      ]
+    },
+    "proprio": {
+      "order": "term",
+      "terms": [
+        {
+          "name": "joint_pos",
+          "frame_size": 23,
+          "history_length": 5
+        },
+        {
+          "name": "joint_vel",
+          "frame_size": 23,
+          "history_length": 5
+        },
+        {
+          "name": "hand_tips_state_b",
+          "frame_size": 35,
+          "history_length": 5
+        },
+        {
+          "name": "contact",
+          "frame_size": 12,
+          "history_length": 5
+        }
+      ]
+    },
+    "perception": {
+      "order": "term",
+      "terms": [
+        {
+          "name": "object_point_cloud",
+          "frame_size": 192,
+          "history_length": 5
+        }
+      ]
+    }
+  },
+  "rollout_dense_observation_bytes": 9558016,
+  "compact_history_frames_bytes": 734976,
+  "compact_history_storage_bytes": 741872,
+  "compact_history_scope": "Exact processed frames and reset boundaries in global storage; unchanged raw images. Minibatch gathering reconstructs histories; normalization reconstructs complete state groups.",
+  "startup_s": 64.33110972307622,
+  "fused_spatial_softmax_modules": 1,
+  "observations": {
+    "policy": {
+      "shape": [
+        16,
+        170
+      ],
+      "dtype": "torch.float32"
+    },
+    "proprio": {
+      "shape": [
+        16,
+        465
+      ],
+      "dtype": "torch.float32"
+    },
+    "perception": {
+      "shape": [
+        16,
+        960
+      ],
+      "dtype": "torch.float32"
+    },
+    "base_image": {
+      "shape": [
+        16,
+        3,
+        64,
+        64
+      ],
+      "dtype": "torch.uint8"
+    }
+  },
+  "rollout_observation_bytes": 7033328,
+  "initial_image": {
+    "min": 0.0,
+    "max": 238.0,
+    "std": 72.49009704589844
+  },
+  "camera_preview_scale": "Native uint8 RGB",
+  "camera_preview": "/home/horde/sram-lab/scratch/production-unified/real16_3/camera_preview.jpg",
+  "train_wall_s": 6.955371347023174,
+  "torch_peak_allocated_bytes": 109188096,
+  "torch_peak_reserved_bytes": 123731968,
+  "unified_learner_resources": {
+    "NUM_REGS": 224,
+    "LOCAL_SIZE_BYTES": 0,
+    "SHARED_SIZE_BYTES": 336,
+    "MAX_THREADS_PER_BLOCK": 256,
+    "MAX_DYNAMIC_SHARED_SIZE_BYTES": 66612,
+    "BINARY_VERSION": 120,
+    "dynamic_shared_bytes": 66612,
+    "resident_blocks_per_sm": 1,
+    "grid_blocks": 188,
+    "threads_per_block": 256,
+    "register_cap": 224,
+    "moment_register_values_per_thread": 84,
+    "canonical_parameter_count": 1527711,
+    "replicated_cnn_parameter_count": 118372,
+    "allocated_weight_and_gradient_shared_bytes": 12523056,
+    "logical_resident_weight_and_moment_bytes": 19752996,
+    "gradient_bank_scope": "Phase-overlaid shared bank; critic final gradients exported before reuse",
+    "source_sha256": "dbc6ddd63f2c068cd7797f52af9178bf5f19306bfcf122415582d7196462f092",
+    "cubin_sha256": "170e08940d12c4d0713534ef15ba9445aa4021d74b0ee84a22967c91f445f526",
+    "compiler_log": "(cached)",
+    "scope": "Both networks W/m/v entry-to-exit; phase-overlaid G; global rollout/activation/mailboxes",
+    "all_sram": false,
+    "zero_dram": false
+  },
+  "unified_learner_launches": 3,
+  "rollout_storage_bytes": 7185392,
+  "actor_parameter_max_abs_change": {
+    "distribution.std_param": 0.0031068921089172363,
+    "mlp.0.weight": 0.005379930138587952,
+    "mlp.0.bias": 0.0017996923997998238,
+    "mlp.2.weight": 0.004507381469011307,
+    "mlp.2.bias": 0.0015894211828708649,
+    "mlp.4.weight": 0.003997001796960831,
+    "mlp.4.bias": 0.0014338642358779907,
+    "mlp.6.weight": 0.003701642155647278,
+    "mlp.6.bias": 0.0016370117664337158,
+    "cnns.base_image.0.weight": 0.002173331566154957,
+    "cnns.base_image.0.bias": 0.0008865329436957836,
+    "cnns.base_image.2.weight": 0.003711267840117216,
+    "cnns.base_image.2.bias": 0.0018085800111293793,
+    "cnns.base_image.4.weight": 0.0037300363183021545,
+    "cnns.base_image.4.bias": 0.0017918199300765991,
+    "softmaxes.base_image.log_temperature": 0.0019268293399363756
+  },
+  "cnn_changed": true,
+  "all_parameters_finite": true,
+  "checkpoint": "/home/horde/sram-lab/scratch/production-unified/real16_3/model_2.pt",
+  "checkpoint_tf32_action_max_abs_error": 5.960464477539063e-08,
+  "checkpoint_action_max_abs_error": 5.960464477539063e-08,
+  "checkpoint_verification_precision": "IEEE float32 (TF32 disabled for both actors)",
+  "checkpoint_native_actor_class": "SpatialSoftmaxCNNModel",
+  "checkpoint_native_actor_matches": true,
+  "image_action_sensitivity_max_abs": 0.0016631931066513062,
+  "measured_iterations": 2,
+  "timing_medians": {
+    "collection_s": 1.2131574153900146,
+    "learning_s": 0.38848876953125,
+    "iteration_s": 1.6016461849212646,
+    "transitions_per_s": 327.69417929923895
+  },
+  "integration_passed": true,
+  "finished_utc": "2026-11-22T22:35:16.164215+00:00"
+}

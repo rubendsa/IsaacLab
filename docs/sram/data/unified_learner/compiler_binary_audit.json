@@ -1,0 +1,35 @@
+{
+  "scope": "Compiler and SASS resource inspection of the exact cubin loaded by the production validation runs",
+  "production_source_sha256": "dbc6ddd63f2c068cd7797f52af9178bf5f19306bfcf122415582d7196462f092",
+  "same_cubin_as_validated_production": true,
+  "source_relation": "Promotion changed SPDX/header and stale comments only; compiled cubin SHA256 is identical",
+  "binary_audit": {
+    "cap": 224,
+    "registers_per_thread": 224,
+    "stack_bytes": 0,
+    "spill_store_bytes": 0,
+    "spill_load_bytes": 0,
+    "dynamic_shared_bytes": 66612,
+    "static_shared_bytes": 336,
+    "runtime_reserved_shared_bytes": 1024,
+    "rounded_shared_allocation_bytes": 68096,
+    "analytical_resident_ctas_per_sm": 1,
+    "sass_local_sites": {
+      "LDL": 0,
+      "STL": 0
+    },
+    "source_sha256": "42872d02a933384528040a68145bc3c9db7ce77f65d408b4a6ddf18fd6a2fab1",
+    "cubin_sha256": "170e08940d12c4d0713534ef15ba9445aa4021d74b0ee84a22967c91f445f526",
+    "compiler_log": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function 'unified_native_learner' for 'sm_120'\nptxas info    : Function properties for unified_native_learner\nptxas         .     0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 224 registers, used 1 barriers, 336 bytes smem\nptxas info    : Compile time = 6915.526 ms",
+    "cuobjdump_resources": "\nResource usage:\n Common:\n  GLOBAL:0\n Function unified_native_learner:\n  REG:224 STACK:0 SHARED:1360 LOCAL:0 CONSTANT[2]:5788 CONSTANT[0]:1336 TEXTURE:0 SURFACE:0 SAMPLER:0\n",
+    "defines": {
+      "THREADS": 256,
+      "N_CTAS": 188,
+      "CRITIC_TILE": 64,
+      "ACTOR_TILE": 8,
+      "CRITIC_SHARD_SIZE": 6200,
+      "ACTOR_SHARD_SIZE": 4253,
+      "MAX_REGS": 224
+    }
+  }
+}

@@ -38,7 +38,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "source" / "isaacla
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--backend", choices=("torch", "sram", "sram_graph", "sram_critic", "sram_full"), default="sram"
+        "--backend", choices=("torch", "sram", "sram_graph", "sram_critic", "sram_full", "sram_unified"), default="sram"
     )
     parser.add_argument("--camera", choices=("rgb64", "depth64"), default="rgb64")
     parser.add_argument("--num_envs", type=int, default=4096)
@@ -64,8 +64,10 @@ def parse_args():
         parser.error("num_envs and iterations must be positive; warmup_iterations must be nonnegative")
     if args.backend in ("sram_critic", "sram_full") and args.num_envs > 64:
         parser.error("Persistent camera backends currently support at most 64 environments")
-    if args.backend == "sram_full" and args.camera != "rgb64":
-        parser.error("sram_full currently supports the native RGB64 actor only")
+    if args.backend == "sram_unified" and args.num_envs > 16:
+        parser.error("sram_unified currently supports at most 16 environments")
+    if args.backend in ("sram_full", "sram_unified") and args.camera != "rgb64":
+        parser.error(f"{args.backend} currently supports the native RGB64 actor only")
     return args
 
 
@@ -119,6 +121,8 @@ def main():
         agent_cfg.algorithm.class_name = "isaaclab_sram.persistent_perception:SramPersistentCriticPPO"
     elif args.backend == "sram_full":
         agent_cfg.algorithm.class_name = "isaaclab_sram.persistent_full_perception:SramPersistentFullPerceptionPPO"
+    elif args.backend == "sram_unified":
+        agent_cfg.algorithm.class_name = "isaaclab_sram.unified_perception:SramUnifiedPerceptionPPO"
     if args.smoke_reset_bank is not None:
         env_cfg.events.conditional_reset.params["buffer_size_per_group"] = args.smoke_reset_bank
         env_cfg.events.conditional_reset.params["oversample_factor"] = 1.0
@@ -184,6 +188,12 @@ def main():
         else "Native PPO samples",
         "rows": [],
     }
+    if args.backend == "sram_unified":
+        report["storage_scope"] = (
+            "Both actor and critic weights/Adam retained across one cooperative launch; phase-overlaid gradient "
+            "arena, with critic gradient diagnostics exported before reuse; global rollout/activation/transport; "
+            "GAE, normalization and RNG alignment outside the kernel"
+        )
     report["git_commit"] = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=Path(__file__).resolve().parents[2], text=True
     ).strip()
@@ -313,6 +323,9 @@ def main():
                 report["persistent_critic_resources"] = alg._persistent_critic.resource_info
             if getattr(alg, "_persistent_actor", None) is not None:
                 report["persistent_actor_resources"] = alg._persistent_actor.resource_info
+            if getattr(alg, "_unified", None) is not None:
+                report["unified_learner_resources"] = alg._unified.resource_info
+                report["unified_learner_launches"] = alg._unified.launch_count
             storage_tensors = (
                 observation_storage_tensors(alg.storage.observations)
                 + [

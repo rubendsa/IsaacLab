@@ -1,0 +1,15 @@
+{
+  "encoding": "gzip; decompression reproduces raw evidence byte-for-byte",
+  "artifacts": {
+    "screened_cycles.json.gz": {
+      "sha256": "8476330d5013df9e2918538d0482b137f54e67ca7f1d5096d788a89a0d038258",
+      "bytes": 41069
+    },
+    "summary.json": {
+      "sha256": "12151174b6b18804efc84a95b90c74fa9871c01c41863813b330155f32f85161",
+      "bytes": 3174
+    }
+  },
+  "raw_decompressed_sha256": "d8750152762f3cf90ac4b5ad0e1f7e59b042794a820a24be10a3d2c50c248111",
+  "raw_decompressed_bytes": 1073669
+}

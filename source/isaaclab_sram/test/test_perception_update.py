@@ -160,14 +160,16 @@ def test_native_camera_ppo_update_matches_stock_parameters_moments_and_normalize
         "isaaclab_sram.perception:SramGraphPerceptionPPO",
         "isaaclab_sram.persistent_perception:SramPersistentCriticPPO",
         "isaaclab_sram.persistent_full_perception:SramPersistentFullPerceptionPPO",
+        "isaaclab_sram.unified_perception:SramUnifiedPerceptionPPO",
     ],
-    ids=["cuda_graph", "persistent_critic", "persistent_full"],
+    ids=["cuda_graph", "persistent_critic", "persistent_full", "persistent_unified"],
 )
 def test_optimized_updates_match_eager_after_resume_and_normalizer_changes(device, backend):
     """Optimized updates preserve resumed Adam and consume later normalization."""
     cfg = _config()
     cfg["algorithm"]["class_name"] = "isaaclab_sram.perception:SramPerceptionPPO"
-    env = SimpleNamespace(num_envs=8, num_actions=23)
+    unified = backend == "isaaclab_sram.unified_perception:SramUnifiedPerceptionPPO"
+    env = SimpleNamespace(num_envs=16 if unified else 8, num_actions=23)
     with (
         torch.random.fork_rng(devices=[torch.device(device).index]),
         scoped_torch_backend_flags(
@@ -193,7 +195,12 @@ def test_optimized_updates_match_eager_after_resume_and_normalizer_changes(devic
 
         # The first update initializes compiled/captured state from nonzero Adam;
         # the second consumes a changed observation distribution and normalizer.
-        for iteration in range(2):
+        # Unified additionally reloads before a third update, covering reused
+        # scratch buffers as well as checkpoint-triggered reconstruction.
+        for iteration in range(3 if unified else 2):
+            if unified and iteration == 2:
+                optimized.load(copy.deepcopy(optimized.save()), load_cfg=None, strict=True)
+                assert optimized._unified is None
             torch.manual_seed(71 + iteration)
             last = _collect_rollout(eager, env.num_envs, device, offset=0.5 + iteration)
             optimized.storage = copy.deepcopy(eager.storage)
@@ -206,6 +213,8 @@ def test_optimized_updates_match_eager_after_resume_and_normalizer_changes(devic
             expected_cuda_rng = torch.cuda.get_rng_state(device)
             torch.manual_seed(81 + iteration)
             actual_losses = optimized.update()
+            if unified:
+                assert optimized._unified.launch_count == (1 if iteration == 2 else iteration + 1)
             if backend != "isaaclab_sram.perception:SramGraphPerceptionPPO":
                 # Persistent phases consume the same discarded action samples
                 # as native PPO. Graph replay deliberately omits those draws.

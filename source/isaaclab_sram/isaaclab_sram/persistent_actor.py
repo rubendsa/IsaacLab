@@ -23,6 +23,7 @@ import torch
 from torch import nn
 
 from . import cuda_rt as rt
+from .persistent_state import PackedAdamState, PreparedUpdate, UpdateGuard, prepare_update
 
 DIMS = (699, 512, 256, 128, 23)
 NUM_PARAMS = 546206
@@ -76,6 +77,7 @@ class PersistentActor:
         clip_param: float = 0.2,
         entropy_coef: float = 0.005,
         max_grad_norm: float = 1.0,
+        _prepare_only: bool = False,
     ):
         self.actor = actor
         self.optimizer = optimizer
@@ -159,6 +161,9 @@ class PersistentActor:
             raise ValueError("torch.optim.Adam required")
         self._validate_model_tensors()
         self._optimizer_config()
+        self._update_guard = UpdateGuard(self.device)
+        self.kernel = None
+        self.resource_info = {}
         with torch.cuda.device(self.device):
             rt.ensure_context(self.device.index)
             if not rt.device_attr("COOPERATIVE_LAUNCH", self.device.index):
@@ -175,50 +180,51 @@ class PersistentActor:
             replicated_cnn_parameters = sum(
                 (self.num_ctas - channels) * (inputs + 1) for inputs, channels in shapes[4:7]
             )
-            limit = rt.device_attr("MAX_SHARED_MEMORY_PER_BLOCK_OPTIN", self.device.index)
-            if self.shared_bytes + 256 > limit:
-                raise ValueError("Native actor state cannot fit device shared memory; architecture is not reduced")
-            source = _KERNEL.read_text()
-            self.module = rt.compile_module(
-                source,
-                name=_KERNEL.name,
-                defines={"THREADS": THREADS, "TILE": TILE, "N_CTAS": self.num_ctas, "SHARD_SIZE": self.shard_size},
-                options=("-Xptxas=-v",),
-            )
-            self.kernel = self.module.kernel("persistent_native_actor")
-            if self.shared_bytes + self.kernel.attr("SHARED_SIZE_BYTES") > limit:
-                raise ValueError("Native actor state exceeds shared memory limit")
-            self.kernel.set_max_dynamic_smem(self.shared_bytes)
-            occupancy = self.kernel.occupancy(THREADS, self.shared_bytes)
-            if occupancy < 1 or self.num_ctas > occupancy * rt.num_sms(self.device.index):
-                raise ValueError("Cooperative actor grid cannot be resident")
-            self.resource_info = {
-                **self.kernel.info(),
-                "resident_blocks_per_sm": occupancy,
-                "dynamic_shared_bytes_per_block": self.shared_bytes,
-                "grid_blocks": self.num_ctas,
-                "threads_per_block": THREADS,
-                "parameter_count": NUM_PARAMS,
-                "working_state_bytes": NUM_PARAMS * 16,
-                "canonical_parameter_count": NUM_PARAMS,
-                "canonical_working_state_bytes": NUM_PARAMS * 16,
-                "resident_parameter_count": NUM_PARAMS + replicated_cnn_parameters,
-                "resident_working_state_bytes": (NUM_PARAMS + replicated_cnn_parameters) * 16,
-                "replicated_cnn_parameter_count": replicated_cnn_parameters,
-                "replicated_cnn_working_state_bytes": replicated_cnn_parameters * 16,
-                "allocated_model_shared_bytes": self.shared_bytes * self.num_ctas,
-                "compiler_log": self.module.log,
-                "cubin_sha256": hashlib.sha256(self.module.cubin).hexdigest(),
-                "source_sha256": hashlib.sha256(source.encode()).hexdigest(),
-                "scope": (
-                    "Canonical and replicated actor W/G/Adam shared during all steps; "
-                    "rollout/mailboxes global; separate critic phase"
-                ),
-                "zero_dram_claim": False,
-                "tile_samples": TILE,
-                "cnn_replica_groups": [16, 32, 32],
-                "replica_gradient_mailbox_bytes": self.num_ctas * 739 * 4,
-            }
+            if not _prepare_only:
+                limit = rt.device_attr("MAX_SHARED_MEMORY_PER_BLOCK_OPTIN", self.device.index)
+                if self.shared_bytes + 256 > limit:
+                    raise ValueError("Native actor state cannot fit device shared memory; architecture is not reduced")
+                source = _KERNEL.read_text()
+                self.module = rt.compile_module(
+                    source,
+                    name=_KERNEL.name,
+                    defines={"THREADS": THREADS, "TILE": TILE, "N_CTAS": self.num_ctas, "SHARD_SIZE": self.shard_size},
+                    options=("-Xptxas=-v",),
+                )
+                self.kernel = self.module.kernel("persistent_native_actor")
+                if self.shared_bytes + self.kernel.attr("SHARED_SIZE_BYTES") > limit:
+                    raise ValueError("Native actor state exceeds shared memory limit")
+                self.kernel.set_max_dynamic_smem(self.shared_bytes)
+                occupancy = self.kernel.occupancy(THREADS, self.shared_bytes)
+                if occupancy < 1 or self.num_ctas > occupancy * rt.num_sms(self.device.index):
+                    raise ValueError("Cooperative actor grid cannot be resident")
+                self.resource_info = {
+                    **self.kernel.info(),
+                    "resident_blocks_per_sm": occupancy,
+                    "dynamic_shared_bytes_per_block": self.shared_bytes,
+                    "grid_blocks": self.num_ctas,
+                    "threads_per_block": THREADS,
+                    "parameter_count": NUM_PARAMS,
+                    "working_state_bytes": NUM_PARAMS * 16,
+                    "canonical_parameter_count": NUM_PARAMS,
+                    "canonical_working_state_bytes": NUM_PARAMS * 16,
+                    "resident_parameter_count": NUM_PARAMS + replicated_cnn_parameters,
+                    "resident_working_state_bytes": (NUM_PARAMS + replicated_cnn_parameters) * 16,
+                    "replicated_cnn_parameter_count": replicated_cnn_parameters,
+                    "replicated_cnn_working_state_bytes": replicated_cnn_parameters * 16,
+                    "allocated_model_shared_bytes": self.shared_bytes * self.num_ctas,
+                    "compiler_log": self.module.log,
+                    "cubin_sha256": hashlib.sha256(self.module.cubin).hexdigest(),
+                    "source_sha256": hashlib.sha256(source.encode()).hexdigest(),
+                    "scope": (
+                        "Canonical and replicated actor W/G/Adam shared during all steps; "
+                        "rollout/mailboxes global; separate critic phase"
+                    ),
+                    "zero_dram_claim": False,
+                    "tile_samples": TILE,
+                    "cnn_replica_groups": [16, 32, 32],
+                    "replica_gradient_mailbox_bytes": self.num_ctas * 739 * 4,
+                }
 
             def buffer(count, dtype=torch.float32):
                 return torch.empty(count, dtype=dtype, device=self.device)
@@ -277,7 +283,17 @@ class PersistentActor:
                 raise ValueError("Native uint8 image normalization requires shift=-0.5 and scale=1/255")
 
     @torch.no_grad()
-    def update(
+    def update(self, normalized_state, raw_rgb, actions, old_logp, advantages, indices):
+        """Perform the complete native actor update on this wrapper's CUDA stream."""
+        if self.kernel is None:
+            raise RuntimeError("This actor was constructed for preparation only")
+        with torch.cuda.device(self.device):
+            prepared = self._prepare_update(normalized_state, raw_rgb, actions, old_logp, advantages, indices)
+            return prepared.launch(self.kernel, self.num_ctas, THREADS, self.shared_bytes)
+
+    @torch.no_grad()
+    @prepare_update
+    def _prepare_update(
         self,
         normalized_state: torch.Tensor,
         raw_rgb: torch.Tensor,
@@ -285,8 +301,8 @@ class PersistentActor:
         old_logp: torch.Tensor,
         advantages: torch.Tensor,
         indices: torch.Tensor,
-    ) -> torch.Tensor:
-        """Return CUDA [mean surrogate loss, mean entropy] after all actor steps.
+    ) -> PreparedUpdate:
+        """Prepare CUDA [mean surrogate loss, mean entropy] after all actor steps.
 
         State inputs are frozen normalized [B,635], RGB is uint8 [B,3,64,64],
         actions are float32 [B,23], log probabilities and advantages are float32
@@ -326,62 +342,29 @@ class PersistentActor:
             if not torch.equal(indices.sort().values, torch.arange(batch, device=self.device)):
                 raise ValueError("indices must be full permutation")
             lr, beta1, beta2, epsilon, fused, groups = self._optimizer_config()
-            states = []
-            steps = []
             updates = self.num_learning_epochs * self.num_mini_batches
-            for parameter, group in zip(self.parameters, groups, strict=True):
-                state = self.optimizer.state[parameter]
-                if not state:
-                    state["step"] = torch.zeros(
-                        (), dtype=torch.float32, device=self.device if fused or group.get("capturable") else "cpu"
-                    )
-                    state["exp_avg"] = torch.zeros_like(parameter)
-                    state["exp_avg_sq"] = torch.zeros_like(parameter)
-                for name in ("exp_avg", "exp_avg_sq"):
-                    value = state[name]
-                    if value.shape != parameter.shape or value.dtype != torch.float32 or value.device != self.device:
-                        raise ValueError("Invalid Adam state")
-                step = float(state["step"].item())
-                if not math.isfinite(step) or step < 0 or step != int(step) or step + updates > 2**24:
-                    raise ValueError("Invalid Adam step")
-                states.append(state)
-                steps.append(int(step))
-            flat = torch.cat([p.flatten() for p in self.parameters])
-            moments = torch.cat([s["exp_avg"].flatten() for s in states])
-            variances = torch.cat([s["exp_avg_sq"].flatten() for s in states])
-            finite = torch.stack(
-                [
-                    torch.isfinite(value).all()
-                    for value in (
-                        flat,
-                        moments,
-                        variances,
-                        coordinates,
-                        normalized_state,
-                        actions,
-                        old_logp,
-                        advantages,
-                    )
-                ]
-            ).all()
-            if not bool(finite & (variances >= 0).all()):
-                raise ValueError("Actor inputs/checkpoint must be finite, with nonnegative Adam second moments")
-            corrections = torch.tensor(
-                [
-                    (-lr, step + u + 1)
-                    if fused
-                    else (-lr / (1.0 - beta1 ** (step + u + 1)), math.sqrt(1.0 - beta2 ** (step + u + 1)))
-                    for u in range(updates)
-                    for step in steps
-                ],
-                dtype=torch.float32,
-                device=self.device,
+            state = PackedAdamState.prepare(
+                self.parameters,
+                self.optimizer,
+                groups,
+                updates,
+                self.device,
+                (lr, beta1, beta2, epsilon, fused),
             )
+            flat, moments, variances, corrections = state.flat, state.moments, state.variances, state.corrections
+            if not bool(
+                torch.stack(
+                    [
+                        torch.isfinite(value).all()
+                        for value in (coordinates, normalized_state, actions, old_logp, advantages)
+                    ]
+                ).all()
+            ):
+                raise ValueError("Persistent inputs must be finite")
             result = torch.empty(2, dtype=torch.float32, device=self.device)
-            self.kernel.launch(
-                self.num_ctas,
-                THREADS,
-                args=[
+            return PreparedUpdate(
+                state=state,
+                arguments=(
                     flat,
                     moments,
                     variances,
@@ -421,17 +404,11 @@ class PersistentActor:
                     self.last_statistics,
                     result,
                     self.barrier,
-                ],
-                smem=self.shared_bytes,
-                cooperative=True,
+                ),
+                result=result,
+                batch=batch,
+                indices=indices,
+                minibatch_size=batch // self.num_mini_batches,
+                epochs=self.num_learning_epochs,
+                minibatches=self.num_mini_batches,
             )
-            offset = 0
-            for parameter, state, step in zip(self.parameters, states, steps, strict=True):
-                end = offset + parameter.numel()
-                parameter.copy_(flat[offset:end].view_as(parameter))
-                state["exp_avg"].copy_(moments[offset:end].view_as(parameter))
-                state["exp_avg_sq"].copy_(variances[offset:end].view_as(parameter))
-                state["step"].fill_(step + updates)
-                parameter.grad = None
-                offset = end
-            return result

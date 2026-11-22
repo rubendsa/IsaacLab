@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "source_commit": "e8f75eff8a01332f15041c8a3f8eb7c627673389",
+  "source_unchanged": true,
+  "accepted": {
+    "production_shared": 5,
+    "register128": 5,
+    "register96": 5,
+    "cluster4": 5,
+    "owned_cluster4": 5
+  },
+  "excluded_pairs": 1,
+  "max_accepted_monitor_gap_ms": 100.42622301261872,
+  "max_state_abs_error": 9.313225746154785e-08,
+  "max_gradient_abs_error": 7.450580596923828e-09,
+  "comparisons": {
+    "production_shared": {
+      "native_host_ms": 84.31347692385316,
+      "candidate_host_ms": 34.887618967331946,
+      "paired_ratio_median": 2.4264069877918586
+    },
+    "register128": {
+      "native_host_ms": 84.24889296293259,
+      "candidate_host_ms": 35.22175399120897,
+      "paired_ratio_median": 2.3931053432539544
+    },
+    "register96": {
+      "native_host_ms": 83.71457899920642,
+      "candidate_host_ms": 39.8995439754799,
+      "paired_ratio_median": 2.0930039731734094
+    },
+    "cluster4": {
+      "native_host_ms": 83.72869191225618,
+      "candidate_host_ms": 50.081194029189646,
+      "paired_ratio_median": 1.6715033531047085
+    },
+    "owned_cluster4": {
+      "native_host_ms": 82.75119494646788,
+      "candidate_host_ms": 51.04947602376342,
+      "paired_ratio_median": 1.6217513034575497
+    }
+  },
+  "raw_sha256": "d2c5e29892837e2c0ba83fbae2f9ee23b24f9bdf15227e9612e8e760939d911d"
+}

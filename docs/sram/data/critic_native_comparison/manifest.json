@@ -1,0 +1,19 @@
+{
+  "encoding": "gzip preserves original raw bytes after decompression",
+  "raw_decompressed_bytes": 1613948,
+  "raw_decompressed_sha256": "d2c5e29892837e2c0ba83fbae2f9ee23b24f9bdf15227e9612e8e760939d911d",
+  "artifacts": {
+    "independent_audit.json": {
+      "bytes": 1360,
+      "sha256": "ecaa115b4da4fa83618e2eafb99ece7e4207c09d10182f620b7f52a5f0993dbe"
+    },
+    "screened_pairs.json.gz": {
+      "bytes": 53443,
+      "sha256": "804a024589a7c1da7fc17bf995bb248b5975a2aa060f9d564f0b87f6c44bcfa5"
+    },
+    "summary.json": {
+      "bytes": 3897,
+      "sha256": "9e6f6cc828c6a74d0429827a61491b792edc1c5388af939f1458f26ad703a8a5"
+    }
+  }
+}

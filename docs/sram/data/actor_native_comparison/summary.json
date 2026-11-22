@@ -1,0 +1,70 @@
+{
+  "scope": "Native RGB64 actor component: 40 steps, N64, B2048, fused Adam, IEEE FP32, fixed synthetic rollout and identical resumed checkpoint",
+  "publication_review": {
+    "accepted": true,
+    "reviewer": "Implementation review",
+    "raw_publication_allowed_preserved": false,
+    "accepted_scope": "Native PyTorch versus the production replicated persistent actor only; scratch variants retained as diagnostic data."
+  },
+  "git_commit": "e8f75eff8a01332f15041c8a3f8eb7c627673389",
+  "verified_committed_source_files": [
+    "source/isaaclab_sram/isaaclab_sram/persistent_actor.py",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu",
+    "scripts/sram/benchmark_persistent_actor.py",
+    "scripts/sram/benchmark_persistent_critic.py"
+  ],
+  "raw_artifact": "screened_cycles.json.gz",
+  "raw_sha256": "d8750152762f3cf90ac4b5ad0e1f7e59b042794a820a24be10a3d2c50c248111",
+  "valid_cycle_count": 5,
+  "excluded_cycle_count": 4,
+  "maximum_valid_process_sample_gap_ms": 100.12188600376248,
+  "balanced_positions": true,
+  "all_model_moment_step_metric_checks_passed": true,
+  "host_ms": {
+    "torch_fused": {
+      "median": 177.05531092360616,
+      "min": 168.15569705795497,
+      "max": 207.96631707344204,
+      "samples": [
+        202.60389300528914,
+        168.15569705795497,
+        207.96631707344204,
+        177.05531092360616,
+        173.5272000078112
+      ]
+    },
+    "shared_t8": {
+      "median": 245.0015509966761,
+      "min": 244.4069089833647,
+      "max": 245.62867800705135,
+      "samples": [
+        245.51999499090016,
+        245.62867800705135,
+        244.6088920114562,
+        244.4069089833647,
+        245.0015509966761
+      ]
+    }
+  },
+  "persistent_over_native_median_time": 1.3837571418706927,
+  "persistent_over_native_paired_time_ratios": [
+    1.2118226918003527,
+    1.4607217138911164,
+    1.1761947581399639,
+    1.3803986319778832,
+    1.411891340295052
+  ],
+  "measurement_boundary": "Complete 40-step native RGB64 actor update; packing, validation and copyback included. Restore, reference computation, parity checks and clock queries excluded.",
+  "normalization_scope": "Frozen normalizer evaluated per native minibatch; persistent receives pre-normalized state prepared outside timing.",
+  "rng_scope": "Both timed paths omit discarded Gaussian samples; full learner RNG alignment is excluded.",
+  "limitations": [
+    "One GPU, one fixed synthetic rollout and five accepted cycles; no convergence or end-to-end camera claim.",
+    "Polling cannot exclude external activity between 100 ms process samples; desktop services are excluded explicitly.",
+    "Native host times varied from 168 to 208 ms; CPU load and affinity were not controlled. The persistent actor was slower in every accepted cycle.",
+    "The historical raw publication_allowed=false flag is preserved; this review accepts only the stated native/production comparison.",
+    "Register, parallel-reduction and inverse-convolution variants in the raw data are scratch experiments, not the committed production path."
+  ],
+  "all_sram": false,
+  "zero_dram": false,
+  "persistent_over_native_throughput_ratio": 0.7226701635289168
+}

@@ -5,7 +5,8 @@ Branch: `sram-resident-training`. Base: Isaac Lab `v3.0.0`, commit
 
 The opportunity is to keep repeatedly used learner intermediates on chip and remove launch and synchronization
 overhead from PPO. This branch contains a persistent Cartpole training megakernel, fused operations and separate
-persistent actor/critic updates for the native Kuka-Allegro camera learner, lossless history storage, a real-environment runner and a separate
+persistent actor/critic updates plus a combined resident-model launch for the native Kuka-Allegro camera learner,
+lossless history storage, a real-environment runner and a separate
 learner benchmark. The Cartpole implementation
 can keep its rollout, environment state, parameters and optimizer
 working state in shared memory and registers during a launch. Real Kuka RGB64 measurements below test selective
@@ -16,12 +17,16 @@ For Ruben: real RGB64 Kuka training measured **11–12% higher learner throughpu
 throughput** in 200-iteration runs at 4,096 environments on one RTX PRO 6000 Blackwell. The native trainable CNN,
 23-action policy, critic and PPO recipe are preserved. These are single-seed throughput observations, not a
 time-to-success result. The smaller two-phase persistent learner below is separate from these throughput results.
+At 64 environments, screened component measurements found a faster persistent critic but a slower persistent
+visual actor: 34.89 versus 84.31 ms for the critic, and 245.00 versus 177.06 ms for the actor. These components were
+measured separately; their times are not an end-to-end learner measurement.
 
 **The complete perception learner is not yet SRAM-resident.** Its dense native rollout alone contains 1.5 GiB of
 images and 797.5 MiB of state/history at 4,096 environments. At 64 environments, the branch now retains the native
 actor's and critic's parameters, gradients and Adam moments on chip for each network's 40 optimizer steps in
 separate cooperative launches. The actor launch includes the complete trainable CNN and its backward pass.
-Repeated state histories can also be compacted losslessly. Observations, activations and communication buffers
+At up to 16 environments, `sram_unified` retains both networks' weights and Adam moments across one combined
+launch, overlaying the critic and actor gradient arena. Repeated state histories can also be compacted losslessly. Observations, activations and communication buffers
 still use global memory; GAE and normalization remain outside those launches. An entirely SRAM-resident visual
 learner remains unimplemented. Neither CUDA graphs nor a persistent
 kernel imply zero device-memory traffic. The measurements and capacity analysis below make that remaining
@@ -37,8 +42,9 @@ engineering work concrete.
 | `source/isaaclab_sram/isaaclab_sram/perception.py`, `spatial_softmax.py`, `ppo_kernels.py` | Native trainable CNN and critic with fused spatial softmax, PPO objective, GAE and Adam | Whether selective fusion improves the original learner while preserving its gradient computation |
 | [Persistent critic](../../source/isaaclab_sram/isaaclab_sram/persistent_critic.py), [CUDA kernel](../../source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_critic.cu) and [PPO integration](../../source/isaaclab_sram/isaaclab_sram/persistent_perception.py) | All 40 native critic forward/backward, clipping and Adam steps in one cooperative launch | Critic parameter, gradient and optimizer residency; not residency of the visual actor or rollout |
 | [Persistent actor](../../source/isaaclab_sram/isaaclab_sram/persistent_actor.py), [CUDA kernel](../../source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu) and [full PPO integration](../../source/isaaclab_sram/isaaclab_sram/persistent_full_perception.py) | Complete native RGB64 CNN, spatial softmax, policy MLP, Gaussian PPO backward, clipping and Adam; separate 40-step actor and critic launches | Parameter, gradient and optimizer residency during each network's update; not residency of the rollout, activations or complete learning process |
+| [Unified learner](../../source/isaaclab_sram/isaaclab_sram/persistent_unified.py), [combined CUDA kernel](../../source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_unified.cu) and [PPO integration](../../source/isaaclab_sram/isaaclab_sram/unified_perception.py) | Both native networks retained across one launch, with critic then actor optimizer phases | Simultaneous weight/Adam residency for both networks; gradient storage reused between phases; rollout and activations remain global |
 | [History codec](../../source/isaaclab_sram/isaaclab_sram/compact_history.py) and [rollout adapter](../../source/isaaclab_sram/isaaclab_sram/compact_storage.py) | Store processed state frames once and reconstruct native histories exactly | Reduced retained global observation storage, including real resets; not on-chip placement |
-| `scripts/sram/train_kuka_perception.py` | Real Kuka camera rollouts and native PPO with `torch`, `sram`, `sram_graph`, `sram_critic` and `sram_full` backends, checkpoint and integration checks | Actual camera/task execution and iteration throughput; longer evaluation is still needed for learning quality and time to success |
+| `scripts/sram/train_kuka_perception.py` | Real Kuka camera rollouts and native PPO with `torch`, `sram`, `sram_graph`, `sram_critic`, `sram_full` and `sram_unified` backends, checkpoint and integration checks | Actual camera/task execution and iteration throughput; longer evaluation is still needed for learning quality and time to success |
 
 The branch includes [real camera run summaries](data/perception/README.md),
 [isolated kernel measurements](data/kuka_kernel_microbenchmark.json) and the [device query](data/gpu.json). Historical
@@ -345,6 +351,40 @@ RGB camera; depth and multiple cameras are unsupported. An entirely on-chip
 visual learner therefore remains a further implementation step, despite both
 networks' forward/backward and optimizer loops now being persistent.
 
+### Combined resident-model learner
+
+The `sram_unified` backend supports 1–16 environments, 32 rollout steps and the unchanged native RGB64 networks.
+A single cooperative kernel imports both networks' weights and Adam moments, executes 40 critic steps followed
+by 40 actor steps using the same PPO permutation, and exports both updated checkpoints at exit. The critic's
+final gradient diagnostic is exported before its shared gradient arena is reused for the actor. Gradients from
+both phases are therefore not retained simultaneously.
+
+The 188-block, 256-thread layout uses 66,612 bytes of dynamic shared memory per block for both weight shards and
+the overlaid gradient bank. Each thread retains 84 float32 moment values in registers. The wrapper rejects
+compiled local-memory use and verifies that the entire cooperative grid fits. Preparation and native checkpoint
+copyback are shared with the standalone kernels. Guards reject checkpoint mutation between preparation and
+commit, concurrent preparation and movement to another CUDA stream. Valid checkpoints are refreshed between
+updates; checkpoint loading rebuilds the learner.
+
+The [production validation record](data/unified_learner/summary.json) and
+[matching binary audit](data/unified_learner/compiler_binary_audit.json) report 224 registers per thread,
+336 bytes static shared memory, zero local memory and no spills. Separate matched default- and fused-Adam comparisons
+against the actual native PPO passed two resumed updates with unequal per-tensor entry steps, compact histories,
+changed normalizers and exact CPU/CUDA RNG equality. The largest model, normalizer or Adam difference was
+`1.19e-7`. Five production learner tests and six host checkpoint-boundary tests passed; the unified test covers
+both consecutive wrapper reuse and checkpoint-triggered reconstruction.
+
+A [three-update real camera smoke](data/unified_learner/real16_camera_TIMING_EXCLUDED.json) at 16 environments
+passed with the native reset bank and compact histories. All three updates used one combined launch, CNN weights
+changed, parameters stayed finite and image changes affected actions. A fresh native checkpoint actor matched
+actions within `5.96e-8`. Its timings are excluded because no continuous process monitor covered the run.
+These checks establish execution and numerical compatibility, not convergence or a combined-kernel speedup.
+
+This boundary retains model working state across both optimizer phases. Raw RGB, normalized state inputs,
+actions, targets, activation tiles and cross-block mailboxes still reside in global allocations. GAE,
+normalization, permutation generation and native RNG alignment execute outside the combined kernel. Neither
+complete learner residency nor zero DRAM traffic is claimed. A single launch by itself establishes no speedup.
+
 ### Screened CNN replication comparison
 
 Five independently screened pairs compared the previous persistent actor
@@ -371,8 +411,44 @@ The raw record's historical `publication_allowed: false` flag is unchanged. The
 [publication summary](data/actor_replication/summary.json) records the subsequent
 review accepting only this screened comparison against the prior prototype.
 This is one GPU and one synthetic rollout, without confidence intervals. It is
-not a native-PyTorch or whole-camera speedup; those component and complete-task
-comparisons remain pending.
+not a native-PyTorch or whole-camera speedup. The subsequent native component
+comparison below shows that the persistent actor remains slower than PyTorch.
+
+### Native actor comparison
+
+Five accepted cycles at commit `e8f75eff8` compared the production replicated
+actor with native PyTorch on the same resumed checkpoint and frozen synthetic
+RGB64 rollout: 64 environments, 2,048 samples, 40 steps, fused Adam and IEEE
+float32. The complete wrapper timings include validation, packing, launch and
+copyback, with restoration and correctness checks outside the timed region.
+
+| Actor path | Median host time | Observed range across five accepted cycles |
+| --- | ---: | ---: |
+| Native PyTorch with fused Adam | 177.06 ms | 168.16–207.97 ms |
+| Production persistent actor | 245.00 ms | 244.41–245.63 ms |
+
+The persistent actor took **38.4% longer** by the ratio of medians and was slower
+in every accepted cycle. Its throughput was 0.723× the native actor's. Moving
+state into shared memory did not compensate for this custom kernel's compute
+and synchronization costs. This result does not change the separate native-scale
+selective-fusion measurements or establish full-camera iteration performance.
+
+Each cycle included five backends, including three scratch experiments, and
+rotated their order so each occupied every position once. Four additional cycles
+were rejected for external CUDA activity. Monitoring sampled processes every
+100 ms and at both boundaries; maximum accepted sample gap was 100.13 ms.
+GPU clocks were 2,422 MHz core and 12,481 MHz memory. Full model, optimizer and
+loss checks passed after every measurement. Native host times varied; CPU load
+and affinity were not controlled. Sampling cannot rule out activity between
+samples, and this is one GPU with one synthetic rollout.
+
+Both paths omit the discarded Gaussian samples used by full PPO. The native
+actor applies its frozen observation normalizer per minibatch; the persistent
+path receives state normalized before timing. This asymmetry favors the
+persistent path. See the [reviewed summary](data/actor_native_comparison/summary.json)
+and [compressed raw evidence](data/actor_native_comparison/screened_cycles.json.gz).
+The archive preserves the original bytes and historical publication flag; the
+summary accepts only the stated production-versus-native comparison.
 
 ### Controlled critic timing and measured traffic
 
@@ -385,6 +461,18 @@ state outside the timed interval. After two warmups, 20 repeats measured:
 | --- | ---: | ---: | ---: |
 | [Default Adam](data/persistent_learner/critic64_default_benchmark.json) | 92.32 ms | 34.48 ms | 2.68× |
 | [Fused Adam](data/persistent_learner/critic64_fused_benchmark.json) | 86.98 ms | 34.56 ms | 2.52× |
+
+A subsequent [screened comparison](data/critic_native_comparison/summary.json)
+at clean commit `e8f75eff8` reproduced the direction with fused Adam: five
+accepted pairs measured 84.31 ms native versus 34.89 ms persistent, or 2.42× by
+the ratio of medians. Every measured update passed full model, Adam, final
+gradient and loss checks. The broader scratch-variant run retained one excluded
+pair; no production-versus-native pair was excluded. Process samples every
+100 ms plus boundaries had a maximum accepted gap of 100.43 ms across the
+run. See the [independent audit](data/critic_native_comparison/independent_audit.json)
+and [compressed raw pairs](data/critic_native_comparison/screened_pairs.json.gz).
+This remains a fixed-rollout component comparison, with CPU load and affinity
+uncontrolled, rather than whole-camera training performance.
 
 These CUDA-event intervals include wrapper packing/copyback and can include host
 launch gaps. Compilation, warmup and checkpoint restoration are excluded. Model,
@@ -605,9 +693,14 @@ OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
 OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
     --backend sram_full --camera rgb64 --num_envs 64 --iterations 100 --warmup_iterations 5 \
     --compact_history --ieee_fp32 --seed 42 --output logs/sram/kuka_rgb64_persistent_full
+
+# Both native networks retained across one combined launch.
+OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
+    --backend sram_unified --camera rgb64 --num_envs 16 --iterations 30 --warmup_iterations 5 \
+    --compact_history --ieee_fp32 --seed 42 --output logs/sram/kuka_rgb64_unified
 ```
 
-Use `--camera depth64` for the corresponding depth preset with the backends other than `sram_full`.
+Use `--camera depth64` for the corresponding depth preset with the backends other than `sram_full` and `sram_unified`.
 A small execution smoke test can use `--num_envs 64
 --iterations 3 --warmup_iterations 1 --smoke_reset_bank 16`; the explicit reset-bank override changes initialization
 coverage and is recorded in the summary. Do not quote it as native-task learning evidence. Full comparisons omit
@@ -619,7 +712,8 @@ weights changed, finite parameters, checkpoint action replay, image sensitivity 
 `torch` backend is the reference learner; `sram` selects the fused learner operations;
 `sram_graph` captures each minibatch update; `sram_critic` retains only the critic's
 parameter/gradient/Adam working state across its optimizer steps; `sram_full`
-does the same for the entire actor/CNN in a separate launch. Use `--ieee_fp32`
+does the same for the entire actor/CNN in a separate launch; `sram_unified` retains both networks' weights and
+Adam moments across a combined launch at up to 16 environments. Use `--ieee_fp32`
 on every compared backend when testing the persistent updates. All retain global
 state. `--checkpoint PATH` resumes native model/optimizer state; simulator,
 curriculum and reset initialization start anew. The graph path

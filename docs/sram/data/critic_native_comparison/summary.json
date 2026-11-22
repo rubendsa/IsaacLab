@@ -1,0 +1,105 @@
+{
+  "scope": "Production native critic component: 40 steps, N64, B2048, fused Adam, IEEE FP32, fixed synthetic rollout and resumed checkpoint",
+  "publication_review": {
+    "accepted": true,
+    "reviewer": "Implementation review and independent CPU audit",
+    "raw_publication_allowed_preserved": true,
+    "accepted_scope": "Only production_shared versus native PyTorch; scratch register/cluster comparisons retained as diagnostic evidence."
+  },
+  "git_commit": "e8f75eff8a01332f15041c8a3f8eb7c627673389",
+  "raw_artifact": "screened_pairs.json.gz",
+  "raw_decompressed_sha256": "d2c5e29892837e2c0ba83fbae2f9ee23b24f9bdf15227e9612e8e760939d911d",
+  "production_comparison": {
+    "accepted_pairs": 5,
+    "excluded_pairs": 0,
+    "torch": {
+      "host_ms": {
+        "median_ms": 84.31347692385316,
+        "p10_ms": 82.95191000215709,
+        "p90_ms": 85.21811820100993,
+        "samples_ms": [
+          84.47494800202549,
+          84.30709701497108,
+          85.71356500033289,
+          82.04845199361444,
+          84.31347692385316
+        ]
+      },
+      "cuda_ms_including_host_launch_gaps": {
+        "median_ms": 84.2567367553711,
+        "p10_ms": 82.89798278808594,
+        "p90_ms": 85.1600128173828,
+        "samples_ms": [
+          84.40489959716797,
+          84.2567367553711,
+          85.66342163085938,
+          82.00006103515625,
+          84.24486541748047
+        ]
+      }
+    },
+    "production_shared": {
+      "host_ms": {
+        "median_ms": 34.887618967331946,
+        "p10_ms": 34.77126385550946,
+        "p90_ms": 35.027512488886714,
+        "samples_ms": [
+          34.80573499109596,
+          34.887618967331946,
+          35.096032079309225,
+          34.92473310325295,
+          34.74828309845179
+        ]
+      },
+      "cuda_ms_including_host_launch_gaps": {
+        "median_ms": 34.83958435058594,
+        "p10_ms": 34.723226165771486,
+        "p90_ms": 34.97257614135742,
+        "samples_ms": [
+          34.759071350097656,
+          34.83958435058594,
+          35.03644943237305,
+          34.876766204833984,
+          34.6993293762207
+        ]
+      }
+    },
+    "paired_host_ratio": {
+      "median": 2.4264069877918586,
+      "p10": 2.376189526679039,
+      "p90": 2.4361712226914967,
+      "samples": [
+        2.427041061584706,
+        2.4165334153045674,
+        2.442257996762691,
+        2.349293600928687,
+        2.4264069877918586
+      ]
+    },
+    "paired_cuda_ratio": {
+      "median": 2.4278528413062963,
+      "p10": 2.37805017149508,
+      "p90": 2.4383016919227694,
+      "samples": [
+        2.428284080061616,
+        2.41841968915321,
+        2.4449800998302047,
+        2.351137159722993,
+        2.4278528413062963
+      ]
+    }
+  },
+  "ratio_of_median_host_times": 2.416716285591246,
+  "normalization_scope": "Updated once before burn-in, then frozen; every path consumes the same normalized 1,595 inputs.",
+  "timing_scope": "Wrapper validation, packing and flush included. Restore, reference computation, all-state parity, diagnostic copies and clock queries excluded.",
+  "method": "Three default warmups; wait 500 ms process-monitor quiet; alternate native/candidate order; monitor every 100 ms plus pair boundaries; exclude gaps over 350 ms; retain excluded pairs and require requested accepted pairs for every variant.",
+  "monitor_limit": "Process-presence polling cannot prove absence between samples; only this process and named desktop services are allowed.",
+  "independent_audit": "independent_audit.json",
+  "all_sram": false,
+  "zero_dram": false,
+  "limitations": [
+    "One GPU, one fixed synthetic rollout and five accepted pairs; no full camera or convergence claim.",
+    "CPU load and affinity were not controlled; process polling cannot exclude activity between samples.",
+    "The historical raw publication flag is preserved; this summary records acceptance for the stated scope."
+  ]
+}
