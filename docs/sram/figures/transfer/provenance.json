@@ -1,0 +1,106 @@
+{
+  "script": "scripts/sram/plot_transfer_report.py",
+  "script_sha256": "82a25f4d9cd135aaa3cb2d9239001029314d24c2b2291b02997b875a985a27bd",
+  "plotting_base_commit": "52bca3a5e07d24f7034a482d74838d7210ff2bb1",
+  "reproduction": "uv run python scripts/sram/plot_transfer_report.py",
+  "requested_formats": [
+    "jpg"
+  ],
+  "packages": {
+    "matplotlib": "3.10.8",
+    "numpy": "2.5.1"
+  },
+  "inputs": {
+    "docs/sram/data/perception/torch_rgb64_4096_200.json": {
+      "sha256": "7270a21e8f7c665b271a53802ec5b38dc16e36dd519c9ab6b3214fa196af9324",
+      "decoded_sha256": "7270a21e8f7c665b271a53802ec5b38dc16e36dd519c9ab6b3214fa196af9324",
+      "bytes": 212625
+    },
+    "docs/sram/data/perception/sram_rgb64_4096_200.json": {
+      "sha256": "1006368e7cf98a0b8d7ee8c1fa774ca76601e0a249717a7737927d94a9f1169b",
+      "decoded_sha256": "1006368e7cf98a0b8d7ee8c1fa774ca76601e0a249717a7737927d94a9f1169b",
+      "bytes": 215295
+    },
+    "docs/sram/data/perception/sram_graph_rgb64_4096_200.json": {
+      "sha256": "1ba80a31bdd74de7f51b2f225260321574124f208cc7dfe23c088ca43548a43d",
+      "decoded_sha256": "1ba80a31bdd74de7f51b2f225260321574124f208cc7dfe23c088ca43548a43d",
+      "bytes": 215171
+    },
+    "docs/sram/data/perception/comparison_4096_200.json": {
+      "sha256": "c515aee88d2dff0cd0dd3087372af3bc7f038be8d6d37da078d909a693aea1ae",
+      "decoded_sha256": "c515aee88d2dff0cd0dd3087372af3bc7f038be8d6d37da078d909a693aea1ae",
+      "bytes": 14971
+    },
+    "docs/sram/data/unified_performance/camera_torch16_30.json.gz": {
+      "sha256": "c5a1ef4a02897b61dd71cb673e738f0c1622cf16643e1b62d5c7d004040b5e5c",
+      "decoded_sha256": "89336523da796d3b84c1bab0cd50f1c87531c8028e870e55f5f344e72a39db18",
+      "bytes": 8115
+    },
+    "docs/sram/data/unified_performance/camera_sram_unified16_30.json.gz": {
+      "sha256": "06ae6b71e55e751b7ef18360b3b4feb2a7af54adb8ebb7b7a314a386e80b6783",
+      "decoded_sha256": "df49f8a738325422654fd740d8f929d6d8c176ceed22a9fcd57f0777ba833aaa",
+      "bytes": 8781
+    },
+    "docs/sram/data/unified_performance/synthetic_full16_four.json.gz": {
+      "sha256": "a406cb515d165738e17cd9b6cc8107ba23fa688c07e6e6ccc50aaa9ae4735a42",
+      "decoded_sha256": "6d05374db28ad181f6b16cb57b3de78986cd3eb71f5243ea9e7addecfb312c53",
+      "bytes": 19876
+    },
+    "docs/sram/data/unified_performance/synthetic_four_independent_audit.json.gz": {
+      "sha256": "12646d0770a9d4df2d708127b644ae553aebdb53f5fdc1c4748085a73477ca92",
+      "decoded_sha256": "0c20fe06bdb03ad3e4f940ecc2a34948e4786d96d9962ee06ea33ef870764003",
+      "bytes": 1113
+    },
+    "docs/sram/data/unified_performance/summary.json": {
+      "sha256": "8c1c45f33d400a570989850917a6b2e706cae541dc9211a5816d4ce4e97f15ff",
+      "decoded_sha256": "8c1c45f33d400a570989850917a6b2e706cae541dc9211a5816d4ce4e97f15ff",
+      "bytes": 9852
+    },
+    "docs/sram/data/kuka_kernel_microbenchmark.json": {
+      "sha256": "763ee3195ea496dc4f1842d28edbadafb27af53160c266098e7041ac126a1a8a",
+      "decoded_sha256": "763ee3195ea496dc4f1842d28edbadafb27af53160c266098e7041ac126a1a8a",
+      "bytes": 6468
+    },
+    "docs/sram/data/persistent_critic/compact_rgb64_native64_summary.json": {
+      "sha256": "da535c815dfc0e02799d6566f356732608497102d7c534787843ee6ec0e7c168",
+      "decoded_sha256": "da535c815dfc0e02799d6566f356732608497102d7c534787843ee6ec0e7c168",
+      "bytes": 11688
+    }
+  },
+  "outputs": {
+    "bounded_16.jpg": "5d59120c7d52355f26be94916b902456596c765c69d576002eee87fee5b2dae3",
+    "native_4096.jpg": "dda09eb0c4adcb727f2a3698c8622b3f7bcb8f0cef854628f0aa473d4d9e1504",
+    "plotted_samples.csv": "223244454e331beccbbfc2f5e01545b1d3337e4c87c90cdc66a7fd52a7a74962",
+    "portable_operations.jpg": "b573d72d70cd08817e0993664434ebad485b74107662b9a967f9ad15dce4c5d8",
+    "statistics.csv": "a04ce055cc1765ab1d205193293b9769948ed0e35fdce04bfd4cc50875919ed2"
+  },
+  "settings": {
+    "latency_units": "ms for task/update; us for operation kernels",
+    "percentiles": "NumPy linear p10/p90",
+    "camera_warmup_rows_excluded": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "reward_rows": "All available logged rewards, without interpolating missing rows",
+    "rolling_timing_median": "Centered nine post-warmup rows, full windows only",
+    "distribution": "All accepted samples plus p10/p90 and median; no confidence intervals",
+    "scatter_jitter": "Deterministic seed17; display-only, independent of measurement order",
+    "microbenchmark": "Only archived medians plotted; raw repetitions unavailable",
+    "precision": {
+      "native4096": "Historical FP32 model/TF32-allowed library operations; c117928 train driver configuration",
+      "real16_and_synthetic16": "FP32 with TF32 disabled, explicit raw report field",
+      "microbenchmark": "FP32 with TF32 disabled in archived source-hashed benchmark_ppo_kernels.py"
+    }
+  },
+  "interpretation": [
+    "Camera and synthetic scopes are separate; no additive phase medians or stacked phase attribution.",
+    "Camera curves are independent single-seed trajectories, not paired convergence evidence.",
+    "Synthetic eight-cycle comparison was a prepared working tree with source hashes, not a clean-commit measurement.",
+    "Raw synthetic publication_allowed=false is retained; the archived independent audit accepts this bounded evidence.",
+    "Input-resident synthetic update is 12.34% slower than model-only combined; neither establishes N64/N4096 speedup.",
+    "No new GPU timing or training experiment was run to produce these figures."
+  ]
+}

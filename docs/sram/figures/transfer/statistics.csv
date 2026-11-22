@@ -1,0 +1,34 @@
+figure,scope,backend,metric,n,unit,median,p10,p90,minimum,maximum
+native_4096,real_camera_N4096,torch,iteration_s,195,ms,1466.0518169403076,1351.2231826782227,1513.307523727417,1339.7142887115479,1531.6369533538818
+native_4096,real_camera_N4096,torch,learning_s,195,ms,485.6553077697754,483.69531631469727,491.8527126312256,481.86540603637695,503.9968490600586
+native_4096,real_camera_N4096,torch,logged_mean_episode_reward,200,reward,-1.0379335985309446,-2.0725969101786617,-0.4450786553751678,-2.573839892745018,-0.23723103418946268
+native_4096,real_camera_N4096,sram,iteration_s,195,ms,1438.1413459777832,1328.7463188171387,1462.4812602996826,1301.4063835144043,1516.6206359863281
+native_4096,real_camera_N4096,sram,learning_s,195,ms,435.70494651794434,432.8113555908203,443.5094356536865,430.9360980987549,458.42957496643066
+native_4096,real_camera_N4096,sram,logged_mean_episode_reward,200,reward,-0.9761981036420913,-2.088796810016036,-0.3650088079874404,-2.6393602791428568,0.16679050419479607
+native_4096,real_camera_N4096,sram_graph,iteration_s,195,ms,1420.7773208618164,1318.9515113830566,1463.2165908813477,1308.5951805114746,1471.1685180664062
+native_4096,real_camera_N4096,sram_graph,learning_s,195,ms,433.1545829772949,432.37128257751465,433.4566116333008,430.23157119750977,433.6729049682617
+native_4096,real_camera_N4096,sram_graph,logged_mean_episode_reward,200,reward,-1.0239658050239087,-2.0991304647028444,-0.36402600780874506,-2.6693440717458725,0.492613577991724
+bounded_16,real_camera_N16,torch,iteration_s,25,ms,575.0062465667725,565.51194190979,586.7544651031494,558.0499172210693,616.5523529052734
+bounded_16,real_camera_N16,sram_unified,iteration_s,25,ms,434.1318607330322,428.2460689544678,450.4477024078369,424.5917797088623,485.0752353668213
+bounded_16,real_camera_N16,torch,learning_s,25,ms,213.43278884887695,209.69538688659668,225.50349235534668,209.05613899230957,227.82182693481445
+bounded_16,real_camera_N16,sram_unified,learning_s,25,ms,79.8196792602539,79.46805953979492,80.10416030883789,79.3294906616211,80.24954795837402
+bounded_16,real_camera_N16,torch,logged_mean_episode_reward,29,reward,-1.7356944854917198,-2.149112616259642,-0.8668882481377534,-2.2075569995989404,-0.393314649661382
+bounded_16,real_camera_N16,sram_unified,logged_mean_episode_reward,29,reward,-1.8082409914462798,-2.1369478502402117,-1.002903817708676,-2.1601503916243288,-0.3933147092660268
+bounded_16,synthetic_PPO_update_N16_B512,native_ppo_fused_adam,update_host_ms,8,ms,246.02222302928567,240.70753577398136,283.1333843525499,237.8698589745909,285.57975695002824
+bounded_16,synthetic_PPO_update_N16_B512,separate_full,update_host_ms,8,ms,78.53130251169205,78.14722439507023,80.78543260926381,78.03972403053194,81.48142998106778
+bounded_16,synthetic_PPO_update_N16_B512,unified,update_host_ms,8,ms,79.24652547808364,78.72868833364919,81.23311121016741,78.45500996336341,81.42451499588788
+bounded_16,synthetic_PPO_update_N16_B512,resident,update_host_ms,8,ms,89.02901847613975,88.73247305164114,91.32015146315098,88.6960009811446,91.56187903136015
+portable_operations,isolated_captured_CUDA_event,torch,ppo_forward_backward,100 repeats; median only,us,143.8400000333786,,,,
+portable_operations,isolated_captured_CUDA_event,fused,ppo_forward_backward,100 repeats; median only,us,22.576000541448593,,,,
+portable_operations,isolated_eager_CUDA_event,torch,ppo_forward_backward,100 repeats; median only,us,1066.1280155181885,,,,
+portable_operations,isolated_eager_CUDA_event,fused,ppo_forward_backward,100 repeats; median only,us,339.9839997291565,,,,
+portable_operations,isolated_captured_CUDA_event,torch,spatial_softmax_forward_backward,100 repeats; median only,us,372.78400361537933,,,,
+portable_operations,isolated_captured_CUDA_event,fused,spatial_softmax_forward_backward,100 repeats; median only,us,50.08000135421753,,,,
+portable_operations,isolated_eager_CUDA_event,torch,spatial_softmax_forward_backward,100 repeats; median only,us,491.7919933795929,,,,
+portable_operations,isolated_eager_CUDA_event,fused,spatial_softmax_forward_backward,100 repeats; median only,us,196.27200067043304,,,,
+portable_operations,isolated_captured_CUDA_event,torch,gae_and_global_normalization,100 repeats; median only,us,462.46400475502014,,,,
+portable_operations,isolated_captured_CUDA_event,fused,gae_and_global_normalization,100 repeats; median only,us,13.952000066637993,,,,
+portable_operations,isolated_eager_CUDA_event,torch,gae_and_global_normalization,100 repeats; median only,us,2769.2960500717163,,,,
+portable_operations,isolated_eager_CUDA_event,fused,gae_and_global_normalization,100 repeats; median only,us,81.37600123882294,,,,
+portable_operations,exact_global_observation_storage_N64_B2048,dense,rollout_observation_bytes,1,bytes,38232064.0,38232064.0,38232064.0,38232064.0,38232064.0
+portable_operations,exact_global_observation_storage_N64_B2048,compact,rollout_observation_bytes,1,bytes,28132352.0,28132352.0,28132352.0,28132352.0,28132352.0

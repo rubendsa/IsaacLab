@@ -3,6 +3,9 @@
 Branch: `sram-resident-training`. Base: Isaac Lab `v3.0.0`, commit
 `e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4`. Research checked on 2026-11-22.
 
+For performance plots, the relationship to MDP2, and a task-by-task reuse plan, see
+[Performance results, MDP2, and reuse across tasks](PERFORMANCE_TRANSFER.md).
+
 For Ruben: at **16 environments**, real RGB64 Kuka-Allegro training measured **2.67× learning-phase throughput
 and 1.32× full-iteration throughput** with the combined persistent learner. Median learning time, including GAE
 and PPO update, fell from **213.43 to 79.82 ms**; collection plus learning fell from **575.01 to 434.13 ms**.
