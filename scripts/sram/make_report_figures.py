@@ -103,7 +103,7 @@ def title(fig, ax, t, text, sub):
 
 def load_runs(bench):
     runs = {}
-    for p in sorted(glob.glob(os.path.join(bench, "*_s*.json"))):
+    for p in sorted(glob.glob(os.path.join(bench, "*_s[0-9]*.json"))):
         r = _load_json(p)
         runs.setdefault(r["config"], []).append(r)
     return runs
@@ -220,7 +220,7 @@ def fig_iteration(runs, t, out):
     plt.close(fig)
 
 
-def fig_scaling(rows, t, out, stock_ref=None):
+def fig_scaling(rows, t, out, stock_ref=None, stock_rows=None):
     rows = [r for r in rows if "error" not in r]
     if not rows:
         return
@@ -247,7 +247,25 @@ def fig_scaling(rows, t, out, stock_ref=None):
             color=t["ink2"],
             fontsize=8,
         )
-    if stock_ref:
+    if stock_rows:  # stock Isaac Lab measured at several environment counts (second series)
+        sx = np.array([r["num_envs"] for r in stock_rows])
+        sy = np.array([r["env_steps_per_s"] for r in stock_rows])
+        o = np.argsort(sx)
+        col2 = t["series"][1]
+        ax.plot(sx[o], sy[o], color=col2, linewidth=2 * PX, zorder=3, label="Stock Isaac Lab 3.0 (Newton + RSL-RL)")
+        ax.plot(
+            sx[o],
+            sy[o],
+            "o",
+            color=col2,
+            markersize=8 * PX,
+            markeredgecolor=t["surface"],
+            markeredgewidth=2 * PX,
+            zorder=4,
+        )
+        ax.lines[0].set_label("SRAM megakernel")
+        ax.legend(loc="lower right", frameon=False, fontsize=8.5, labelcolor=t["ink"])
+    elif stock_ref:
         ax.axhline(stock_ref, color=t["gray"], linewidth=1 * PX)
         ax.annotate(
             f"stock Isaac Lab @4,096 envs: {stock_ref / 1e6:.2f} M steps/s",
@@ -265,8 +283,8 @@ def fig_scaling(rows, t, out, stock_ref=None):
         fig,
         ax,
         t,
-        "SRAM megakernel throughput vs. environment count",
-        "label = where the rollout buffer lives: shared memory (SMEM), L2, or DRAM",
+        "Training throughput vs. environment count",
+        "SRAM labels: where the megakernel's rollout buffer lives (shared memory, L2 or DRAM)",
     )
     fig.tight_layout()
     fig.savefig(out, dpi=200, facecolor=t["surface"])
@@ -287,12 +305,17 @@ def main():
     )
     stock = [r.get("median_iteration_s") for r in runs.get("stock_torch", []) if r.get("median_iteration_s")]
     stock_ref = (4096 * 16 / statistics.median(stock)) if stock else None
+    stock_rows = []
+    if os.path.exists(os.path.join(a.bench, "stock_scaling.json")):
+        stock_rows = [r for r in _load_json(os.path.join(a.bench, "stock_scaling.json")) if r.get("env_steps_per_s")]
+        if stock_ref:
+            stock_rows.append({"num_envs": 4096, "env_steps_per_s": stock_ref})
     for mode, t in THEMES.items():
         if runs:
             fig_learning(runs, t, os.path.join(a.out, f"learning_curves_{mode}.png"))
             fig_iteration(runs, t, os.path.join(a.out, f"iteration_time_{mode}.png"))
         if scaling:
-            fig_scaling(scaling, t, os.path.join(a.out, f"scaling_{mode}.png"), stock_ref)
+            fig_scaling(scaling, t, os.path.join(a.out, f"scaling_{mode}.png"), stock_ref, stock_rows)
     print("figures written to", a.out)
 
 

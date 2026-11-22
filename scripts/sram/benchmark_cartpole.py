@@ -290,7 +290,7 @@ def cmd_scaling(args):
 
 def cmd_eval(args):
     """Evaluate every trained checkpoint with the same protocol in the stock Isaac Lab Newton env."""
-    for path in sorted(glob.glob(os.path.join(args.out, "*_s*.json"))):
+    for path in sorted(glob.glob(os.path.join(args.out, "*_s[0-9]*.json"))):
         rec = _load_json(path)
         ck = rec.get("checkpoint")
         if not ck or not os.path.exists(ck):
@@ -399,8 +399,53 @@ def cmd_locomotion(args):
         json.dump(rows, fh, indent=1)
 
 
+def cmd_stock_scaling(args):
+    """Stock Isaac Lab (Newton + RSL-RL) iteration time vs environment count (throughput only)."""
+    os.makedirs(args.out, exist_ok=True)
+    rows = []
+    for n in args.env_counts:
+        tag = f"stock_scaling_{n}"
+        work = os.path.join(args.out, "work", tag)
+        os.makedirs(work, exist_ok=True)
+        cmd = [
+            PY,
+            os.path.join(REPO, "scripts", "reinforcement_learning", "train.py"),
+            "--rl_library",
+            "rsl_rl",
+            "--task",
+            "Isaac-Cartpole-Direct",
+            "--num_envs",
+            str(n),
+            "--max_iterations",
+            str(args.iterations),
+            "--seed",
+            "1",
+            "--visualizer",
+            "none",
+            "--run_name",
+            tag,
+            "physics=newton_mjwarp",
+        ]
+        wall, out, rc = run_proc(cmd, work, os.path.join(args.out, "logs", f"{tag}.log"))
+        its = parse_rsl_rl_log(out)[3:]  # drop warm-up iterations
+        it_s = statistics.median([r["iteration_s"] for r in its if "iteration_s" in r]) if its else None
+        row = dict(
+            num_envs=n,
+            returncode=rc,
+            iterations_measured=len(its),
+            median_iteration_s=it_s,
+            env_steps_per_s=(n * 16 / it_s) if it_s else None,
+            median_collection_s=statistics.median([r["collection_s"] for r in its if "collection_s" in r] or [0]),
+            median_learning_s=statistics.median([r["learning_s"] for r in its if "learning_s" in r] or [0]),
+        )
+        rows.append(row)
+        print(row, flush=True)
+    with open(os.path.join(args.out, "stock_scaling.json"), "w") as fh:
+        json.dump(rows, fh, indent=1)
+
+
 def cmd_report(args):
-    recs = [_load_json(p) for p in sorted(glob.glob(os.path.join(args.out, "*_s*.json")))]
+    recs = [_load_json(p) for p in sorted(glob.glob(os.path.join(args.out, "*_s[0-9]*.json")))]
     by = {}
     for r in recs:
         by.setdefault(r["config"], []).append(r)
@@ -453,12 +498,21 @@ def main():
     lo.add_argument("--tasks", nargs="+", default=["anymal_c", "g1"])
     lo.add_argument("--num_envs", type=int, default=4096)
     lo.add_argument("--iterations", type=int, default=12)
+    ss = sub.add_parser("stock_scaling")
+    ss.add_argument("--out", required=True)
+    ss.add_argument("--env_counts", type=int, nargs="+", default=[1024, 16384, 65536])
+    ss.add_argument("--iterations", type=int, default=20)
     p = sub.add_parser("report")
     p.add_argument("--out", required=True)
     args = ap.parse_args()
-    {"run": cmd_run, "scaling": cmd_scaling, "eval": cmd_eval, "locomotion": cmd_locomotion, "report": cmd_report}[
-        args.cmd
-    ](args)
+    {
+        "run": cmd_run,
+        "scaling": cmd_scaling,
+        "eval": cmd_eval,
+        "stock_scaling": cmd_stock_scaling,
+        "locomotion": cmd_locomotion,
+        "report": cmd_report,
+    }[args.cmd](args)
 
 
 if __name__ == "__main__":

@@ -32,6 +32,18 @@ fi
     "${PY}" -c "import torch, warp, newton, importlib.metadata as m; print('torch', torch.__version__, 'warp', warp.__version__, 'newton', newton.__version__, 'rsl-rl', m.version('rsl-rl-lib'))"
 } > "${OUT}/provenance.txt" 2>&1
 
+# contention monitor: other GPU compute processes and load average every 5 s (any foreign GPU process during a
+# measurement invalidates it; see contention.log)
+(
+    while true; do
+        echo "$(date -Is) load=$(cut -d' ' -f1 /proc/loadavg) gpu_apps=$(nvidia-smi --query-compute-apps=pid,process_name \
+            --format=csv,noheader | grep -v -E "dcvagent|gnome|Xorg|remote-desktop" | tr '\n' ';')"
+        sleep 5
+    done
+) > "${OUT}/contention.log" 2>&1 &
+MONITOR=$!
+trap 'kill ${MONITOR} 2>/dev/null' EXIT
+
 echo "== 1/7 numerical verification"
 "${PY}" scripts/sram/verify_megakernel.py --num_envs 4096 --seed 3 --out "${OUT}/verify_4096.json" > "${OUT}/verify_4096.log" 2>&1
 "${PY}" scripts/sram/verify_megakernel.py --num_envs 4096 --seed 3 --warmup_iters 3 --out "${OUT}/verify_4096_warm.json" > "${OUT}/verify_4096_warm.log" 2>&1
@@ -43,8 +55,9 @@ echo "== 2/7 training runs (stock torch, stock warp, analytic ablation, SRAM) x 
 echo "== 3/7 evaluation of every trained policy in the stock Newton env"
 "${PY}" scripts/sram/benchmark_cartpole.py eval --out "${OUT}"
 
-echo "== 4/7 SRAM megakernel scaling"
+echo "== 4/7 scaling with the environment count: SRAM megakernel and stock Isaac Lab"
 "${PY}" scripts/sram/benchmark_cartpole.py scaling --out "${OUT}"
+"${PY}" scripts/sram/benchmark_cartpole.py stock_scaling --out "${OUT}"
 
 echo "== 5/7 stock iteration times: ANYmal-C flat, G1 flat, DexSuite state + RGB64"
 "${PY}" scripts/sram/benchmark_cartpole.py locomotion --out "${OUT}" --tasks anymal_c g1 dex_state dex_rgb64
