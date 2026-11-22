@@ -1,0 +1,15 @@
+{
+  "device": 0,
+  "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "source": "CUDA driver cuDeviceGetAttribute, 2026-11-22",
+  "sm_count": 188,
+  "l2_cache_bytes": 134217728,
+  "shared_memory_per_sm_bytes": 102400,
+  "shared_memory_per_block_optin_bytes": 101376,
+  "registers_per_sm_32bit": 65536,
+  "compute_capability_major": 12,
+  "compute_capability_minor": 0,
+  "cooperative_launch": 1,
+  "all_sms_shared_memory_mib": 18.359375,
+  "all_sms_registers_mib": 47.0
+}

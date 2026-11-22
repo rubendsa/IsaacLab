@@ -227,6 +227,8 @@ exclude_patterns = [
     "README.md",
     "licenses/*",
     "plans",
+    # Branch research artifacts are read on GitHub, with repository-relative source/data links.
+    "sram",
     # Include-only fragments (pulled in via ``.. include::``; not standalone pages).
 ]
 

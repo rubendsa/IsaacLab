@@ -1,0 +1,347 @@
+{
+ "label": "stock_torch_s42",
+ "created_at": "2026-11-22T20:42:23.838538+00:00",
+ "protocol": {
+  "version": 1,
+  "task": "Isaac-Cartpole-Direct",
+  "physics": "newton_mjwarp",
+  "hydra_overrides": [
+   "physics=newton_mjwarp"
+  ],
+  "frontend": "torch",
+  "num_envs": 4096,
+  "num_episodes": 2,
+  "num_steps": 600,
+  "max_episode_length": 300,
+  "step_dt": 0.016666666666666666,
+  "seed": 10002,
+  "device": "cuda:0",
+  "actions": "deterministic mean (RSL-RL inference policy), torch.inference_mode, TF32 off",
+  "clip_actions": null,
+  "start": "env.reset() after the wrapper's reset: all episodes start aligned (episode_length_buf == 0)",
+  "benchmark_play_equivalent_command": "scripts/benchmarks/play.py --rl_library rsl_rl --task Isaac-Cartpole-Direct --num_envs 4096 --seed 10002 --warmup_steps 0 --num_steps 600 --checkpoint <ckpt> --visualizer none physics=newton_mjwarp"
+ },
+ "policy": {
+  "source": "checkpoint",
+  "checkpoint": "/home/horde/sram-lab/scratch/final-cartpole-bench/work/stock_torch_s42/logs/rsl_rl/cartpole_direct/2026-11-22_20-41-22_stock_torch_s42/model_149.pt",
+  "loaded_with": "rsl_rl.runners.OnPolicyRunner.load (load_cfg=None, strict=True)",
+  "iter": 149,
+  "infos": null,
+  "learning_rate": 0.004444444444444445,
+  "action_std": [
+   0.054348479956388474
+  ]
+ },
+ "initial_state": {
+  "episode_length_buf_max": 0,
+  "obs_abs_max": {
+   "cart_pos": 0.9999901652336121,
+   "pole_angle": 0.7853701114654541,
+   "cart_vel": 0.49995583295822144,
+   "pole_vel": 0.7848977446556091
+  }
+ },
+ "first_episodes": {
+  "episodes_per_env": 2,
+  "envs_with_fewer_completed_episodes": 0,
+  "num_episodes": 8192,
+  "return_mean": 4.9455355136306025,
+  "return_std": 0.069680120562757,
+  "length_mean": 299.96630859375,
+  "length_std": 3.0493979938669864,
+  "timeout_fraction": 0.9998779296875,
+  "terminated_fraction": 0.0001220703125,
+  "terminated_and_timeout_fraction": 0.0,
+  "return": {
+   "count": 8192,
+   "mean": 4.9455355136306025,
+   "std": 0.069680120562757,
+   "min": 0.2259817123413086,
+   "p01": 4.7964277267456055,
+   "p05": 4.8506978273391725,
+   "p25": 4.923375844955444,
+   "p50": 4.962735414505005,
+   "p75": 4.980643272399902,
+   "p95": 4.991418743133545,
+   "p99": 4.995537900924683,
+   "max": 4.998842239379883
+  },
+  "length": {
+   "count": 8192,
+   "mean": 299.96630859375,
+   "std": 3.0493979938669864,
+   "min": 24.0,
+   "p01": 300.0,
+   "p05": 300.0,
+   "p25": 300.0,
+   "p50": 300.0,
+   "p75": 300.0,
+   "p95": 300.0,
+   "p99": 300.0,
+   "max": 300.0
+  }
+ },
+ "by_episode_index": [
+  {
+   "episode_index": 0,
+   "num_episodes": 4096,
+   "return_mean": 4.944675511564128,
+   "return_std": 0.08732177882503019,
+   "length_mean": 299.9326171875,
+   "length_std": 4.3125,
+   "timeout_fraction": 0.999755859375,
+   "terminated_fraction": 0.000244140625,
+   "terminated_and_timeout_fraction": 0.0,
+   "return": {
+    "count": 4096,
+    "mean": 4.944675511564128,
+    "std": 0.08732177882503019,
+    "min": 0.2259817123413086,
+    "p01": 4.793260455131531,
+    "p05": 4.8502055406570435,
+    "p25": 4.922983169555664,
+    "p50": 4.96255087852478,
+    "p75": 4.980634927749634,
+    "p95": 4.991636753082275,
+    "p99": 4.995368790626526,
+    "max": 4.998736381530762
+   },
+   "length": {
+    "count": 4096,
+    "mean": 299.9326171875,
+    "std": 4.3125,
+    "min": 24.0,
+    "p01": 300.0,
+    "p05": 300.0,
+    "p25": 300.0,
+    "p50": 300.0,
+    "p75": 300.0,
+    "p95": 300.0,
+    "p99": 300.0,
+    "max": 300.0
+   }
+  },
+  {
+   "episode_index": 1,
+   "num_episodes": 4096,
+   "return_mean": 4.946395515697077,
+   "return_std": 0.045664553517104564,
+   "length_mean": 300.0,
+   "length_std": 0.0,
+   "timeout_fraction": 1.0,
+   "terminated_fraction": 0.0,
+   "terminated_and_timeout_fraction": 0.0,
+   "return": {
+    "count": 4096,
+    "mean": 4.946395515697077,
+    "std": 0.045664553517104564,
+    "min": 4.704837799072266,
+    "p01": 4.802330684661865,
+    "p05": 4.852169752120972,
+    "p25": 4.923574090003967,
+    "p50": 4.962828874588013,
+    "p75": 4.980673789978027,
+    "p95": 4.9912636280059814,
+    "p99": 4.995726609230042,
+    "max": 4.998842239379883
+   },
+   "length": {
+    "count": 4096,
+    "mean": 300.0,
+    "std": 0.0,
+    "min": 300.0,
+    "p01": 300.0,
+    "p05": 300.0,
+    "p25": 300.0,
+    "p50": 300.0,
+    "p75": 300.0,
+    "p95": 300.0,
+    "p99": 300.0,
+    "max": 300.0
+   }
+  }
+ ],
+ "all_completed_episodes": {
+  "num_episodes": 8192,
+  "return_mean": 4.9455355136306025,
+  "return_std": 0.069680120562757,
+  "length_mean": 299.96630859375,
+  "length_std": 3.0493979938669864,
+  "timeout_fraction": 0.9998779296875,
+  "terminated_fraction": 0.0001220703125,
+  "terminated_and_timeout_fraction": 0.0,
+  "return": {
+   "count": 8192,
+   "mean": 4.9455355136306025,
+   "std": 0.069680120562757,
+   "min": 0.2259817123413086,
+   "p01": 4.7964277267456055,
+   "p05": 4.8506978273391725,
+   "p25": 4.923375844955444,
+   "p50": 4.962735414505005,
+   "p75": 4.980643272399902,
+   "p95": 4.991418743133545,
+   "p99": 4.995537900924683,
+   "max": 4.998842239379883
+  },
+  "length": {
+   "count": 8192,
+   "mean": 299.96630859375,
+   "std": 3.0493979938669864,
+   "min": 24.0,
+   "p01": 300.0,
+   "p05": 300.0,
+   "p25": 300.0,
+   "p50": 300.0,
+   "p75": 300.0,
+   "p95": 300.0,
+   "p99": 300.0,
+   "max": 300.0
+  }
+ },
+ "benchmark_play_equivalent": {
+  "reward": {
+   "mean": 4.9455355136306025,
+   "std": 0.069680120562757,
+   "peak": 4.998842239379883
+  },
+  "ep_length": {
+   "mean": 299.96630859375,
+   "std": 3.0493979938669864,
+   "peak": 300.0
+  },
+  "success_rate": 0.9999
+ },
+ "per_env": {
+  "completed_episodes": {
+   "count": 4096,
+   "mean": 2.0,
+   "std": 0.0,
+   "min": 2.0,
+   "p01": 2.0,
+   "p05": 2.0,
+   "p25": 2.0,
+   "p50": 2.0,
+   "p75": 2.0,
+   "p95": 2.0,
+   "p99": 2.0,
+   "max": 2.0
+  },
+  "completed_episodes_histogram": {
+   "2": 4096
+  },
+  "first_episodes_mean_return": {
+   "count": 4096,
+   "mean": 4.9455355136306025,
+   "std": 0.048983937766726784,
+   "min": 2.6024975776672363,
+   "p01": 4.853831994533539,
+   "p05": 4.883831262588501,
+   "p25": 4.926897823810577,
+   "p50": 4.953045606613159,
+   "p75": 4.972150564193726,
+   "p95": 4.985874772071838,
+   "p99": 4.990751779079437,
+   "max": 4.996348857879639
+  },
+  "all_completed_mean_return": {
+   "count": 4096,
+   "mean": 4.9455355136306025,
+   "std": 0.048983937766726784,
+   "min": 2.6024975776672363,
+   "p01": 4.853831994533539,
+   "p05": 4.883831262588501,
+   "p25": 4.926897823810577,
+   "p50": 4.953045606613159,
+   "p75": 4.972150564193726,
+   "p95": 4.985874772071838,
+   "p99": 4.990751779079437,
+   "max": 4.996348857879639
+  },
+  "fraction_envs_all_first_episodes_timed_out": 0.999755859375,
+  "fraction_envs_any_first_episode_terminated": 0.000244140625,
+  "worst_envs": [
+   {
+    "env": 4088,
+    "first_returns": [
+     0.2259817123413086,
+     4.979013442993164
+    ],
+    "first_lengths": [
+     24,
+     300
+    ],
+    "completed": 2
+   },
+   {
+    "env": 294,
+    "first_returns": [
+     4.801236629486084,
+     4.721315383911133
+    ],
+    "first_lengths": [
+     300,
+     300
+    ],
+    "completed": 2
+   },
+   {
+    "env": 438,
+    "first_returns": [
+     4.808148384094238,
+     4.787123203277588
+    ],
+    "first_lengths": [
+     300,
+     300
+    ],
+    "completed": 2
+   },
+   {
+    "env": 2123,
+    "first_returns": [
+     4.723305702209473,
+     4.8980817794799805
+    ],
+    "first_lengths": [
+     300,
+     300
+    ],
+    "completed": 2
+   },
+   {
+    "env": 2647,
+    "first_returns": [
+     4.9086103439331055,
+     4.7174506187438965
+    ],
+    "first_lengths": [
+     300,
+     300
+    ],
+    "completed": 2
+   }
+  ]
+ },
+ "unfinished_episodes_at_end": {
+  "count": 1,
+  "length_mean": 276.0
+ },
+ "action_abs_max": 3.0724668502807617,
+ "timing_indicative": {
+  "setup_s": 4.3103682638611645,
+  "rollout_wall_s": 1.8525334580335766,
+  "env_steps_per_s": 1326615.7160846575,
+  "note": "host wall clock on a shared GPU; not a benchmark"
+ },
+ "versions": {
+  "isaaclab": "28.0.0",
+  "isaaclab_tasks": "25.2.0",
+  "isaaclab_rl": "1.5.1",
+  "rsl-rl-lib": "5.5.1",
+  "newton": "1.6.1",
+  "warp-lang": "1.17.0",
+  "mujoco-warp": "3.12.0",
+  "torch": "2.11.0+cu130"
+ }
+}

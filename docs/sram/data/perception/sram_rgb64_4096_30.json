@@ -1,0 +1,950 @@
+{
+  "backend": "sram",
+  "task": "Isaac-Lift-KukaAllegro-Camera",
+  "camera": "rgb64",
+  "overrides": [
+    "physics=newton_mjwarp",
+    "renderer=newton_renderer",
+    "presets=single_camera,rgb64"
+  ],
+  "num_envs": 4096,
+  "seed": 42,
+  "iterations": 30,
+  "warmup_iterations": 5,
+  "smoke_reset_bank": null,
+  "resume_checkpoint": null,
+  "resume_scope": "Model and optimizer only; simulator, curriculum and reset-bank state initialize anew",
+  "started_utc": "2026-11-22T20:32:01.508987+00:00",
+  "output": "/home/horde/sram-lab/scratch/perception-integration/sram_rgb64_4096_30",
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "storage_scope": "SRAM tiles inside fused kernels; rollouts, model, optimizer and CNN activations use GPU global memory",
+  "timing_scope": "Native runner collection/learning timers with CUDA synchronization before update returns; total iteration wall time is synchronized; split phases retain host-timer attribution. Initial compilation is included in warmup, logging/checkpoint IO excluded from iteration timings",
+  "convergence_claim": false,
+  "update_rng": "Native PPO samples",
+  "rows": [
+    {
+      "iteration": 0,
+      "collection_s": 2.979663133621216,
+      "learning_s": 0.9616682529449463,
+      "iteration_s": 3.941331386566162,
+      "losses": {
+        "value": 0.006988729815930128,
+        "surrogate": -0.007556908763945103,
+        "entropy": 32.628021240234375
+      },
+      "transitions_per_s": 33255.76744111205,
+      "mean_episode_reward": -0.3405424775928259,
+      "mean_episode_length": 27.98,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.0106255067512393,
+        "Episode_Reward/fingers_to_object": 3.247322092647664e-05,
+        "Episode_Reward/position_tracking": 5.511464405572042e-05,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.013644739985466003,
+        "Episode_Reward/good_finger_contact": 7.75454900576733e-05,
+        "Episode_Reward/contact_count": 1.4891947103023995e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.445658415555954,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 1,
+      "collection_s": 0.9334757328033447,
+      "learning_s": 0.43816661834716797,
+      "iteration_s": 1.3716423511505127,
+      "losses": {
+        "value": 0.006252762861549854,
+        "surrogate": -0.009451128542423248,
+        "entropy": 32.6108512878418
+      },
+      "transitions_per_s": 95558.43758400927,
+      "mean_episode_reward": -0.5516417655348778,
+      "mean_episode_length": 60.69,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.030804159119725227,
+        "Episode_Reward/fingers_to_object": 8.295453153550625e-05,
+        "Episode_Reward/position_tracking": 2.712673813221045e-05,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.011440062895417213,
+        "Episode_Reward/good_finger_contact": 3.2388918043579906e-05,
+        "Episode_Reward/contact_count": 2.2902751879883e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.49892210960388184,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 2,
+      "collection_s": 0.9161591529846191,
+      "learning_s": 0.4327239990234375,
+      "iteration_s": 1.3488831520080566,
+      "losses": {
+        "value": 0.00530995661392808,
+        "surrogate": -0.008725694380700588,
+        "entropy": 32.59039306640625
+      },
+      "transitions_per_s": 97170.75923505725,
+      "mean_episode_reward": -0.7954865896701813,
+      "mean_episode_length": 92.87,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.0511031448841095,
+        "Episode_Reward/fingers_to_object": 0.00014332326827570796,
+        "Episode_Reward/position_tracking": 3.100198955507949e-05,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.009038210846483707,
+        "Episode_Reward/good_finger_contact": 7.127293065423146e-05,
+        "Episode_Reward/contact_count": 3.9806061977287754e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.5863632559776306,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 3,
+      "collection_s": 0.9183814525604248,
+      "learning_s": 0.4329955577850342,
+      "iteration_s": 1.351377010345459,
+      "losses": {
+        "value": 0.0050900280475616455,
+        "surrogate": -0.008951290510594845,
+        "entropy": 32.56379318237305
+      },
+      "transitions_per_s": 96991.43835996842,
+      "mean_episode_reward": -1.0392142814397811,
+      "mean_episode_length": 119.59,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.07067778706550598,
+        "Episode_Reward/fingers_to_object": 0.0001659956033108756,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 1.5419766620537833e-17,
+        "Episode_Reward/early_termination": -0.009611941874027252,
+        "Episode_Reward/good_finger_contact": 6.473320536315441e-05,
+        "Episode_Reward/contact_count": 4.174322748440318e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6075470447540283,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 4,
+      "collection_s": 0.9344534873962402,
+      "learning_s": 0.43634605407714844,
+      "iteration_s": 1.3707995414733887,
+      "losses": {
+        "value": 0.0034052326809614897,
+        "surrogate": -0.008693414740264416,
+        "entropy": 32.52768325805664
+      },
+      "transitions_per_s": 95617.18984755328,
+      "mean_episode_reward": -1.2510284435749055,
+      "mean_episode_length": 148.98,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.08905160427093506,
+        "Episode_Reward/fingers_to_object": 0.00017660076264292002,
+        "Episode_Reward/position_tracking": 3.100198955507949e-05,
+        "Episode_Reward/success": 7.818825339782343e-13,
+        "Episode_Reward/early_termination": -0.007239168509840965,
+        "Episode_Reward/good_finger_contact": 1.2400795640132856e-05,
+        "Episode_Reward/contact_count": 2.4620789190521464e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.5935255289077759,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 5,
+      "collection_s": 0.9358835220336914,
+      "learning_s": 0.4355580806732178,
+      "iteration_s": 1.3714416027069092,
+      "losses": {
+        "value": 0.003921277355402708,
+        "surrogate": -0.008734426461160183,
+        "entropy": 32.48424530029297
+      },
+      "transitions_per_s": 95572.42520665417,
+      "mean_episode_reward": -1.4932503762841225,
+      "mean_episode_length": 171.42,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.10584716498851776,
+        "Episode_Reward/fingers_to_object": 0.000185511089512147,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.009017391130328178,
+        "Episode_Reward/good_finger_contact": 6.200397820066428e-06,
+        "Episode_Reward/contact_count": 3.167711474816315e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.5896757245063782,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 6,
+      "collection_s": 0.9247825145721436,
+      "learning_s": 0.434981107711792,
+      "iteration_s": 1.3597636222839355,
+      "losses": {
+        "value": 0.0036991597153246403,
+        "surrogate": -0.008928523398935795,
+        "entropy": 32.44258117675781
+      },
+      "transitions_per_s": 96393.22441928847,
+      "mean_episode_reward": -1.5697974506020547,
+      "mean_episode_length": 197.62,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.12151448428630829,
+        "Episode_Reward/fingers_to_object": 0.00020163929730188102,
+        "Episode_Reward/position_tracking": 3.100198955507949e-05,
+        "Episode_Reward/success": 3.4034615403744084e-12,
+        "Episode_Reward/early_termination": -0.008538750931620598,
+        "Episode_Reward/good_finger_contact": 3.0915871320758015e-05,
+        "Episode_Reward/contact_count": 3.0144330594339408e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6222561597824097,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 7,
+      "collection_s": 0.9253277778625488,
+      "learning_s": 0.44223880767822266,
+      "iteration_s": 1.3675665855407715,
+      "losses": {
+        "value": 0.00252323504537344,
+        "surrogate": -0.009008691646158695,
+        "entropy": 32.396732330322266
+      },
+      "transitions_per_s": 95843.23087871492,
+      "mean_episode_reward": -1.8478850001096725,
+      "mean_episode_length": 231.92,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.14229890704154968,
+        "Episode_Reward/fingers_to_object": 0.0002118062984663993,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 4.2042505747955615e-15,
+        "Episode_Reward/early_termination": -0.006371750496327877,
+        "Episode_Reward/good_finger_contact": 4.712302325060591e-05,
+        "Episode_Reward/contact_count": 2.852396028174553e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6566340923309326,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 8,
+      "collection_s": 0.9111275672912598,
+      "learning_s": 0.43151235580444336,
+      "iteration_s": 1.3426399230957031,
+      "losses": {
+        "value": 0.0027055132668465376,
+        "surrogate": -0.00870686024427414,
+        "entropy": 32.345890045166016
+      },
+      "transitions_per_s": 97622.59988351114,
+      "mean_episode_reward": -1.985717270374298,
+      "mean_episode_length": 248.13,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.1567096710205078,
+        "Episode_Reward/fingers_to_object": 0.00020893302280455828,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.007536411285400391,
+        "Episode_Reward/good_finger_contact": 3.3482148865005e-05,
+        "Episode_Reward/contact_count": 2.3005864932201803e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6172282099723816,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 9,
+      "collection_s": 0.9070343971252441,
+      "learning_s": 0.4318075180053711,
+      "iteration_s": 1.3388419151306152,
+      "losses": {
+        "value": 0.002330465940758586,
+        "surrogate": -0.008597437292337418,
+        "entropy": 32.29630661010742
+      },
+      "transitions_per_s": 97899.53430552167,
+      "mean_episode_reward": -2.1387747746706007,
+      "mean_episode_length": 263.52,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.1742950677871704,
+        "Episode_Reward/fingers_to_object": 0.00019917316967621446,
+        "Episode_Reward/position_tracking": 5.123939263285138e-05,
+        "Episode_Reward/success": 2.1325393707860574e-12,
+        "Episode_Reward/early_termination": -0.005814114585518837,
+        "Episode_Reward/good_finger_contact": 5.93912809563335e-05,
+        "Episode_Reward/contact_count": 2.772508014459163e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6165157556533813,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 10,
+      "collection_s": 0.9049148559570312,
+      "learning_s": 0.4332163333892822,
+      "iteration_s": 1.3381311893463135,
+      "losses": {
+        "value": 0.002613847842440009,
+        "surrogate": -0.00855710543692112,
+        "entropy": 32.24679183959961
+      },
+      "transitions_per_s": 97951.53198994606,
+      "mean_episode_reward": -2.4328312496840954,
+      "mean_episode_length": 306.73,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.19243782758712769,
+        "Episode_Reward/fingers_to_object": 0.00019422333571128547,
+        "Episode_Reward/position_tracking": 6.853070226497948e-05,
+        "Episode_Reward/success": 3.2462661780612943e-19,
+        "Episode_Reward/early_termination": -0.00860346108675003,
+        "Episode_Reward/good_finger_contact": 2.9168102628318593e-05,
+        "Episode_Reward/contact_count": 2.149463034584187e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.5713101625442505,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 11,
+      "collection_s": 0.8945460319519043,
+      "learning_s": 0.4325370788574219,
+      "iteration_s": 1.3270831108093262,
+      "losses": {
+        "value": 0.002310245530679822,
+        "surrogate": -0.008644013665616512,
+        "entropy": 32.201026916503906
+      },
+      "transitions_per_s": 98766.9867338341,
+      "mean_episode_reward": -2.6095669901371004,
+      "mean_episode_length": 323.99,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.2009359449148178,
+        "Episode_Reward/fingers_to_object": 0.0002302676730323583,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.008936751633882523,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 3.331741754664108e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.5890446305274963,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 12,
+      "collection_s": 0.8922443389892578,
+      "learning_s": 0.43437910079956055,
+      "iteration_s": 1.3266234397888184,
+      "losses": {
+        "value": 0.002526269294321537,
+        "surrogate": -0.008660027757287025,
+        "entropy": 32.153255462646484
+      },
+      "transitions_per_s": 98801.20919683509,
+      "mean_episode_reward": -2.5535598626732825,
+      "mean_episode_length": 322.43,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.20161721110343933,
+        "Episode_Reward/fingers_to_object": 0.0001976493076654151,
+        "Episode_Reward/position_tracking": 8.439429802820086e-05,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.008368469774723053,
+        "Episode_Reward/good_finger_contact": 0.00010683761502150446,
+        "Episode_Reward/contact_count": 2.682725971681066e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.60468989610672,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 13,
+      "collection_s": 0.8905150890350342,
+      "learning_s": 0.43296146392822266,
+      "iteration_s": 1.3234765529632568,
+      "losses": {
+        "value": 0.0017102118581533432,
+        "surrogate": -0.008674105629324913,
+        "entropy": 32.104557037353516
+      },
+      "transitions_per_s": 99036.13305919965,
+      "mean_episode_reward": -2.5220959693193437,
+      "mean_episode_length": 322.22,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.20437702536582947,
+        "Episode_Reward/fingers_to_object": 0.0002210838720202446,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.00407610647380352,
+        "Episode_Reward/good_finger_contact": 2.1828578610438854e-05,
+        "Episode_Reward/contact_count": 2.2081001588958316e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.631150484085083,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 14,
+      "collection_s": 0.8893635272979736,
+      "learning_s": 0.4332127571105957,
+      "iteration_s": 1.3225762844085693,
+      "losses": {
+        "value": 0.001992463134229183,
+        "surrogate": -0.008610129356384277,
+        "entropy": 32.04914093017578
+      },
+      "transitions_per_s": 99103.54627189832,
+      "mean_episode_reward": -2.455641956180334,
+      "mean_episode_length": 316.42,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.19706478714942932,
+        "Episode_Reward/fingers_to_object": 0.00020632025552913547,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.00701289065182209,
+        "Episode_Reward/good_finger_contact": 3.80238052457571e-05,
+        "Episode_Reward/contact_count": 2.6355748559581116e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6017006635665894,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 15,
+      "collection_s": 0.8848180770874023,
+      "learning_s": 0.4323761463165283,
+      "iteration_s": 1.3171942234039307,
+      "losses": {
+        "value": 0.00120345049072057,
+        "surrogate": -0.009182771667838097,
+        "entropy": 31.98897361755371
+      },
+      "transitions_per_s": 99508.48376884012,
+      "mean_episode_reward": -2.3538844549655913,
+      "mean_episode_length": 307.67,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.20280992984771729,
+        "Episode_Reward/fingers_to_object": 0.00021229844423942268,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.003934809006750584,
+        "Episode_Reward/good_finger_contact": 4.568713848129846e-06,
+        "Episode_Reward/contact_count": 1.9154478650307283e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6070190668106079,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 16,
+      "collection_s": 0.8777740001678467,
+      "learning_s": 0.43249034881591797,
+      "iteration_s": 1.3102643489837646,
+      "losses": {
+        "value": 0.0011867985595017672,
+        "surrogate": -0.00925555732101202,
+        "entropy": 31.91543960571289
+      },
+      "transitions_per_s": 100034.77550286618,
+      "mean_episode_reward": -2.510564487874508,
+      "mean_episode_length": 321.83,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.19803398847579956,
+        "Episode_Reward/fingers_to_object": 0.00016819829761516303,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 1.4297436568000421e-09,
+        "Episode_Reward/early_termination": -0.004257900174707174,
+        "Episode_Reward/good_finger_contact": 1.7361113350489177e-05,
+        "Episode_Reward/contact_count": 2.7807531296275556e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6186951398849487,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 17,
+      "collection_s": 0.8746507167816162,
+      "learning_s": 0.43185997009277344,
+      "iteration_s": 1.3065106868743896,
+      "losses": {
+        "value": 0.001722423592582345,
+        "surrogate": -0.009008514694869518,
+        "entropy": 31.8494873046875
+      },
+      "transitions_per_s": 100322.17976997037,
+      "mean_episode_reward": -2.3094544017314913,
+      "mean_episode_length": 296.39,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.18937444686889648,
+        "Episode_Reward/fingers_to_object": 0.0001890031562652439,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.007928961887955666,
+        "Episode_Reward/good_finger_contact": 2.0736884835059755e-05,
+        "Episode_Reward/contact_count": 2.4938140995800495e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6419438719749451,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 18,
+      "collection_s": 0.8727231025695801,
+      "learning_s": 0.433459997177124,
+      "iteration_s": 1.306183099746704,
+      "losses": {
+        "value": 0.001229011220857501,
+        "surrogate": -0.009070013649761677,
+        "entropy": 31.79120445251465
+      },
+      "transitions_per_s": 100347.34029663802,
+      "mean_episode_reward": -2.353415247797966,
+      "mean_episode_length": 301.41,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.19613522291183472,
+        "Episode_Reward/fingers_to_object": 0.0001855411392170936,
+        "Episode_Reward/position_tracking": 3.61689853889402e-05,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.003202639054507017,
+        "Episode_Reward/good_finger_contact": 5.07377517351415e-05,
+        "Episode_Reward/contact_count": 2.8107506295782514e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6017677783966064,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 19,
+      "collection_s": 0.8725147247314453,
+      "learning_s": 0.43274784088134766,
+      "iteration_s": 1.305262565612793,
+      "losses": {
+        "value": 0.0014745605876669288,
+        "surrogate": -0.008846706710755825,
+        "entropy": 31.727615356445312
+      },
+      "transitions_per_s": 100418.11008229175,
+      "mean_episode_reward": -2.3571132016181946,
+      "mean_episode_length": 313.72,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.19185498356819153,
+        "Episode_Reward/fingers_to_object": 0.00021059441496618092,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 5.139922482572815e-18,
+        "Episode_Reward/early_termination": -0.005246082320809364,
+        "Episode_Reward/good_finger_contact": 9.28575755096972e-05,
+        "Episode_Reward/contact_count": 5.590631189988926e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6301277875900269,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 20,
+      "collection_s": 0.8698766231536865,
+      "learning_s": 0.4332258701324463,
+      "iteration_s": 1.3031024932861328,
+      "losses": {
+        "value": 0.0010116490302607417,
+        "surrogate": -0.008958886377513409,
+        "entropy": 31.660810470581055
+      },
+      "transitions_per_s": 100584.56696638325,
+      "mean_episode_reward": -2.3750556755065917,
+      "mean_episode_length": 318.09,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.18971793353557587,
+        "Episode_Reward/fingers_to_object": 0.00017862948880065233,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.0035707587376236916,
+        "Episode_Reward/good_finger_contact": 5.511464405572042e-05,
+        "Episode_Reward/contact_count": 2.8698412279482e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6339102387428284,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 21,
+      "collection_s": 0.8740642070770264,
+      "learning_s": 0.43210697174072266,
+      "iteration_s": 1.306171178817749,
+      "losses": {
+        "value": 0.0009789325995370746,
+        "surrogate": -0.009104271419346333,
+        "entropy": 31.586584091186523
+      },
+      "transitions_per_s": 100348.25612875399,
+      "mean_episode_reward": -2.2149626940488814,
+      "mean_episode_length": 294.18,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.19369716942310333,
+        "Episode_Reward/fingers_to_object": 0.00016532489098608494,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.004506137687712908,
+        "Episode_Reward/good_finger_contact": 3.0381950637092814e-05,
+        "Episode_Reward/contact_count": 2.4551529349992052e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.5964868068695068,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 22,
+      "collection_s": 0.8721268177032471,
+      "learning_s": 0.43192243576049805,
+      "iteration_s": 1.3040492534637451,
+      "losses": {
+        "value": 0.0011754048755392432,
+        "surrogate": -0.008775520138442516,
+        "entropy": 31.514448165893555
+      },
+      "transitions_per_s": 100511.54099575123,
+      "mean_episode_reward": -2.2158280563354493,
+      "mean_episode_length": 294.75,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.18313679099082947,
+        "Episode_Reward/fingers_to_object": 0.0001953304308699444,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 6.727213897050888e-09,
+        "Episode_Reward/early_termination": -0.003780676517635584,
+        "Episode_Reward/good_finger_contact": 8.769588021095842e-05,
+        "Episode_Reward/contact_count": 4.334437835495919e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6825770139694214,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 23,
+      "collection_s": 0.8674485683441162,
+      "learning_s": 0.4343836307525635,
+      "iteration_s": 1.3018321990966797,
+      "losses": {
+        "value": 0.001038322108797729,
+        "surrogate": -0.008636755868792534,
+        "entropy": 31.443246841430664
+      },
+      "transitions_per_s": 100682.71478532236,
+      "mean_episode_reward": -2.3067406356334685,
+      "mean_episode_length": 305.61,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.19038215279579163,
+        "Episode_Reward/fingers_to_object": 0.00017237049178220332,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.0027477166149765253,
+        "Episode_Reward/good_finger_contact": 4.603325214702636e-05,
+        "Episode_Reward/contact_count": 2.744477751548402e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6055427193641663,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 24,
+      "collection_s": 0.860267162322998,
+      "learning_s": 0.4364781379699707,
+      "iteration_s": 1.2967453002929688,
+      "losses": {
+        "value": 0.0008385232649743557,
+        "surrogate": -0.00854483898729086,
+        "entropy": 31.36505126953125
+      },
+      "transitions_per_s": 101077.67498396747,
+      "mean_episode_reward": -2.26006623595953,
+      "mean_episode_length": 305.53,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.18533697724342346,
+        "Episode_Reward/fingers_to_object": 0.00018084753537550569,
+        "Episode_Reward/position_tracking": 2.553104786784388e-05,
+        "Episode_Reward/success": 6.18918197942131e-12,
+        "Episode_Reward/early_termination": -0.003598596667870879,
+        "Episode_Reward/good_finger_contact": 3.9045226003509015e-05,
+        "Episode_Reward/contact_count": 3.0594776035286486e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6313724517822266,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 25,
+      "collection_s": 0.8649256229400635,
+      "learning_s": 0.43468189239501953,
+      "iteration_s": 1.299607515335083,
+      "losses": {
+        "value": 0.0011457944056019187,
+        "surrogate": -0.008253482170403004,
+        "entropy": 31.289365768432617
+      },
+      "transitions_per_s": 100855.06466635443,
+      "mean_episode_reward": -2.197369330972433,
+      "mean_episode_length": 295.77,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.18317380547523499,
+        "Episode_Reward/fingers_to_object": 0.0001790780806913972,
+        "Episode_Reward/position_tracking": 1.8870774511015043e-05,
+        "Episode_Reward/success": 3.628180119767973e-19,
+        "Episode_Reward/early_termination": -0.004561364650726318,
+        "Episode_Reward/good_finger_contact": 0.00013829857925884426,
+        "Episode_Reward/contact_count": 4.228003672324121e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6361203193664551,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 26,
+      "collection_s": 0.8611414432525635,
+      "learning_s": 0.43467068672180176,
+      "iteration_s": 1.2958121299743652,
+      "losses": {
+        "value": 0.000868395552970469,
+        "surrogate": -0.008776287548244,
+        "entropy": 31.221237182617188
+      },
+      "transitions_per_s": 101150.46538620762,
+      "mean_episode_reward": -2.244124661386013,
+      "mean_episode_length": 298.33,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.17879806458950043,
+        "Episode_Reward/fingers_to_object": 0.0001827400119509548,
+        "Episode_Reward/position_tracking": 3.338675742270425e-05,
+        "Episode_Reward/success": 3.0839530759533828e-18,
+        "Episode_Reward/early_termination": -0.0034310268238186836,
+        "Episode_Reward/good_finger_contact": 9.771919576451182e-05,
+        "Episode_Reward/contact_count": 4.509610516834073e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6385394334793091,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 27,
+      "collection_s": 0.8670170307159424,
+      "learning_s": 0.4344358444213867,
+      "iteration_s": 1.301452875137329,
+      "losses": {
+        "value": 0.0008739628829061985,
+        "surrogate": -0.008692111819982529,
+        "entropy": 31.145755767822266
+      },
+      "transitions_per_s": 100712.05996311568,
+      "mean_episode_reward": -2.143135379254818,
+      "mean_episode_length": 292.59,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.1747957170009613,
+        "Episode_Reward/fingers_to_object": 0.0001812426489777863,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 1.2996660130071946e-17,
+        "Episode_Reward/early_termination": -0.0033083013258874416,
+        "Episode_Reward/good_finger_contact": 0.00020275363931432366,
+        "Episode_Reward/contact_count": 5.676058935932815e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.653904914855957,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 28,
+      "collection_s": 0.8675904273986816,
+      "learning_s": 0.43526196479797363,
+      "iteration_s": 1.3028523921966553,
+      "losses": {
+        "value": 0.0006255950429476798,
+        "surrogate": -0.009101616218686104,
+        "entropy": 31.0687255859375
+      },
+      "transitions_per_s": 100603.87560789443,
+      "mean_episode_reward": -2.0955974246561526,
+      "mean_episode_length": 288.84,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.17430070042610168,
+        "Episode_Reward/fingers_to_object": 0.00018200877821072936,
+        "Episode_Reward/position_tracking": 3.338675742270425e-05,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.002303097629919648,
+        "Episode_Reward/good_finger_contact": 0.00017442688113078475,
+        "Episode_Reward/contact_count": 4.406937659950927e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6437036991119385,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 29,
+      "collection_s": 0.8673644065856934,
+      "learning_s": 0.4378514289855957,
+      "iteration_s": 1.305215835571289,
+      "losses": {
+        "value": 0.0004624676948878914,
+        "surrogate": -0.009843374602496624,
+        "entropy": 30.976953506469727
+      },
+      "transitions_per_s": 100421.7053056441,
+      "mean_episode_reward": -2.056696427464485,
+      "mean_episode_length": 289.6,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.17505857348442078,
+        "Episode_Reward/fingers_to_object": 0.0001717564882710576,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.0014581810683012009,
+        "Episode_Reward/good_finger_contact": 7.43827986298129e-05,
+        "Episode_Reward/contact_count": 5.0106315029552206e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.6582032442092896,
+        "Metrics/success_rate": 0.0
+      }
+    }
+  ],
+  "git_commit": "e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4",
+  "git_status": [
+    "A  docs/sram/SRAM_TRAINING.md",
+    "AM docs/sram/data/locomotion_footprint.json",
+    "AM docs/sram/data/rl/rl_anymalc.json",
+    "AM docs/sram/data/rl/rl_cartpole.json",
+    "AM docs/sram/data/rl/rl_g1.json",
+    "M  pyproject.toml",
+    "A  scripts/sram/baselines/README.md",
+    "A  scripts/sram/baselines/record_newton_rollouts.py",
+    "AM scripts/sram/baselines/torch_cartpole_vecenv.py",
+    "AM scripts/sram/baselines/train_rsl_rl_analytic.py",
+    "A  scripts/sram/benchmark_cartpole.py",
+    "AM scripts/sram/benchmark_ppo_kernels.py",
+    "A  scripts/sram/eval_policy.py",
+    "A  scripts/sram/make_report_figures.py",
+    "A  scripts/sram/projection/measure_update_cost.py",
+    "AM scripts/sram/projection/measure_update_cost_cnn.py",
+    "A  scripts/sram/projection/project_locomotion.py",
+    "A  scripts/sram/run_benchmarks.sh",
+    "AM scripts/sram/train_kuka_perception.py",
+    "A  scripts/sram/train_sram.py",
+    "A  scripts/sram/verify_megakernel.py",
+    "A  source/isaaclab/changelog.d/sram-resident-training.changed.rst",
+    "M  source/isaaclab/isaaclab/cli/commands/install.py",
+    "A  source/isaaclab_sram/README.md",
+    "A  source/isaaclab_sram/changelog.d/.gitkeep",
+    "A  source/isaaclab_sram/changelog.d/sram-resident-training.added.rst",
+    "A  source/isaaclab_sram/docs/CHANGELOG.rst",
+    "A  source/isaaclab_sram/isaaclab_sram/__init__.py",
+    "A  source/isaaclab_sram/isaaclab_sram/cartpole.py",
+    "A  source/isaaclab_sram/isaaclab_sram/cuda_rt.py",
+    "A  source/isaaclab_sram/isaaclab_sram/export.py",
+    "AM source/isaaclab_sram/isaaclab_sram/kernels/cartpole_physics.cuh",
+    "A  source/isaaclab_sram/isaaclab_sram/kernels/ppo_cartpole.cu",
+    "AM source/isaaclab_sram/isaaclab_sram/kernels/sram_device.cuh",
+    "A  source/isaaclab_sram/isaaclab_sram/megakernel.py",
+    "AM source/isaaclab_sram/isaaclab_sram/perception.py",
+    "AM source/isaaclab_sram/isaaclab_sram/ppo_kernels.py",
+    "A  source/isaaclab_sram/isaaclab_sram/rl_backend.py",
+    "AM source/isaaclab_sram/isaaclab_sram/spatial_softmax.py",
+    "A  source/isaaclab_sram/pyproject.toml",
+    "A  source/isaaclab_sram/test/test_determinism.py",
+    "A  source/isaaclab_sram/test/test_device_functions.py",
+    "AM source/isaaclab_sram/test/test_kernel_edge_cases.py",
+    "A  source/isaaclab_sram/test/test_megakernel_parity.py",
+    "AM source/isaaclab_sram/test/test_ppo_kernels.py",
+    "AM source/isaaclab_sram/test/test_spatial_softmax.py",
+    "M  uv.lock",
+    "?? docs/sram/data/kuka_kernel_microbenchmark.json",
+    "?? source/isaaclab_sram/test/test_perception_update.py"
+  ],
+  "source_sha256": {
+    "scripts/sram/train_kuka_perception.py": "d6b182db5ab992a550c97750992c17520cc5eaf982b4826c054b6c952403af4b",
+    "source/isaaclab_sram/isaaclab_sram/__init__.py": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
+    "source/isaaclab_sram/isaaclab_sram/cartpole.py": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+    "source/isaaclab_sram/isaaclab_sram/export.py": "8a3a3b69c2fe3b2fd244fafaa3d8e0561ceb23d59616bb7eaf9785cae88c05f0",
+    "source/isaaclab_sram/isaaclab_sram/megakernel.py": "2eeccbdd42d505034bb297a6c4010137644d8e9922476dbaa9d83931fdd4e8c2",
+    "source/isaaclab_sram/isaaclab_sram/perception.py": "306c980b7b03f7db3a04ec4b0c4f82998106c7292bf994d0a47dcf6021e9ddf2",
+    "source/isaaclab_sram/isaaclab_sram/ppo_kernels.py": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+    "source/isaaclab_sram/isaaclab_sram/rl_backend.py": "25eea34640901f31ed63097173e2cb6f1b49f7dedb40a0b1ef07e5430fb5e79d",
+    "source/isaaclab_sram/isaaclab_sram/spatial_softmax.py": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b"
+  },
+  "startup_s": 13.011019680998288,
+  "fused_spatial_softmax_modules": 1,
+  "observations": {
+    "policy": {
+      "shape": [
+        4096,
+        170
+      ],
+      "dtype": "torch.float32"
+    },
+    "proprio": {
+      "shape": [
+        4096,
+        465
+      ],
+      "dtype": "torch.float32"
+    },
+    "perception": {
+      "shape": [
+        4096,
+        960
+      ],
+      "dtype": "torch.float32"
+    },
+    "base_image": {
+      "shape": [
+        4096,
+        3,
+        64,
+        64
+      ],
+      "dtype": "torch.uint8"
+    }
+  },
+  "rollout_observation_bytes": 2446852096,
+  "initial_image": {
+    "min": 0.0,
+    "max": 238.0,
+    "std": 69.18163299560547
+  },
+  "train_wall_s": 42.7365864609601,
+  "rollout_storage_bytes": 2485780480,
+  "actor_parameter_max_abs_change": {
+    "distribution.std_param": 0.07553201913833618,
+    "mlp.0.weight": 0.024435173720121384,
+    "mlp.0.bias": 0.01157369650900364,
+    "mlp.2.weight": 0.01370129082351923,
+    "mlp.2.bias": 0.008958743885159492,
+    "mlp.4.weight": 0.013056408613920212,
+    "mlp.4.bias": 0.009356305003166199,
+    "mlp.6.weight": 0.012056712992489338,
+    "mlp.6.bias": 0.008082762360572815,
+    "cnns.base_image.0.weight": 0.015094613656401634,
+    "cnns.base_image.0.bias": 0.015177658759057522,
+    "cnns.base_image.2.weight": 0.019022943452000618,
+    "cnns.base_image.2.bias": 0.01581953465938568,
+    "cnns.base_image.4.weight": 0.020679805427789688,
+    "cnns.base_image.4.bias": 0.01340391207486391,
+    "softmaxes.base_image.log_temperature": 0.01583614945411682
+  },
+  "cnn_changed": true,
+  "all_parameters_finite": true,
+  "checkpoint": "/home/horde/sram-lab/scratch/perception-integration/sram_rgb64_4096_30/model_29.pt",
+  "checkpoint_tf32_action_max_abs_error": 0.0002707839012145996,
+  "checkpoint_action_max_abs_error": 3.2782554626464844e-07,
+  "checkpoint_verification_precision": "IEEE float32 (TF32 disabled for both actors)",
+  "checkpoint_native_actor_class": "SpatialSoftmaxCNNModel",
+  "checkpoint_native_actor_matches": true,
+  "image_action_sensitivity_max_abs": 0.12095380574464798,
+  "measured_iterations": 25,
+  "timing_medians": {
+    "collection_s": 0.8746507167816162,
+    "learning_s": 0.4332258701324463,
+    "iteration_s": 1.3065106868743896,
+    "transitions_per_s": 100322.17976997037
+  },
+  "integration_passed": true,
+  "finished_utc": "2026-11-22T20:32:57.407840+00:00"
+}

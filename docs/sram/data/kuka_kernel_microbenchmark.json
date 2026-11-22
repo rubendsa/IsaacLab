@@ -1,0 +1,217 @@
+{
+  "scope": "Isolated hot paths, not end-to-end training; compile and capture excluded by warmup",
+  "timing_note": "Eager CUDA events include CPU launch gaps. Captured replay removes most host scheduling cost.",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "torch": "2.11.0+cu130",
+  "triton": "3.6.0",
+  "shapes": {
+    "ppo": [
+      16384,
+      23
+    ],
+    "spatial": [
+      16384,
+      32,
+      4,
+      4
+    ],
+    "gae": [
+      32,
+      4096,
+      1
+    ]
+  },
+  "source_sha256": {
+    "scripts/sram/benchmark_ppo_kernels.py": "797af01e7c43c58c11530551a464f235d7c693c93f605a92eee322696a8453d0",
+    "source/isaaclab_sram/isaaclab_sram/ppo_kernels.py": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+    "source/isaaclab_sram/isaaclab_sram/spatial_softmax.py": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b"
+  },
+  "results": {
+    "ppo_forward_backward": {
+      "torch": {
+        "gpu_ms_mean": 1.0819820803403855,
+        "gpu_ms_median": 1.0661280155181885,
+        "gpu_ms_min": 0.9965760111808777,
+        "wall_ms_mean": 1.0950804210733622,
+        "wall_ms_median": 1.0787685168907046,
+        "repeats": 100
+      },
+      "fused": {
+        "gpu_ms_mean": 0.35608159989118576,
+        "gpu_ms_median": 0.3399839997291565,
+        "gpu_ms_min": 0.30480000376701355,
+        "wall_ms_mean": 0.3686475451104343,
+        "wall_ms_median": 0.35171950003132224,
+        "repeats": 100
+      },
+      "gpu_median_speedup": 3.1358182042905094,
+      "wall_median_speedup": 3.0671274034980582,
+      "captured_graph": {
+        "torch": {
+          "gpu_ms_mean": 0.1442345604300499,
+          "gpu_ms_median": 0.1438400000333786,
+          "gpu_ms_min": 0.14246399700641632,
+          "wall_ms_mean": 0.15480374451726675,
+          "wall_ms_median": 0.15343952691182494,
+          "repeats": 100
+        },
+        "fused": {
+          "gpu_ms_mean": 0.022865279987454416,
+          "gpu_ms_median": 0.022576000541448593,
+          "gpu_ms_min": 0.021503999829292297,
+          "wall_ms_mean": 0.032707254868000746,
+          "wall_ms_median": 0.03190699499100447,
+          "repeats": 100
+        },
+        "gpu_median_speedup": 6.371367672909751,
+        "wall_median_speedup": 4.808962014601629
+      }
+    },
+    "spatial_softmax_forward_backward": {
+      "torch": {
+        "gpu_ms_mean": 0.49838591992855075,
+        "gpu_ms_median": 0.4917919933795929,
+        "gpu_ms_min": 0.47440001368522644,
+        "wall_ms_mean": 0.5106667021755129,
+        "wall_ms_median": 0.504070078022778,
+        "repeats": 100
+      },
+      "fused": {
+        "gpu_ms_mean": 0.1978064000606537,
+        "gpu_ms_median": 0.19627200067043304,
+        "gpu_ms_min": 0.18636800348758698,
+        "wall_ms_mean": 0.2085653436370194,
+        "wall_ms_median": 0.2067569876089692,
+        "repeats": 100
+      },
+      "gpu_median_speedup": 2.505665564623135,
+      "wall_median_speedup": 2.4379832761739815,
+      "captured_graph": {
+        "torch": {
+          "gpu_ms_mean": 0.37297408014535904,
+          "gpu_ms_median": 0.37278400361537933,
+          "gpu_ms_min": 0.36790400743484497,
+          "wall_ms_mean": 0.383939869934693,
+          "wall_ms_median": 0.3835969837382436,
+          "repeats": 100
+        },
+        "fused": {
+          "gpu_ms_mean": 0.05007008008658886,
+          "gpu_ms_median": 0.05008000135421753,
+          "gpu_ms_min": 0.047040000557899475,
+          "wall_ms_mean": 0.05948941456153989,
+          "wall_ms_median": 0.05954643711447716,
+          "repeats": 100
+        },
+        "gpu_median_speedup": 7.4437698389555855,
+        "wall_median_speedup": 6.441980449657869
+      }
+    },
+    "gae_and_global_normalization": {
+      "torch": {
+        "gpu_ms_mean": 2.7927641654014588,
+        "gpu_ms_median": 2.7692960500717163,
+        "gpu_ms_min": 2.7190399169921875,
+        "wall_ms_mean": 2.8041434520855546,
+        "wall_ms_median": 2.7816209476441145,
+        "repeats": 100
+      },
+      "fused": {
+        "gpu_ms_mean": 0.08483103983104229,
+        "gpu_ms_median": 0.08137600123882294,
+        "gpu_ms_min": 0.07680000364780426,
+        "wall_ms_mean": 0.09544455213472247,
+        "wall_ms_median": 0.09161501657217741,
+        "repeats": 100
+      },
+      "gpu_median_speedup": 34.03086914954649,
+      "wall_median_speedup": 30.36206346644777,
+      "captured_graph": {
+        "torch": {
+          "gpu_ms_mean": 0.46266879975795744,
+          "gpu_ms_median": 0.46246400475502014,
+          "gpu_ms_min": 0.46009600162506104,
+          "wall_ms_mean": 0.4733553505502641,
+          "wall_ms_median": 0.47304853796958923,
+          "repeats": 100
+        },
+        "fused": {
+          "gpu_ms_mean": 0.014281599968671798,
+          "gpu_ms_median": 0.013952000066637993,
+          "gpu_ms_min": 0.013567999936640263,
+          "wall_ms_mean": 0.023396062897518277,
+          "wall_ms_median": 0.022734515368938446,
+          "repeats": 100
+        },
+        "gpu_median_speedup": 33.14678917332172,
+        "wall_median_speedup": 20.807504813403792
+      }
+    }
+  },
+  "kernel_resources": {
+    "_gae_kernel": [
+      {
+        "registers_per_thread": 26,
+        "spill_slots": 0,
+        "shared_memory_bytes": 0,
+        "warps": 4
+      }
+    ],
+    "_advantage_moments_kernel": [
+      {
+        "registers_per_thread": 28,
+        "spill_slots": 0,
+        "shared_memory_bytes": 16,
+        "warps": 4
+      }
+    ],
+    "_normalize_advantages_kernel": [
+      {
+        "registers_per_thread": 19,
+        "spill_slots": 0,
+        "shared_memory_bytes": 16,
+        "warps": 4
+      }
+    ],
+    "_ppo_forward_kernel": [
+      {
+        "registers_per_thread": 48,
+        "spill_slots": 0,
+        "shared_memory_bytes": 128,
+        "warps": 4
+      }
+    ],
+    "_ppo_reduce_kernel": [
+      {
+        "registers_per_thread": 12,
+        "spill_slots": 0,
+        "shared_memory_bytes": 16,
+        "warps": 4
+      }
+    ],
+    "_ppo_backward_kernel": [
+      {
+        "registers_per_thread": 76,
+        "spill_slots": 0,
+        "shared_memory_bytes": 0,
+        "warps": 4
+      }
+    ],
+    "_keypoints_forward": [
+      {
+        "registers_per_thread": 18,
+        "spill_slots": 0,
+        "shared_memory_bytes": 64,
+        "warps": 4
+      }
+    ],
+    "_keypoints_backward": [
+      {
+        "registers_per_thread": 28,
+        "spill_slots": 0,
+        "shared_memory_bytes": 64,
+        "warps": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "base_commit": "e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4",
+  "uncommitted_implementation": true,
+  "date_utc": "2026-11-22",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "driver": "580.178.04",
+  "cuda": "13.0",
+  "torch": "2.11.0+cu130",
+  "rsl_rl": "5.5.1",
+  "training_command": "uv run --no-sync python scripts/sram/benchmark_cartpole.py run --out OUTPUT --seeds 42 --configs stock_torch sram --iterations 150 --num_envs 4096",
+  "evaluation_command": "uv run --no-sync python scripts/sram/benchmark_cartpole.py eval --out OUTPUT --num_envs 4096 --num_episodes 2 --eval_seed 10002",
+  "timing_note": "Stock loop uses reported host iteration times rounded to milliseconds; SRAM loop uses CUDA events. Process wall times include imports, setup and checkpoint export. NVRTC cache was warm. Analytic Cartpole physics is specialized; this is not Kuka performance.",
+  "source_sha256": {
+    "source/isaaclab_sram/isaaclab_sram/__init__.py": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
+    "source/isaaclab_sram/isaaclab_sram/cartpole.py": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+    "source/isaaclab_sram/isaaclab_sram/export.py": "8a3a3b69c2fe3b2fd244fafaa3d8e0561ceb23d59616bb7eaf9785cae88c05f0",
+    "source/isaaclab_sram/isaaclab_sram/megakernel.py": "2eeccbdd42d505034bb297a6c4010137644d8e9922476dbaa9d83931fdd4e8c2",
+    "source/isaaclab_sram/isaaclab_sram/perception.py": "306c980b7b03f7db3a04ec4b0c4f82998106c7292bf994d0a47dcf6021e9ddf2",
+    "source/isaaclab_sram/isaaclab_sram/ppo_kernels.py": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+    "source/isaaclab_sram/isaaclab_sram/rl_backend.py": "25eea34640901f31ed63097173e2cb6f1b49f7dedb40a0b1ef07e5430fb5e79d",
+    "source/isaaclab_sram/isaaclab_sram/spatial_softmax.py": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b",
+    "source/isaaclab_sram/isaaclab_sram/kernels/cartpole_physics.cuh": "9e703f62392fa8adcd067a32cd55b417bcf230d4b8028468bbb4b276f8819da9",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_cartpole.cu": "50f06ad9493462237cfbf854b009ec1189128005e50c17040c9a2e44436eaf16",
+    "source/isaaclab_sram/isaaclab_sram/kernels/sram_device.cuh": "e754c81eb12bf6304fe10e2d94bbc45dc3a98e51bac6bbd7fc7a0aee4c007948",
+    "scripts/sram/benchmark_cartpole.py": "06b64afb9fb128e367f10ff25c92e6b93dd64ac013917e5e8870bc2045ffb6e0",
+    "scripts/sram/eval_policy.py": "22944f8450ff61d93856a68b8a631a8f2bfc5af52aa97e54c8ff08b825c4c7c8"
+  }
+}

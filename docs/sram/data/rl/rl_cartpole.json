@@ -1,0 +1,208 @@
+{
+ "task": "Isaac-Cartpole-Direct",
+ "num_envs": 4096,
+ "num_steps_per_env": 16,
+ "rsl_rl_version": "5.5.1",
+ "num_actions": 1,
+ "obs_dim": 4,
+ "actor_params": 1250,
+ "critic_params": 1249,
+ "actor_param_shapes": {
+  "distribution.std_param": [
+   1
+  ],
+  "mlp.0.weight": [
+   32,
+   4
+  ],
+  "mlp.0.bias": [
+   32
+  ],
+  "mlp.2.weight": [
+   32,
+   32
+  ],
+  "mlp.2.bias": [
+   32
+  ],
+  "mlp.4.weight": [
+   1,
+   32
+  ],
+  "mlp.4.bias": [
+   1
+  ]
+ },
+ "critic_param_shapes": {
+  "mlp.0.weight": [
+   32,
+   4
+  ],
+  "mlp.0.bias": [
+   32
+  ],
+  "mlp.2.weight": [
+   32,
+   32
+  ],
+  "mlp.2.bias": [
+   32
+  ],
+  "mlp.4.weight": [
+   1,
+   32
+  ],
+  "mlp.4.bias": [
+   1
+  ]
+ },
+ "alg_cfg": {
+  "num_learning_epochs": 5,
+  "num_mini_batches": 4,
+  "learning_rate": 0.001,
+  "clip_param": 0.2,
+  "gamma": 0.99,
+  "lam": 0.95,
+  "desired_kl": 0.01,
+  "schedule": "adaptive",
+  "entropy_coef": 0.005,
+  "max_grad_norm": 1.0,
+  "optimizer": "adam"
+ },
+ "actor_cfg": {
+  "hidden_dims": [
+   32,
+   32
+  ],
+  "activation": "elu",
+  "obs_normalization": false
+ },
+ "critic_cfg": {
+  "hidden_dims": [
+   32,
+   32
+  ],
+  "activation": "elu",
+  "obs_normalization": false
+ },
+ "obs_groups": {
+  "actor": [
+   "policy"
+  ],
+  "critic": [
+   "policy"
+  ]
+ },
+ "t_act_total_s(contended)": 0.27330402296502143,
+ "storage": {
+  "rewards": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 262144
+  },
+  "actions": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 262144
+  },
+  "dones": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.uint8",
+   "nbytes": 65536
+  },
+  "values": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 262144
+  },
+  "actions_log_prob": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 262144
+  },
+  "returns": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 262144
+  },
+  "advantages": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 262144
+  },
+  "observations[policy]": {
+   "shape": [
+    16,
+    4096,
+    4
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 1048576
+  },
+  "distribution_params[0]": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 262144
+  },
+  "distribution_params[1]": {
+   "shape": [
+    16,
+    4096,
+    1
+   ],
+   "dtype": "torch.float32",
+   "nbytes": 262144
+  }
+ },
+ "storage_total_bytes": 3211264,
+ "storage_bytes_per_env_per_step": 49.0,
+ "t_returns_plus_update_s(contended,incl. first-call overheads)": 0.41786148597020656,
+ "update_peak_transient_bytes": 30554624,
+ "t_update2_s(contended)": 0.06640075996983796,
+ "optimizer_class": "Adam",
+ "optimizer_state_bytes": 20044,
+ "optimizer_state_detail": {
+  "step": 52,
+  "exp_avg": 9996,
+  "exp_avg_sq": 9996
+ },
+ "params_bytes_fp32": 9996,
+ "grads_bytes_fp32": 9996,
+ "mini_batch_size": 16384,
+ "mlp_flops_per_sample_forward": {
+  "actor": 2368,
+  "critic": 2368
+ }
+}

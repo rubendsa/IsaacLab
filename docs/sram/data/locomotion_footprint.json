@@ -1,0 +1,74 @@
+{
+ "provenance": {
+  "measured_by": "instantiating each task kitless on Newton MJWarp (Isaac Lab v3.0.0, e3f7d9ff) at N=16..4096 envs and walking every CUDA/torch buffer reachable from the Newton model/state/control/contacts, the MuJoCo-Warp model/data and the Isaac Lab env (de-duplicated by device address; totals match allocator counters within ~2%)",
+  "physics_flops": "analytic count of the MuJoCo-Warp pipeline per step at the contact / constraint-row / solver-iteration counts observed under random actions (useful FLOPs; executed FLOPs with tile padding are ~1.5-3x higher)",
+  "lean_working_set": "fp32 rollout storage (RSL-RL layout) + params/grads/Adam + estimated minimal persistent simulator state per env",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition: 188 SMs, 47 MiB registers, 18.4 MiB max shared memory, 128 MiB L2 (80 MiB max persisting)"
+ },
+ "tasks": {
+  "anymal_c": {
+   "name": "ANYmal-C flat (IsaacContrib-Velocity-Flat-AnymalC)",
+   "num_envs": 4096,
+   "num_steps_per_env": 24,
+   "mjwarp_steps_per_env_step": 8,
+   "num_learning_epochs": 5,
+   "num_mini_batches": 4,
+   "physics_flops_per_mjwarp_step": 46649.57371133373,
+   "actuator_flops_per_env_step": 88000.0,
+   "actor_macs": 40448,
+   "critic_macs": 39040,
+   "actor_dims": [
+    48,
+    128,
+    128,
+    128,
+    12
+   ],
+   "critic_dims": [
+    48,
+    128,
+    128,
+    128,
+    1
+   ],
+   "lean_working_set_bytes": 44866004,
+   "rollout_bytes": 35094528,
+   "stock_allocated_bytes": 770683699,
+   "max_envs_in_L2_fp32": 12493,
+   "max_envs_in_smem_fp32": 1688,
+   "fits": "fits L2 and the 80 MiB persisting window (fp32)"
+  },
+  "g1": {
+   "name": "Unitree G1 flat (Isaac-Velocity-Flat-G1)",
+   "num_envs": 4096,
+   "num_steps_per_env": 24,
+   "mjwarp_steps_per_env_step": 8,
+   "num_learning_epochs": 5,
+   "num_mini_batches": 4,
+   "physics_flops_per_mjwarp_step": 122896.31127210673,
+   "actuator_flops_per_env_step": 0.0,
+   "actor_macs": 85376,
+   "critic_macs": 80768,
+   "actor_dims": [
+    123,
+    256,
+    128,
+    128,
+    37
+   ],
+   "critic_dims": [
+    123,
+    256,
+    128,
+    128,
+    1
+   ],
+   "lean_working_set_bytes": 101307636,
+   "rollout_bytes": 94076928,
+   "stock_allocated_bytes": 964069342,
+   "max_envs_in_L2_fp32": 5462,
+   "max_envs_in_smem_fp32": 688,
+   "fits": "fits L2; 80 MiB window needs a bf16 rollout"
+  }
+ }
+}

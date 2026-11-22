@@ -1809,6 +1809,7 @@ dependencies = [
     { name = "isaaclab-physx" },
     { name = "isaaclab-ppisp" },
     { name = "isaaclab-rl" },
+    { name = "isaaclab-sram" },
     { name = "isaaclab-tasks" },
     { name = "isaaclab-tasks-experimental" },
     { name = "isaaclab-visualizers" },
@@ -1997,7 +1998,7 @@ requires-dist = [
     { name = "botocore" },
     { name = "coacd", specifier = ">=1.0.7" },
     { name = "coverage", marker = "extra == 'test'", specifier = ">=7.6.1" },
-    { name = "daqp", marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'x86_64' and sys_platform == 'linux')", specifier = "==0.8.5" },
+    { name = "daqp", marker = "(platform_machine == 'aarch64' or platform_machine == 'x86_64') and sys_platform == 'linux'", specifier = "==0.8.5" },
     { name = "decord2", marker = "extra == 'rlinf'" },
     { name = "dex-retargeting", marker = "platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'teleop'", specifier = "==0.5.0" },
     { name = "diffusers", marker = "extra == 'rlinf'", specifier = ">=0.35.0" },
@@ -2028,6 +2029,7 @@ requires-dist = [
     { name = "isaaclab-physx", editable = "source/isaaclab_physx" },
     { name = "isaaclab-ppisp", editable = "source/isaaclab_ppisp" },
     { name = "isaaclab-rl", editable = "source/isaaclab_rl" },
+    { name = "isaaclab-sram", editable = "source/isaaclab_sram" },
     { name = "isaaclab-tasks", editable = "source/isaaclab_tasks" },
     { name = "isaaclab-tasks-experimental", editable = "source/isaaclab_tasks_experimental" },
     { name = "isaaclab-teleop", marker = "extra == 'mimic'", editable = "source/isaaclab_teleop" },
@@ -2052,7 +2054,7 @@ requires-dist = [
     { name = "numpydantic", marker = "extra == 'rlinf'", specifier = ">=1.7.0" },
     { name = "omniverseclient", specifier = "==2.74.0", index = "https://pypi.org/simple" },
     { name = "onnx", specifier = ">=1.18.0" },
-    { name = "open3d", marker = "(python_full_version < '3.13' and platform_machine != 'aarch64') or (python_full_version < '3.13' and sys_platform != 'linux')", specifier = ">=0.19.0" },
+    { name = "open3d", marker = "python_full_version < '3.13' and (platform_machine != 'aarch64' or sys_platform != 'linux')", specifier = ">=0.19.0" },
     { name = "ovphysx", marker = "extra == 'ov'", specifier = "==0.6.4.72118723", index = "https://pypi.org/simple" },
     { name = "ovphysx", marker = "extra == 'ovphysx'", specifier = "==0.6.4.72118723", index = "https://pypi.org/simple" },
     { name = "ovrtx", marker = "extra == 'ov'", specifier = "==0.5.1.385782", index = "https://pypi.org/simple" },
@@ -2064,8 +2066,8 @@ requires-dist = [
     { name = "pandas", marker = "extra == 'rlinf'" },
     { name = "peft", marker = "extra == 'rlinf'", specifier = ">=0.17.0" },
     { name = "pillow", specifier = ">=12.3.0" },
-    { name = "pin", marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'x86_64' and sys_platform == 'linux')" },
-    { name = "pin-pink", marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'x86_64' and sys_platform == 'linux')", specifier = "==3.3.0" },
+    { name = "pin", marker = "(platform_machine == 'aarch64' or platform_machine == 'x86_64') and sys_platform == 'linux'" },
+    { name = "pin-pink", marker = "(platform_machine == 'aarch64' or platform_machine == 'x86_64') and sys_platform == 'linux'", specifier = "==3.3.0" },
     { name = "prettytable", specifier = ">=3.3.0" },
     { name = "protobuf", specifier = ">=4.25.8,!=5.26.0" },
     { name = "psutil" },
@@ -2214,6 +2216,23 @@ dependencies = [
 requires-dist = [
     { name = "isaaclab", editable = "source/isaaclab" },
     { name = "isaaclab-assets", editable = "source/isaaclab_assets" },
+    { name = "isaaclab-tasks", editable = "source/isaaclab_tasks" },
+]
+
+[[package]]
+name = "isaaclab-sram"
+version = "0.1.0"
+source = { editable = "source/isaaclab_sram" }
+dependencies = [
+    { name = "isaaclab" },
+    { name = "isaaclab-rl" },
+    { name = "isaaclab-tasks" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "isaaclab", editable = "source/isaaclab" },
+    { name = "isaaclab-rl", editable = "source/isaaclab_rl" },
     { name = "isaaclab-tasks", editable = "source/isaaclab_tasks" },
 ]
 

@@ -669,6 +669,7 @@ CORE_ISAACLAB_SUBMODULES: list[str] = [
     "isaaclab_tasks",
     "isaaclab_tasks_experimental",
     "isaaclab_rl",
+    "isaaclab_sram",
     "isaaclab_visualizers",
 ]
 

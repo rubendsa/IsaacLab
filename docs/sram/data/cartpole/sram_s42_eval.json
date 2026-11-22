@@ -1,0 +1,378 @@
+{
+ "label": "sram_s42",
+ "created_at": "2026-11-22T20:42:13.010084+00:00",
+ "protocol": {
+  "version": 1,
+  "task": "Isaac-Cartpole-Direct",
+  "physics": "newton_mjwarp",
+  "hydra_overrides": [
+   "physics=newton_mjwarp"
+  ],
+  "frontend": "torch",
+  "num_envs": 4096,
+  "num_episodes": 2,
+  "num_steps": 600,
+  "max_episode_length": 300,
+  "step_dt": 0.016666666666666666,
+  "seed": 10002,
+  "device": "cuda:0",
+  "actions": "deterministic mean (RSL-RL inference policy), torch.inference_mode, TF32 off",
+  "clip_actions": null,
+  "start": "env.reset() after the wrapper's reset: all episodes start aligned (episode_length_buf == 0)",
+  "benchmark_play_equivalent_command": "scripts/benchmarks/play.py --rl_library rsl_rl --task Isaac-Cartpole-Direct --num_envs 4096 --seed 10002 --warmup_steps 0 --num_steps 600 --checkpoint <ckpt> --visualizer none physics=newton_mjwarp"
+ },
+ "policy": {
+  "source": "checkpoint",
+  "checkpoint": "/home/horde/sram-lab/scratch/final-cartpole-bench/work/sram_s42/logs/model_149.pt",
+  "loaded_with": "rsl_rl.runners.OnPolicyRunner.load (load_cfg=None, strict=True)",
+  "iter": 149,
+  "infos": {
+   "trainer": "isaaclab_sram.megakernel.SramPPOCartpole",
+   "seed": 42,
+   "num_envs": 4096,
+   "completed_iterations": 150,
+   "adam_step": 3000,
+   "learning_rate": 0.006666666666666666,
+   "num_ctas": 188,
+   "rollout_storage": "smem",
+   "ppo": {
+    "num_steps_per_env": 16,
+    "max_iterations": 150,
+    "hidden_dims": [
+     32,
+     32
+    ],
+    "init_noise_std": 1.0,
+    "value_loss_coef": 1.0,
+    "use_clipped_value_loss": true,
+    "clip_param": 0.2,
+    "entropy_coef": 0.005,
+    "num_learning_epochs": 5,
+    "num_mini_batches": 4,
+    "learning_rate": 0.001,
+    "schedule": "adaptive",
+    "gamma": 0.99,
+    "lam": 0.95,
+    "desired_kl": 0.01,
+    "max_grad_norm": 1.0,
+    "init_at_random_ep_len": true
+   }
+  },
+  "learning_rate": 0.006666666666666666,
+  "action_std": [
+   0.06398797780275345
+  ]
+ },
+ "initial_state": {
+  "episode_length_buf_max": 0,
+  "obs_abs_max": {
+   "cart_pos": 0.9999901652336121,
+   "pole_angle": 0.7853701114654541,
+   "cart_vel": 0.49995583295822144,
+   "pole_vel": 0.7848977446556091
+  }
+ },
+ "first_episodes": {
+  "episodes_per_env": 2,
+  "envs_with_fewer_completed_episodes": 0,
+  "num_episodes": 8192,
+  "return_mean": 4.950199903618341,
+  "return_std": 0.06848083798360538,
+  "length_mean": 299.9664306640625,
+  "length_std": 3.0383494504109465,
+  "timeout_fraction": 0.9998779296875,
+  "terminated_fraction": 0.0001220703125,
+  "terminated_and_timeout_fraction": 0.0,
+  "return": {
+   "count": 8192,
+   "mean": 4.950199903618341,
+   "std": 0.06848083798360538,
+   "min": 0.26128092408180237,
+   "p01": 4.810895223617553,
+   "p05": 4.855899524688721,
+   "p25": 4.9296146631240845,
+   "p50": 4.967923164367676,
+   "p75": 4.983944892883301,
+   "p95": 4.993471765518189,
+   "p99": 4.9968870687484745,
+   "max": 4.999610900878906
+  },
+  "length": {
+   "count": 8192,
+   "mean": 299.9664306640625,
+   "std": 3.0383494504109465,
+   "min": 25.0,
+   "p01": 300.0,
+   "p05": 300.0,
+   "p25": 300.0,
+   "p50": 300.0,
+   "p75": 300.0,
+   "p95": 300.0,
+   "p99": 300.0,
+   "max": 300.0
+  }
+ },
+ "by_episode_index": [
+  {
+   "episode_index": 0,
+   "num_episodes": 4096,
+   "return_mean": 4.9493771723718964,
+   "return_std": 0.08617668500050335,
+   "length_mean": 299.932861328125,
+   "length_std": 4.296875,
+   "timeout_fraction": 0.999755859375,
+   "terminated_fraction": 0.000244140625,
+   "terminated_and_timeout_fraction": 0.0,
+   "return": {
+    "count": 4096,
+    "mean": 4.9493771723718964,
+    "std": 0.08617668500050335,
+    "min": 0.26128092408180237,
+    "p01": 4.809712815284729,
+    "p05": 4.854530334472656,
+    "p25": 4.929353475570679,
+    "p50": 4.967747449874878,
+    "p75": 4.984024524688721,
+    "p95": 4.993621587753296,
+    "p99": 4.997102499008179,
+    "max": 4.999610900878906
+   },
+   "length": {
+    "count": 4096,
+    "mean": 299.932861328125,
+    "std": 4.296875,
+    "min": 25.0,
+    "p01": 300.0,
+    "p05": 300.0,
+    "p25": 300.0,
+    "p50": 300.0,
+    "p75": 300.0,
+    "p95": 300.0,
+    "p99": 300.0,
+    "max": 300.0
+   }
+  },
+  {
+   "episode_index": 1,
+   "num_episodes": 4096,
+   "return_mean": 4.951022634864785,
+   "return_std": 0.04418846464644411,
+   "length_mean": 300.0,
+   "length_std": 0.0,
+   "timeout_fraction": 1.0,
+   "terminated_fraction": 0.0,
+   "terminated_and_timeout_fraction": 0.0,
+   "return": {
+    "count": 4096,
+    "mean": 4.951022634864785,
+    "std": 0.04418846464644411,
+    "min": 4.739223957061768,
+    "p01": 4.811597418785095,
+    "p05": 4.859425067901611,
+    "p25": 4.929857611656189,
+    "p50": 4.9682183265686035,
+    "p75": 4.983893156051636,
+    "p95": 4.993295192718506,
+    "p99": 4.996768236160278,
+    "max": 4.999189853668213
+   },
+   "length": {
+    "count": 4096,
+    "mean": 300.0,
+    "std": 0.0,
+    "min": 300.0,
+    "p01": 300.0,
+    "p05": 300.0,
+    "p25": 300.0,
+    "p50": 300.0,
+    "p75": 300.0,
+    "p95": 300.0,
+    "p99": 300.0,
+    "max": 300.0
+   }
+  }
+ ],
+ "all_completed_episodes": {
+  "num_episodes": 8192,
+  "return_mean": 4.950199903618341,
+  "return_std": 0.06848083798360538,
+  "length_mean": 299.9664306640625,
+  "length_std": 3.0383494504109465,
+  "timeout_fraction": 0.9998779296875,
+  "terminated_fraction": 0.0001220703125,
+  "terminated_and_timeout_fraction": 0.0,
+  "return": {
+   "count": 8192,
+   "mean": 4.950199903618341,
+   "std": 0.06848083798360538,
+   "min": 0.26128092408180237,
+   "p01": 4.810895223617553,
+   "p05": 4.855899524688721,
+   "p25": 4.9296146631240845,
+   "p50": 4.967923164367676,
+   "p75": 4.983944892883301,
+   "p95": 4.993471765518189,
+   "p99": 4.9968870687484745,
+   "max": 4.999610900878906
+  },
+  "length": {
+   "count": 8192,
+   "mean": 299.9664306640625,
+   "std": 3.0383494504109465,
+   "min": 25.0,
+   "p01": 300.0,
+   "p05": 300.0,
+   "p25": 300.0,
+   "p50": 300.0,
+   "p75": 300.0,
+   "p95": 300.0,
+   "p99": 300.0,
+   "max": 300.0
+  }
+ },
+ "benchmark_play_equivalent": {
+  "reward": {
+   "mean": 4.950199903618341,
+   "std": 0.06848083798360538,
+   "peak": 4.999610900878906
+  },
+  "ep_length": {
+   "mean": 299.9664306640625,
+   "std": 3.0383494504109465,
+   "peak": 300.0
+  },
+  "success_rate": 0.9999
+ },
+ "per_env": {
+  "completed_episodes": {
+   "count": 4096,
+   "mean": 2.0,
+   "std": 0.0,
+   "min": 2.0,
+   "p01": 2.0,
+   "p05": 2.0,
+   "p25": 2.0,
+   "p50": 2.0,
+   "p75": 2.0,
+   "p95": 2.0,
+   "p99": 2.0,
+   "max": 2.0
+  },
+  "completed_episodes_histogram": {
+   "2": 4096
+  },
+  "first_episodes_mean_return": {
+   "count": 4096,
+   "mean": 4.950199903618341,
+   "std": 0.04822526522272845,
+   "min": 2.6189147979021072,
+   "p01": 4.8591009140014645,
+   "p05": 4.8903297781944275,
+   "p25": 4.931834638118744,
+   "p50": 4.958097577095032,
+   "p75": 4.97660768032074,
+   "p95": 4.988323986530304,
+   "p99": 4.992498135566711,
+   "max": 4.999052286148071
+  },
+  "all_completed_mean_return": {
+   "count": 4096,
+   "mean": 4.950199903618341,
+   "std": 0.04822526522272845,
+   "min": 2.6189147979021072,
+   "p01": 4.8591009140014645,
+   "p05": 4.8903297781944275,
+   "p25": 4.931834638118744,
+   "p50": 4.958097577095032,
+   "p75": 4.97660768032074,
+   "p95": 4.988323986530304,
+   "p99": 4.992498135566711,
+   "max": 4.999052286148071
+  },
+  "fraction_envs_all_first_episodes_timed_out": 0.999755859375,
+  "fraction_envs_any_first_episode_terminated": 0.000244140625,
+  "worst_envs": [
+   {
+    "env": 4088,
+    "first_returns": [
+     0.26128092408180237,
+     4.976548671722412
+    ],
+    "first_lengths": [
+     25,
+     300
+    ],
+    "completed": 2
+   },
+   {
+    "env": 294,
+    "first_returns": [
+     4.8240251541137695,
+     4.749776363372803
+    ],
+    "first_lengths": [
+     300,
+     300
+    ],
+    "completed": 2
+   },
+   {
+    "env": 438,
+    "first_returns": [
+     4.829721450805664,
+     4.806339740753174
+    ],
+    "first_lengths": [
+     300,
+     300
+    ],
+    "completed": 2
+   },
+   {
+    "env": 2664,
+    "first_returns": [
+     4.862425804138184,
+     4.780702590942383
+    ],
+    "first_lengths": [
+     300,
+     300
+    ],
+    "completed": 2
+   },
+   {
+    "env": 3847,
+    "first_returns": [
+     4.825806617736816,
+     4.828286170959473
+    ],
+    "first_lengths": [
+     300,
+     300
+    ],
+    "completed": 2
+   }
+  ]
+ },
+ "unfinished_episodes_at_end": {
+  "count": 1,
+  "length_mean": 275.0
+ },
+ "action_abs_max": 2.7756524085998535,
+ "timing_indicative": {
+  "setup_s": 4.198420236934908,
+  "rollout_wall_s": 1.8840572850313038,
+  "env_steps_per_s": 1304418.9364757913,
+  "note": "host wall clock on a shared GPU; not a benchmark"
+ },
+ "versions": {
+  "isaaclab": "28.0.0",
+  "isaaclab_tasks": "25.2.0",
+  "isaaclab_rl": "1.5.1",
+  "rsl-rl-lib": "5.5.1",
+  "newton": "1.6.1",
+  "warp-lang": "1.17.0",
+  "mujoco-warp": "3.12.0",
+  "torch": "2.11.0+cu130"
+ }
+}

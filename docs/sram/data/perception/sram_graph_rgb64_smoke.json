@@ -1,0 +1,259 @@
+{
+  "backend": "sram_graph",
+  "task": "Isaac-Lift-KukaAllegro-Camera",
+  "camera": "rgb64",
+  "overrides": [
+    "physics=newton_mjwarp",
+    "renderer=newton_renderer",
+    "presets=single_camera,rgb64"
+  ],
+  "num_envs": 64,
+  "seed": 42,
+  "iterations": 3,
+  "warmup_iterations": 1,
+  "smoke_reset_bank": 16,
+  "resume_checkpoint": null,
+  "resume_checkpoint_sha256": null,
+  "resume_scope": "Model and optimizer only; simulator, curriculum and reset-bank state initialize anew",
+  "started_utc": "2026-11-22T20:33:59.271042+00:00",
+  "process_id": 751394,
+  "output": "/home/horde/sram-lab/scratch/perception-integration/sram_graph_rgb64_smoke",
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "storage_scope": "SRAM tiles inside fused kernels; rollouts, model, optimizer and CNN activations use GPU global memory",
+  "timing_scope": "Native runner collection/learning timers with CUDA synchronization before update returns; total iteration wall time is synchronized; split phases retain host-timer attribution. Initial compilation is included in warmup, logging/checkpoint IO excluded from iteration timings",
+  "convergence_claim": false,
+  "update_rng": "Discarded native action samples omitted",
+  "rows": [
+    {
+      "iteration": 0,
+      "collection_s": 2.208822727203369,
+      "learning_s": 1.1002287864685059,
+      "iteration_s": 3.309051513671875,
+      "losses": {
+        "value": 0.001913760439492762,
+        "surrogate": -0.05782781168818474,
+        "entropy": 32.63280487060547
+      },
+      "transitions_per_s": 618.9084671357822,
+      "mean_episode_reward": -0.1172340139746666,
+      "mean_episode_length": 16.0,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.006924295797944069,
+        "Episode_Reward/fingers_to_object": 4.575883212964982e-05,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": 0.0,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 0.0,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.17265620827674866,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 1,
+      "collection_s": 0.3793628215789795,
+      "learning_s": 0.028506755828857422,
+      "iteration_s": 0.4078695774078369,
+      "losses": {
+        "value": 0.002413144102320075,
+        "surrogate": -0.056026823818683624,
+        "entropy": 32.626346588134766
+      },
+      "transitions_per_s": 5021.212940214376,
+      "mean_episode_reward": -0.32621235959231853,
+      "mean_episode_length": 42.125,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.02984626032412052,
+        "Episode_Reward/fingers_to_object": 0.00019514479208737612,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": 0.0,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 0.0,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.5289004445075989,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 2,
+      "collection_s": 0.41632795333862305,
+      "learning_s": 0.028191566467285156,
+      "iteration_s": 0.4445195198059082,
+      "losses": {
+        "value": 0.0018926672637462616,
+        "surrogate": -0.05418860539793968,
+        "entropy": 32.62380599975586
+      },
+      "transitions_per_s": 4607.221750113975,
+      "mean_episode_reward": -0.5182294405319474,
+      "mean_episode_length": 66.5,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.05123879387974739,
+        "Episode_Reward/fingers_to_object": 0.00023853649327065796,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": 0.0,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 8.680556675244588e-06,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.4562036395072937,
+        "Metrics/success_rate": 0.0
+      }
+    }
+  ],
+  "git_commit": "e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4",
+  "git_status": [
+    "A  docs/sram/SRAM_TRAINING.md",
+    "AM docs/sram/data/locomotion_footprint.json",
+    "AM docs/sram/data/rl/rl_anymalc.json",
+    "AM docs/sram/data/rl/rl_cartpole.json",
+    "AM docs/sram/data/rl/rl_g1.json",
+    "M  pyproject.toml",
+    "A  scripts/sram/baselines/README.md",
+    "A  scripts/sram/baselines/record_newton_rollouts.py",
+    "AM scripts/sram/baselines/torch_cartpole_vecenv.py",
+    "AM scripts/sram/baselines/train_rsl_rl_analytic.py",
+    "A  scripts/sram/benchmark_cartpole.py",
+    "AM scripts/sram/benchmark_ppo_kernels.py",
+    "A  scripts/sram/eval_policy.py",
+    "A  scripts/sram/make_report_figures.py",
+    "A  scripts/sram/projection/measure_update_cost.py",
+    "AM scripts/sram/projection/measure_update_cost_cnn.py",
+    "A  scripts/sram/projection/project_locomotion.py",
+    "AM scripts/sram/run_benchmarks.sh",
+    "AM scripts/sram/train_kuka_perception.py",
+    "A  scripts/sram/train_sram.py",
+    "A  scripts/sram/verify_megakernel.py",
+    "A  source/isaaclab/changelog.d/sram-resident-training.changed.rst",
+    "M  source/isaaclab/isaaclab/cli/commands/install.py",
+    "A  source/isaaclab_sram/README.md",
+    "A  source/isaaclab_sram/changelog.d/.gitkeep",
+    "A  source/isaaclab_sram/changelog.d/sram-resident-training.added.rst",
+    "A  source/isaaclab_sram/docs/CHANGELOG.rst",
+    "A  source/isaaclab_sram/isaaclab_sram/__init__.py",
+    "A  source/isaaclab_sram/isaaclab_sram/cartpole.py",
+    "A  source/isaaclab_sram/isaaclab_sram/cuda_rt.py",
+    "A  source/isaaclab_sram/isaaclab_sram/export.py",
+    "AM source/isaaclab_sram/isaaclab_sram/kernels/cartpole_physics.cuh",
+    "A  source/isaaclab_sram/isaaclab_sram/kernels/ppo_cartpole.cu",
+    "AM source/isaaclab_sram/isaaclab_sram/kernels/sram_device.cuh",
+    "A  source/isaaclab_sram/isaaclab_sram/megakernel.py",
+    "AM source/isaaclab_sram/isaaclab_sram/perception.py",
+    "AM source/isaaclab_sram/isaaclab_sram/ppo_kernels.py",
+    "A  source/isaaclab_sram/isaaclab_sram/rl_backend.py",
+    "AM source/isaaclab_sram/isaaclab_sram/spatial_softmax.py",
+    "A  source/isaaclab_sram/pyproject.toml",
+    "A  source/isaaclab_sram/test/test_determinism.py",
+    "A  source/isaaclab_sram/test/test_device_functions.py",
+    "AM source/isaaclab_sram/test/test_kernel_edge_cases.py",
+    "A  source/isaaclab_sram/test/test_megakernel_parity.py",
+    "AM source/isaaclab_sram/test/test_ppo_kernels.py",
+    "AM source/isaaclab_sram/test/test_spatial_softmax.py",
+    "M  uv.lock",
+    "?? docs/sram/data/gpu.json",
+    "?? docs/sram/data/kuka_kernel_microbenchmark.json",
+    "?? source/isaaclab_sram/test/test_perception_update.py"
+  ],
+  "source_sha256": {
+    "scripts/sram/train_kuka_perception.py": "df8f3babc53553e4cbff2263d9657268354ddc0eaa3094108c0bd940537bf738",
+    "source/isaaclab_sram/isaaclab_sram/__init__.py": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
+    "source/isaaclab_sram/isaaclab_sram/cartpole.py": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+    "source/isaaclab_sram/isaaclab_sram/export.py": "8a3a3b69c2fe3b2fd244fafaa3d8e0561ceb23d59616bb7eaf9785cae88c05f0",
+    "source/isaaclab_sram/isaaclab_sram/megakernel.py": "2eeccbdd42d505034bb297a6c4010137644d8e9922476dbaa9d83931fdd4e8c2",
+    "source/isaaclab_sram/isaaclab_sram/perception.py": "306c980b7b03f7db3a04ec4b0c4f82998106c7292bf994d0a47dcf6021e9ddf2",
+    "source/isaaclab_sram/isaaclab_sram/ppo_kernels.py": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+    "source/isaaclab_sram/isaaclab_sram/rl_backend.py": "25eea34640901f31ed63097173e2cb6f1b49f7dedb40a0b1ef07e5430fb5e79d",
+    "source/isaaclab_sram/isaaclab_sram/spatial_softmax.py": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b"
+  },
+  "gpu_processes_start": [
+    "17145, /usr/lib/x86_64-linux-gnu/dcv/dcvagent, 1155 MiB",
+    "17552, /usr/libexec/gnome-remote-desktop-daemon, 558 MiB"
+  ],
+  "startup_s": 7.517842854023911,
+  "fused_spatial_softmax_modules": 1,
+  "observations": {
+    "policy": {
+      "shape": [
+        64,
+        170
+      ],
+      "dtype": "torch.float32"
+    },
+    "proprio": {
+      "shape": [
+        64,
+        465
+      ],
+      "dtype": "torch.float32"
+    },
+    "perception": {
+      "shape": [
+        64,
+        960
+      ],
+      "dtype": "torch.float32"
+    },
+    "base_image": {
+      "shape": [
+        64,
+        3,
+        64,
+        64
+      ],
+      "dtype": "torch.uint8"
+    }
+  },
+  "rollout_observation_bytes": 38232064,
+  "initial_image": {
+    "min": 0.0,
+    "max": 238.0,
+    "std": 72.03131866455078
+  },
+  "camera_preview_scale": "Native uint8 RGB",
+  "camera_preview": "/home/horde/sram-lab/scratch/perception-integration/sram_graph_rgb64_smoke/camera_preview.jpg",
+  "train_wall_s": 4.301675597089343,
+  "torch_peak_allocated_bytes": 228550144,
+  "torch_peak_reserved_bytes": 247463936,
+  "rollout_storage_bytes": 38840320,
+  "actor_parameter_max_abs_change": {
+    "distribution.std_param": 0.0032198429107666016,
+    "mlp.0.weight": 0.005568919237703085,
+    "mlp.0.bias": 0.00301402248442173,
+    "mlp.2.weight": 0.005391928367316723,
+    "mlp.2.bias": 0.0022492967545986176,
+    "mlp.4.weight": 0.004898086190223694,
+    "mlp.4.bias": 0.0019897595047950745,
+    "mlp.6.weight": 0.0038718804717063904,
+    "mlp.6.bias": 0.0017881784588098526,
+    "cnns.base_image.0.weight": 0.0032114163041114807,
+    "cnns.base_image.0.bias": 0.0022401586174964905,
+    "cnns.base_image.2.weight": 0.003745533525943756,
+    "cnns.base_image.2.bias": 0.002262946218252182,
+    "cnns.base_image.4.weight": 0.004225544631481171,
+    "cnns.base_image.4.bias": 0.0033430899493396282,
+    "softmaxes.base_image.log_temperature": 0.0030665178783237934
+  },
+  "cnn_changed": true,
+  "all_parameters_finite": true,
+  "checkpoint": "/home/horde/sram-lab/scratch/perception-integration/sram_graph_rgb64_smoke/model_2.pt",
+  "checkpoint_tf32_action_max_abs_error": 9.176880121231079e-05,
+  "checkpoint_action_max_abs_error": 5.960464477539063e-08,
+  "checkpoint_verification_precision": "IEEE float32 (TF32 disabled for both actors)",
+  "checkpoint_native_actor_class": "SpatialSoftmaxCNNModel",
+  "checkpoint_native_actor_matches": true,
+  "image_action_sensitivity_max_abs": 0.0022686123847961426,
+  "measured_iterations": 2,
+  "timing_medians": {
+    "collection_s": 0.39784538745880127,
+    "learning_s": 0.02834916114807129,
+    "iteration_s": 0.42619454860687256,
+    "transitions_per_s": 4814.217345164176
+  },
+  "integration_passed": true,
+  "finished_utc": "2026-11-22T20:34:11.215740+00:00"
+}
