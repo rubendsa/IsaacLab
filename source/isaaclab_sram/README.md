@@ -1,10 +1,11 @@
 # Isaac Lab: SRAM-oriented training (prototype)
 
-This package explores two scopes: a persistent Cartpole training megakernel and fused operations in the native
-Kuka-Allegro camera PPO learner. The Kuka path retains the task's trainable visual encoder, state observations,
-privileged critic and full PPO rollout. Fusion keeps selected intermediate calculations on chip; images,
-rollouts, parameters and optimizer state remain global allocations. It does not put the complete visual training
-run in SRAM. See [the technical report](../../docs/sram/SRAM_TRAINING.md) for the memory budget, research,
+This package contains a persistent Cartpole training megakernel, fused operations in the native Kuka-Allegro
+camera PPO learner, and an experimental persistent native critic. The Kuka paths retain the task's trainable
+visual encoder, state observations, privileged critic and full PPO rollout. The persistent critic keeps its
+parameter and optimizer working state in shared memory during its update; images, rollouts and the actor still
+use global allocations. The complete visual training run is not in SRAM. See
+[the technical report](../../docs/sram/SRAM_TRAINING.md) for the memory budget, research,
 measurement protocol and current evidence.
 
 `isaaclab_sram` runs the complete RSL-RL PPO training loop of `Isaac-Cartpole-Direct` inside a single
@@ -33,8 +34,13 @@ at kernel boundaries, and compiler spill information must be inspected separatel
 | `isaaclab_sram/spatial_softmax.py` | Fused spatial-softmax forward/backward, including temperature gradients, for the camera actor |
 | `isaaclab_sram/ppo_kernels.py` | Fused PPO objective and GAE operations |
 | `isaaclab_sram/perception.py` | Native camera PPO integration with selectable learner operations |
+| `isaaclab_sram/persistent_perception.py` | Camera PPO with a separate persistent native critic update |
+| `isaaclab_sram/persistent_critic.py` | Native critic checkpoint packing, residency checks and cooperative launch |
+| `isaaclab_sram/kernels/ppo_native_critic.cu` | All critic forward/backward, clipping and Adam steps in one launch |
+| `isaaclab_sram/compact_history.py`, `compact_storage.py` | Lossless state-history storage and native rollout adapter |
 | `scripts/sram/train_sram.py` | Training command line (in the repository, not the package) |
 | `scripts/sram/train_kuka_perception.py` | Real Kuka-Allegro camera rollout and training command |
+| `scripts/sram/benchmark_persistent_critic.py` | Repeated native critic updates from an identical resumed checkpoint and synthetic rollout |
 | `scripts/sram/verify_megakernel.py` | Numerical verification against independent references (in the repository, not the package) |
 | `scripts/sram/projection/measure_update_cost_cnn.py` | Native CNN learner on synthetic inputs: eager/CUDA-graph benchmark and memory accounting |
 
@@ -82,11 +88,44 @@ The graph backend omits unused action samples during optimization, so its rollou
 stock. Checkpoints must be loaded before its first update. Capture warmup restores parameters and Adam state;
 normalizer buffers retain stable addresses across subsequent updates.
 
+The experimental `sram_critic` backend supports at most 64 environments and the
+native 32-step, five-epoch, eight-minibatch recipe. It runs all 40 critic optimizer
+steps in one cooperative launch, retaining the critic's parameters, gradients and
+Adam moments in block-owned shared memory. The actor and critic have disjoint
+parameters and separate gradient clipping, so the actor can use the same
+minibatches in a subsequent phase. The native CNN remains trainable. Critic
+inputs, activation/reduction buffers and launch-boundary checkpoints still use
+global memory; this backend is a step toward a complete resident visual learner.
+The wrapper rejects devices whose queried shared-memory/occupancy limits cannot
+support its cooperative launch. It copies current native optimizer state at
+every boundary, including resumed moments and individual parameter step counts.
+
+`--compact_history` optionally stores each processed state frame once, plus the
+initial history prefix and reset boundaries. It discovers the live observation
+manager's term ordering, reconstructs exact minibatches, and leaves raw camera
+pixels unchanged. A history transition that cannot be represented losslessly
+raises an error before the learner consumes it. Normalizer updates reconstruct
+complete state groups to preserve their reduction order. The stored frames and
+reconstructed minibatches still use global allocations.
+
+```bash
+OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
+    --backend sram_critic --camera rgb64 --num_envs 64 --iterations 30 --warmup_iterations 5 \
+    --compact_history --ieee_fp32 --seed 42 --output logs/sram/kuka_rgb64_persistent_critic
+```
+
+Use `--ieee_fp32` on every compared backend to disable TF32 library operations.
+The custom critic uses IEEE float32 arithmetic and a float64 sum of squared
+gradients for clipping; floating-point reduction order can differ from PyTorch.
+Neither a smaller stored rollout nor a persistent critic proves that the full
+camera learner is resident, or that global buffers avoid DRAM traffic.
+
 The fused perception backend currently supports CUDA float32 model operations, the fixed-learning-rate Gaussian
 camera recipe, clipped values and global advantage normalization. It rejects mixed precision, distributed or
 recurrent training, RND, symmetry, adaptive learning-rate schedules and other unsupported algorithm settings.
 The code uses Triton supplied by the Linux PyTorch environment. Convolutions and GEMMs still use PyTorch's CUDA
-libraries; full rollout buffers and optimizer state remain in global memory.
+libraries in the selective-fusion paths; the persistent critic replaces its own MLP and optimizer operations.
+All paths retain global rollout buffers and native checkpoint tensors.
 
 ## Cartpole training
 

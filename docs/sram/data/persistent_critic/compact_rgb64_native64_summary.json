@@ -1,0 +1,292 @@
+{
+  "backend": "sram",
+  "task": "Isaac-Lift-KukaAllegro-Camera",
+  "camera": "rgb64",
+  "overrides": [
+    "physics=newton_mjwarp",
+    "renderer=newton_renderer",
+    "presets=single_camera,rgb64"
+  ],
+  "num_envs": 64,
+  "seed": 42,
+  "iterations": 3,
+  "warmup_iterations": 1,
+  "smoke_reset_bank": null,
+  "compact_history": true,
+  "precision": "Float32 with TF32 disabled",
+  "resume_checkpoint": null,
+  "resume_checkpoint_sha256": null,
+  "resume_scope": "Model and optimizer only; simulator, curriculum and reset-bank state initialize anew",
+  "started_utc": "2026-11-22T21:21:10.114439+00:00",
+  "process_id": 926990,
+  "output": "/home/horde/sram-lab/scratch/compact-real/sram_rgb64_native64_3",
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "storage_scope": "SRAM tiles inside fused kernels; rollouts, model, optimizer and CNN activations use GPU global memory",
+  "timing_scope": "Native runner collection/learning timers with CUDA synchronization before update returns; total iteration wall time is synchronized; split phases retain host-timer attribution. Initial compilation is included in warmup, logging/checkpoint IO excluded from iteration timings",
+  "convergence_claim": false,
+  "update_rng": "Native PPO samples",
+  "rows": [
+    {
+      "iteration": 0,
+      "collection_s": 2.143113374710083,
+      "learning_s": 0.34557676315307617,
+      "iteration_s": 2.488690137863159,
+      "losses": {
+        "value": 0.003223143517971039,
+        "surrogate": -0.04119369387626648,
+        "entropy": 32.63587951660156
+      },
+      "transitions_per_s": 822.9228576276093,
+      "mean_episode_reward": -0.34528231077517074,
+      "mean_episode_length": 9.0,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.007803301326930523,
+        "Episode_Reward/fingers_to_object": 4.317043203627691e-05,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.0086805559694767,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 0.0,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.26083654165267944,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 1,
+      "collection_s": 0.4365122318267822,
+      "learning_s": 0.16391944885253906,
+      "iteration_s": 0.6004316806793213,
+      "losses": {
+        "value": 0.003569524735212326,
+        "surrogate": -0.04552517086267471,
+        "entropy": 32.62897872924805
+      },
+      "transitions_per_s": 3410.8793155000035,
+      "mean_episode_reward": -0.445804662827868,
+      "mean_episode_length": 31.5,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.02918861247599125,
+        "Episode_Reward/fingers_to_object": 0.00012091892131138593,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": -0.0086805559694767,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 0.0,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.43056097626686096,
+        "Metrics/success_rate": 0.0
+      }
+    },
+    {
+      "iteration": 2,
+      "collection_s": 0.43068480491638184,
+      "learning_s": 0.16570544242858887,
+      "iteration_s": 0.5963902473449707,
+      "losses": {
+        "value": 0.002017082180827856,
+        "surrogate": -0.057353269308805466,
+        "entropy": 32.6247673034668
+      },
+      "transitions_per_s": 3433.9931095743973,
+      "mean_episode_reward": -0.5108480933838739,
+      "mean_episode_length": 49.61538461538461,
+      "task_metrics": {
+        "Episode_Reward/action_l2": -0.04909207299351692,
+        "Episode_Reward/fingers_to_object": 0.00018921586161013693,
+        "Episode_Reward/position_tracking": 0.0,
+        "Episode_Reward/success": 0.0,
+        "Episode_Reward/early_termination": 0.0,
+        "Episode_Reward/good_finger_contact": 0.0,
+        "Episode_Reward/contact_count": 1.085069561668206e-05,
+        "Curriculum/adr": 0.0,
+        "Metrics/object_pose/position_error": 0.306484580039978,
+        "Metrics/success_rate": 0.0
+      }
+    }
+  ],
+  "git_commit": "c6df9af3c030b9cb6f14ccb9ddedf788a33a21b8",
+  "git_status": [
+    " M scripts/sram/train_kuka_perception.py",
+    " M source/isaaclab_sram/README.md",
+    " M source/isaaclab_sram/test/test_perception_update.py",
+    "?? scripts/sram/benchmark_persistent_critic.py",
+    "?? source/isaaclab_sram/changelog.d/persistent-perception.added.rst",
+    "?? source/isaaclab_sram/changelog.d/persistent-perception.minor",
+    "?? source/isaaclab_sram/isaaclab_sram/compact_history.py",
+    "?? source/isaaclab_sram/isaaclab_sram/compact_storage.py",
+    "?? source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_critic.cu",
+    "?? source/isaaclab_sram/isaaclab_sram/persistent_critic.py",
+    "?? source/isaaclab_sram/isaaclab_sram/persistent_perception.py",
+    "?? source/isaaclab_sram/test/test_compact_history.py"
+  ],
+  "source_sha256": {
+    "scripts/sram/train_kuka_perception.py": "05ae85c38529a802e3c64d175885b5bd20c0c8e43dc6f9f69648b60aaef8d906",
+    "source/isaaclab_sram/isaaclab_sram/__init__.py": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
+    "source/isaaclab_sram/isaaclab_sram/cartpole.py": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
+    "source/isaaclab_sram/isaaclab_sram/compact_history.py": "98caa9d2cbdaa8d9ae2db3ee50277a7eb8f16139881f7518d4fe43f0dd891625",
+    "source/isaaclab_sram/isaaclab_sram/compact_storage.py": "8d8a902300e18fb366e3f93e1445b5b15027eebf9adec41aea98ba349a597c46",
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+    "source/isaaclab_sram/isaaclab_sram/export.py": "8a3a3b69c2fe3b2fd244fafaa3d8e0561ceb23d59616bb7eaf9785cae88c05f0",
+    "source/isaaclab_sram/isaaclab_sram/kernels/cartpole_physics.cuh": "9e703f62392fa8adcd067a32cd55b417bcf230d4b8028468bbb4b276f8819da9",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_cartpole.cu": "50f06ad9493462237cfbf854b009ec1189128005e50c17040c9a2e44436eaf16",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_critic.cu": "759f298f54679ec0c0fbba42930b3db911c9abdca344bb3e649076275e34280e",
+    "source/isaaclab_sram/isaaclab_sram/kernels/sram_device.cuh": "e754c81eb12bf6304fe10e2d94bbc45dc3a98e51bac6bbd7fc7a0aee4c007948",
+    "source/isaaclab_sram/isaaclab_sram/megakernel.py": "2eeccbdd42d505034bb297a6c4010137644d8e9922476dbaa9d83931fdd4e8c2",
+    "source/isaaclab_sram/isaaclab_sram/perception.py": "306c980b7b03f7db3a04ec4b0c4f82998106c7292bf994d0a47dcf6021e9ddf2",
+    "source/isaaclab_sram/isaaclab_sram/persistent_critic.py": "1c5d8822a3a339acf0a4da5804a320ac1c5576977396fb50eb47a884a2ab1ee8",
+    "source/isaaclab_sram/isaaclab_sram/persistent_perception.py": "28f87b4d210d846e4399442fe318e846d63ddab1d2273790cec7012cc44889d7",
+    "source/isaaclab_sram/isaaclab_sram/ppo_kernels.py": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+    "source/isaaclab_sram/isaaclab_sram/rl_backend.py": "25eea34640901f31ed63097173e2cb6f1b49f7dedb40a0b1ef07e5430fb5e79d",
+    "source/isaaclab_sram/isaaclab_sram/spatial_softmax.py": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b"
+  },
+  "gpu_processes_start": [
+    "17145, /usr/lib/x86_64-linux-gnu/dcv/dcvagent, 1155 MiB",
+    "17552, /usr/libexec/gnome-remote-desktop-daemon, 558 MiB"
+  ],
+  "compact_history_layouts": {
+    "policy": {
+      "order": "term",
+      "terms": [
+        {
+          "name": "object_quat_b",
+          "frame_size": 4,
+          "history_length": 5
+        },
+        {
+          "name": "target_object_pose_b",
+          "frame_size": 7,
+          "history_length": 5
+        },
+        {
+          "name": "actions",
+          "frame_size": 23,
+          "history_length": 5
+        }
+      ]
+    },
+    "proprio": {
+      "order": "term",
+      "terms": [
+        {
+          "name": "joint_pos",
+          "frame_size": 23,
+          "history_length": 5
+        },
+        {
+          "name": "joint_vel",
+          "frame_size": 23,
+          "history_length": 5
+        },
+        {
+          "name": "hand_tips_state_b",
+          "frame_size": 35,
+          "history_length": 5
+        },
+        {
+          "name": "contact",
+          "frame_size": 12,
+          "history_length": 5
+        }
+      ]
+    },
+    "perception": {
+      "order": "term",
+      "terms": [
+        {
+          "name": "object_point_cloud",
+          "frame_size": 192,
+          "history_length": 5
+        }
+      ]
+    }
+  },
+  "rollout_dense_observation_bytes": 38232064,
+  "compact_history_frames_bytes": 2939904,
+  "compact_history_storage_bytes": 2966528,
+  "compact_history_scope": "Exact processed frames and reset boundaries in global storage; unchanged raw images. Minibatch gathering reconstructs histories; normalization reconstructs complete state groups.",
+  "startup_s": 18.402341559994966,
+  "fused_spatial_softmax_modules": 1,
+  "observations": {
+    "policy": {
+      "shape": [
+        64,
+        170
+      ],
+      "dtype": "torch.float32"
+    },
+    "proprio": {
+      "shape": [
+        64,
+        465
+      ],
+      "dtype": "torch.float32"
+    },
+    "perception": {
+      "shape": [
+        64,
+        960
+      ],
+      "dtype": "torch.float32"
+    },
+    "base_image": {
+      "shape": [
+        64,
+        3,
+        64,
+        64
+      ],
+      "dtype": "torch.uint8"
+    }
+  },
+  "rollout_observation_bytes": 28132352,
+  "initial_image": {
+    "min": 0.0,
+    "max": 238.0,
+    "std": 72.79090118408203
+  },
+  "camera_preview_scale": "Native uint8 RGB",
+  "camera_preview": "/home/horde/sram-lab/scratch/compact-real/sram_rgb64_native64_3/camera_preview.jpg",
+  "train_wall_s": 3.818020613049157,
+  "torch_peak_allocated_bytes": 180089856,
+  "torch_peak_reserved_bytes": 197132288,
+  "rollout_storage_bytes": 28740608,
+  "actor_parameter_max_abs_change": {
+    "distribution.std_param": 0.0024431347846984863,
+    "mlp.0.weight": 0.006130484864115715,
+    "mlp.0.bias": 0.0021305782720446587,
+    "mlp.2.weight": 0.0048675816506147385,
+    "mlp.2.bias": 0.002084774896502495,
+    "mlp.4.weight": 0.00450778566300869,
+    "mlp.4.bias": 0.002023570239543915,
+    "mlp.6.weight": 0.004390530288219452,
+    "mlp.6.bias": 0.0013400837779045105,
+    "cnns.base_image.0.weight": 0.003365813521668315,
+    "cnns.base_image.0.bias": 0.0017977189272642136,
+    "cnns.base_image.2.weight": 0.004304360598325729,
+    "cnns.base_image.2.bias": 0.0025931671261787415,
+    "cnns.base_image.4.weight": 0.005142927169799805,
+    "cnns.base_image.4.bias": 0.0035238848067820072,
+    "softmaxes.base_image.log_temperature": 0.0029138480313122272
+  },
+  "cnn_changed": true,
+  "all_parameters_finite": true,
+  "checkpoint": "/home/horde/sram-lab/scratch/compact-real/sram_rgb64_native64_3/model_2.pt",
+  "checkpoint_tf32_action_max_abs_error": 5.960464477539063e-08,
+  "checkpoint_action_max_abs_error": 5.960464477539063e-08,
+  "checkpoint_verification_precision": "IEEE float32 (TF32 disabled for both actors)",
+  "checkpoint_native_actor_class": "SpatialSoftmaxCNNModel",
+  "checkpoint_native_actor_matches": true,
+  "image_action_sensitivity_max_abs": 0.00198446586728096,
+  "measured_iterations": 2,
+  "timing_medians": {
+    "collection_s": 0.43359851837158203,
+    "learning_s": 0.16481244564056396,
+    "iteration_s": 0.598410964012146,
+    "transitions_per_s": 3422.4362125372004
+  },
+  "integration_passed": true,
+  "finished_utc": "2026-11-22T21:21:32.440382+00:00"
+}

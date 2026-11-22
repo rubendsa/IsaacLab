@@ -4,22 +4,26 @@ Branch: `sram-resident-training`. Base: Isaac Lab `v3.0.0`, commit
 `e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4`. Research checked on 2026-11-22.
 
 The opportunity is to keep repeatedly used learner intermediates on chip and remove launch and synchronization
-overhead from PPO. This branch contains a persistent Cartpole training megakernel, fused operations for the native
-Kuka-Allegro camera learner, a real-environment runner and a separate learner benchmark. The Cartpole implementation
+overhead from PPO. This branch contains a persistent Cartpole training megakernel, fused operations and a persistent
+critic for the native Kuka-Allegro camera learner, lossless history storage, a real-environment runner and a separate
+learner benchmark. The Cartpole implementation
 can keep its rollout, environment state, parameters and optimizer
 working state in shared memory and registers during a launch. Real Kuka RGB64 measurements below test selective
-fusion with the original trainable CNN. The native camera rollout cannot fit entirely in the GPU's SRAM.
+fusion with the original trainable CNN. The dense native camera rollout at 4,096 environments cannot fit entirely
+in the GPU's SRAM.
 
 For Ruben: real RGB64 Kuka training measured **11–12% higher learner throughput and 2–3% higher full-iteration
 throughput** in 200-iteration runs at 4,096 environments on one RTX PRO 6000 Blackwell. The native trainable CNN,
 23-action policy, critic and PPO recipe are preserved. These are single-seed throughput observations, not a
-time-to-success result. All 111 targeted tests passed.
+time-to-success result. The smaller persistent-critic milestone below is separate from these throughput results.
 
 **The complete perception learner is not yet SRAM-resident.** Its dense native rollout alone contains 1.5 GiB of
-images and 797.5 MiB of state/history. This branch implements selective fusion and a separate complete Cartpole
-megakernel; a persistent visual learner at smaller scale remains unimplemented. Neither CUDA graphs nor a
-persistent kernel imply zero device-memory traffic. The measurements and capacity analysis below make that
-remaining engineering work concrete.
+images and 797.5 MiB of state/history at 4,096 environments. At 64 environments, the branch now retains the native
+critic's parameters, gradients and Adam moments on chip for all 40 optimizer steps, and can separately compact
+repeated state histories losslessly. The trainable visual actor, observations and communication buffers still use
+global memory. A complete persistent visual learner remains unimplemented. Neither CUDA graphs nor a persistent
+kernel imply zero device-memory traffic. The measurements and capacity analysis below make that remaining
+engineering work concrete.
 
 ## What is implemented, and what each result would prove
 
@@ -29,7 +33,9 @@ remaining engineering work concrete.
 | `scripts/sram/verify_megakernel.py` | Numerical comparison with float64 closed-form physics, PyTorch autograd and RSL-RL optimizer references | Numerical agreement for the tested Cartpole configurations; not Kuka physics or visual learning |
 | `scripts/sram/projection/measure_update_cost_cnn.py` | Native Kuka actor/critic learner on synthetic observations; eager versus captured CUDA graphs, precision modes, memory and operation accounting | Learner throughput and launch-overhead opportunity for the native architecture; not rendered observations or policy quality |
 | `source/isaaclab_sram/isaaclab_sram/perception.py`, `spatial_softmax.py`, `ppo_kernels.py` | Native trainable CNN and critic with fused spatial softmax, PPO objective, GAE and Adam | Whether selective fusion improves the original learner while preserving its gradient computation |
-| `scripts/sram/train_kuka_perception.py` | Real Kuka camera rollouts and native PPO with `torch`, `sram` and `sram_graph` backends, checkpoint and integration checks | Actual camera/task execution and iteration throughput; longer evaluation is still needed for learning quality and time to success |
+| [Persistent critic](../../source/isaaclab_sram/isaaclab_sram/persistent_critic.py), [CUDA kernel](../../source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_critic.cu) and [PPO integration](../../source/isaaclab_sram/isaaclab_sram/persistent_perception.py) | All 40 native critic forward/backward, clipping and Adam steps in one cooperative launch | Critic parameter, gradient and optimizer residency; not residency of the visual actor or rollout |
+| [History codec](../../source/isaaclab_sram/isaaclab_sram/compact_history.py) and [rollout adapter](../../source/isaaclab_sram/isaaclab_sram/compact_storage.py) | Store processed state frames once and reconstruct native histories exactly | Reduced retained global observation storage, including real resets; not on-chip placement |
+| `scripts/sram/train_kuka_perception.py` | Real Kuka camera rollouts and native PPO with `torch`, `sram`, `sram_graph` and experimental `sram_critic` backends, checkpoint and integration checks | Actual camera/task execution and iteration throughput; longer evaluation is still needed for learning quality and time to success |
 
 The branch includes [real camera run summaries](data/perception/README.md),
 [isolated kernel measurements](data/kuka_kernel_microbenchmark.json) and the [device query](data/gpu.json). Historical
@@ -202,7 +208,7 @@ those operations is a stronger test than timing a small MLP over precomputed fro
 and convolutions should retain efficient tensor-core tiling; reducing launches at the expense of arithmetic
 throughput can lose overall.
 
-The implemented perception path preserves the native convolution/GEMM libraries and trainable CNN. It fuses
+The selective-fusion perception path preserves the native convolution/GEMM libraries and trainable CNN. It fuses
 spatial-softmax probabilities and coordinate expectations within each feature-map tile; backward recomputes
 probabilities, including gradients for the learned temperatures. Separate fused kernels cover GAE and the PPO
 objective/backward, and PyTorch's fused Adam applies optimizer updates. This is selective fusion across several
@@ -211,12 +217,83 @@ and persistent learner state still use global memory. The native camera recipe u
 float32 model state with TF32 library operations; unsupported mixed precision, recurrent/distributed training,
 RND, symmetry, adaptive scheduling and alternate objectives fail explicitly.
 
+### Implemented intermediate step: persistent critic and compact histories
+
+The experimental `sram_critic` backend supports the native 32-step, five-epoch,
+eight-minibatch recipe at up to 64 environments. It keeps the full privileged
+critic, `1595 → 512 → 256 → 128 → 1`, including ELU activations and biases. One
+cooperative launch performs all 40 critic optimizer steps; 981,505 parameters,
+their accumulated gradients and two Adam moments contain 14.98 MiB of logical
+state, sharded in block-owned shared memory across 188 blocks. Per-block padding
+and scratch increase the reserved allocation. Native parameters and optimizer state are imported
+at entry and exported at exit. Their global arrays are not accessed inside the
+optimizer loop.
+
+The actor and critic have disjoint parameters and separate native gradient
+clipping, so this fixed-rate recipe can execute their updates in separate phases
+using the same minibatch permutation. The native CNN, spatial-softmax temperatures,
+23-action policy remain trainable, and running normalizers still update. Complete-update tests
+against the fused `SramPerceptionPPO` baseline passed after resuming nonzero Adam
+moments and changing observations across two updates, comparing actor/critic
+parameters, normalizer buffers, optimizer state and losses. Separate tests compare
+that fused baseline against native RSL-RL PPO. These comparisons use IEEE float32; the
+custom critic uses a float64 sum of squared gradients for clipping, so arithmetic
+is numerically comparable rather than bitwise identical.
+
+All 16 perception and history-compaction tests passed for this implementation;
+the earlier 102-test Cartpole suite also passed. The new tests exercise the native
+shared-activation MLP container, resumed Adam state and exact history reconstruction
+across resets, observation noise, delays and consecutive rollouts.
+
+The [matching binary audit](data/persistent_critic/resource_audit.json) records
+254 registers per thread, 256 threads per block, 99,200 dynamic plus 144 static
+shared bytes per block (99,344 bytes total), and one resident block per SM. The
+compiler reports zero stack/spills; disassembly contains no local load/store
+instructions. The binary's 1,168-byte static shared section includes 1,024 bytes
+reserved by the CUDA runtime (`RESERVED_SHARED_MEMORY_PER_BLOCK`), accounting for
+the difference from the driver's 144-byte user-static allocation. The occupancy
+check uses the CUDA driver. This
+supports residency of the critic's shared working state for this exact binary.
+It does not establish zero DRAM traffic: critic inputs, activation tiles and
+cross-block communication remain global, including a 23.5 MiB adjoint mailbox
+and a 3.74 MiB diagnostic gradient output. This allocation nearly fills each SM's
+register/shared budget, leaving no room to simply append the visual actor and
+pixels to the same layout. Persistent-critic performance and memory-traffic
+measurements are separate from the published 4,096-environment comparison.
+
+With `--compact_history`, each processed state frame is retained once, together
+with the initial history prefix and reset boundaries. The adapter discovers the
+live observation manager's term order and reconstructs exact native minibatches;
+unsupported history evolution raises an error. Raw camera pixels are unchanged,
+and normalizer updates reconstruct full state groups to preserve reduction order.
+An actual three-iteration RGB64 run at 64 environments, with native reset
+initialization and the `sram` backend, recorded these retained allocations:
+
+| Allocation | Bytes | MiB |
+| --- | ---: | ---: |
+| Dense native observations before compaction | 38,232,064 | 36.46 |
+| Unchanged RGB image rollout | 25,165,824 | 24.00 |
+| Processed state frames and history prefixes | 2,939,904 | 2.80 |
+| Compact state storage including reset metadata | 2,966,528 | 2.83 |
+| All retained observations after compaction | 28,132,352 | 26.83 |
+| All rollout fields after compaction | 28,740,608 | 27.41 |
+
+The [compact-run summary](data/persistent_critic/compact_rgb64_native64_summary.json)
+records real camera observations, changed CNN weights, finite parameters,
+image-sensitive actions and a checkpoint matching an unmodified native actor.
+The frame and total-state rows overlap; they are not additive. Compaction saves
+26.4% of retained observation bytes in this run, but every listed allocation is
+global, and gathering/normalization create dense temporary state tensors. This
+is execution and storage evidence, not a convergence or performance result. The
+[package README](../../source/isaaclab_sram/README.md#kuka-allegro-perception-training)
+describes both options and their limits.
+
 For a subsequent complete persistent visual learner, 64 environments are a
 plausible capacity experiment. Losslessly reconstructing repeated state histories
 reduces estimated rollout plus float32 parameters, gradients and Adam moments to
 50.70 MiB, before scratch, padding and normalizers. At 128 environments this grows
 to 78.08 MiB, already above aggregate registers/shared memory. These are design
-calculations, not implemented storage reductions or proof of residency: each SM
+calculations, not proof of complete learner residency: each SM
 has its own address space and cross-SM state exchange still needs a mechanism.
 
 That experiment would retain the native CNN, actor/critic, 23 actions and all 40
@@ -226,7 +303,11 @@ explicit boundary. Start with cache-backed state and measure DRAM traffic before
 asserting SRAM residency. Warp-NN has convolution backward support but materializes
 global layer arrays; tiny-cuda-nn does not directly implement this architecture.
 Neither provides a ready-made complete visual PPO megakernel. The branch's
-working perception implementation is the selective fusion described above.
+working perception implementations are the selective fusion and separate
+persistent critic described above. The next step must combine actor/CNN backward,
+optimizer state, compact history reconstruction and activation recomputation
+within verified per-block budgets, rather than assuming aggregate capacity is
+freely available.
 
 ## How fast could it be?
 
@@ -321,11 +402,13 @@ baseline; they combine a precision change with scheduling changes.
 
 ## Reproduce and validate
 
-Validation on this GPU passed 102 Cartpole tests and nine perception tests, run
-one file per process. The perception tests compare outputs, gradients and complete
-native PPO updates, including all model parameters, normalizer buffers and Adam
-state. Graph tests resume nonzero optimizer state and change observations across
-updates to detect stale captured buffers. Multi-GPU execution was not tested.
+Validation on this GPU covers 102 Cartpole tests, isolated perception kernels,
+compact-history reconstruction and complete native PPO updates. The update tests
+compare all model parameters, normalizer buffers, Adam state and losses. Graph
+and persistent-critic tests resume nonzero optimizer state and change observations
+across updates to detect stale state. The compact-history tests compare against
+the actual observation manager and native rollout minibatch generator, including
+noise, delays and resets. Multi-GPU execution was not tested.
 Repository formatting/lint checks and a clean Sphinx HTML build with warnings
 treated as errors also passed. This GitHub-native report is excluded from Sphinx;
 its links and generated timing figure were checked separately.
@@ -361,6 +444,11 @@ OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
 OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
     --backend sram_graph --camera rgb64 --num_envs 4096 --iterations 200 --warmup_iterations 5 \
     --seed 42 --output logs/sram/kuka_rgb64_sram_graph
+
+# Smaller persistent-critic experiment with lossless history storage.
+OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
+    --backend sram_critic --camera rgb64 --num_envs 64 --iterations 30 --warmup_iterations 5 \
+    --compact_history --ieee_fp32 --seed 42 --output logs/sram/kuka_rgb64_persistent_critic
 ```
 
 Use `--camera depth64` for the corresponding depth preset. A small execution smoke test can use `--num_envs 64
@@ -372,7 +460,11 @@ Each real-environment run writes an RSL-RL checkpoint, `params/`, `run.json`, Te
 `perception_summary.json`. The summary records observation shapes/dtypes, rendered-image statistics, whether CNN
 weights changed, finite parameters, checkpoint action replay, image sensitivity and per-iteration timings. The
 `torch` backend is the reference learner; `sram` selects the fused learner operations;
-`sram_graph` captures each minibatch update. All retain global state. The graph path
+`sram_graph` captures each minibatch update; `sram_critic` retains only the critic's
+parameter/gradient/Adam working state across its optimizer steps. Use `--ieee_fp32`
+on every compared backend when testing the persistent critic. All retain global
+state. `--checkpoint PATH` resumes native model/optimizer state; simulator,
+curriculum and reset initialization start anew. The graph path
 omits unused optimization-time action samples, changing subsequent rollout RNG
 streams without changing the objective. Use `--iterations 30` to reproduce the
 initial short comparison above.

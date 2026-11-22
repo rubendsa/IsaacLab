@@ -13,8 +13,9 @@ Example::
 The full task, renderer, CNN, privileged critic and PPO settings come from Isaac
 Lab. The report separates iteration timings, finite-parameter checks, CNN weight
 changes and checkpoint replay. A short run establishes integration; it does not
-establish convergence. SRAM refers to fused kernel working sets; full rollouts
-and network/optimizer state remain in GPU global memory.
+establish convergence. The persistent-critic experiment retains critic working
+state during its optimizer phase; all paths still use global rollout buffers
+and global CNN activations. This is not a complete SRAM-resident visual learner.
 """
 
 from __future__ import annotations
@@ -36,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "source" / "isaacla
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--backend", choices=("torch", "sram", "sram_graph"), default="sram")
+    parser.add_argument("--backend", choices=("torch", "sram", "sram_graph", "sram_critic"), default="sram")
     parser.add_argument("--camera", choices=("rgb64", "depth64"), default="rgb64")
     parser.add_argument("--num_envs", type=int, default=4096)
     parser.add_argument("--iterations", type=int, default=100)
@@ -48,10 +49,29 @@ def parse_args():
     parser.add_argument("--output", type=Path, default=None)
     parser.add_argument("--checkpoint", type=Path, default=None, help="Resume a native RSL-RL checkpoint.")
     parser.add_argument("--smoke_reset_bank", type=int, default=None, help="Explicit smoke-only smaller reset bank.")
+    parser.add_argument(
+        "--compact_history",
+        action="store_true",
+        help="Store processed state frames once and reconstruct native histories.",
+    )
+    parser.add_argument(
+        "--ieee_fp32", action="store_true", help="Disable TF32 library operations for controlled comparisons."
+    )
     args = parser.parse_args()
     if args.num_envs < 1 or args.iterations < 1 or args.warmup_iterations < 0:
         parser.error("num_envs and iterations must be positive; warmup_iterations must be nonnegative")
+    if args.backend == "sram_critic" and args.num_envs > 64:
+        parser.error("sram_critic currently supports at most 64 environments")
     return args
+
+
+def observation_storage_tensors(observations):
+    """Count physical rollout allocations for either native or compact storage."""
+    return (
+        list(observations.storage_tensors())
+        if hasattr(observations, "storage_tensors")
+        else list(observations.values())
+    )
 
 
 def main():
@@ -91,6 +111,8 @@ def main():
         agent_cfg.algorithm.class_name = "isaaclab_sram.perception:SramPerceptionPPO"
     elif args.backend == "sram_graph":
         agent_cfg.algorithm.class_name = "isaaclab_sram.perception:SramGraphPerceptionPPO"
+    elif args.backend == "sram_critic":
+        agent_cfg.algorithm.class_name = "isaaclab_sram.persistent_perception:SramPersistentCriticPPO"
     if args.smoke_reset_bank is not None:
         env_cfg.events.conditional_reset.params["buffer_size_per_group"] = args.smoke_reset_bank
         env_cfg.events.conditional_reset.params["oversample_factor"] = 1.0
@@ -117,6 +139,12 @@ def main():
         "iterations": args.iterations,
         "warmup_iterations": args.warmup_iterations,
         "smoke_reset_bank": args.smoke_reset_bank,
+        "compact_history": args.compact_history,
+        "precision": (
+            "Float32 with TF32 disabled"
+            if args.ieee_fp32
+            else "Float32 with TF32 library operations; custom reductions and persistent critic use IEEE float32"
+        ),
         "resume_checkpoint": str(args.checkpoint.resolve()) if args.checkpoint is not None else None,
         "resume_checkpoint_sha256": (
             hashlib.sha256(args.checkpoint.read_bytes()).hexdigest() if args.checkpoint is not None else None
@@ -129,7 +157,10 @@ def main():
         "cuda": torch.version.cuda,
         "gpu": torch.cuda.get_device_name(args.device),
         "storage_scope": (
-            "SRAM tiles inside fused kernels; rollouts, model, optimizer and CNN activations use GPU global memory"
+            "Persistent critic parameters/gradients/Adam during its update; global rollout, actor, activation and "
+            "cross-block reduction buffers"
+            if args.backend == "sram_critic"
+            else "SRAM tiles inside fused kernels; rollouts, model, optimizer and CNN activations use GPU global memory"
         ),
         "timing_scope": (
             "Native runner collection/learning timers with CUDA synchronization before update returns; "
@@ -147,7 +178,12 @@ def main():
     ).strip()
     repo = Path(__file__).resolve().parents[2]
     report["git_status"] = subprocess.check_output(["git", "status", "--short"], cwd=repo, text=True).splitlines()
-    source_files = [Path(__file__), *(repo / "source/isaaclab_sram/isaaclab_sram").glob("*.py")]
+    package = repo / "source/isaaclab_sram/isaaclab_sram"
+    source_files = [
+        Path(__file__),
+        *package.glob("*.py"),
+        *(path for path in (package / "kernels").iterdir() if path.suffix in (".cu", ".cuh")),
+    ]
     report["source_sha256"] = {
         str(path.relative_to(repo)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(source_files)
     }
@@ -157,7 +193,10 @@ def main():
     t0 = time.perf_counter()
     with (
         scoped_torch_backend_flags(
-            cuda_matmul_allow_tf32=True, cudnn_allow_tf32=True, cudnn_deterministic=False, cudnn_benchmark=True
+            cuda_matmul_allow_tf32=not args.ieee_fp32,
+            cudnn_allow_tf32=not args.ieee_fp32,
+            cudnn_deterministic=False,
+            cudnn_benchmark=True,
         ),
         launch_simulation(env_cfg, {"visualizer": ["none"], "device": args.device, "livestream": 0}),
     ):
@@ -168,12 +207,29 @@ def main():
             if args.checkpoint is not None:
                 runner.load(str(args.checkpoint), map_location=args.device)
             alg = runner.alg
+            if args.compact_history:
+                from isaaclab_sram.compact_history import layouts_from_observation_manager
+                from isaaclab_sram.compact_storage import compact_rollout_observations
+
+                layouts = layouts_from_observation_manager(base.unwrapped.observation_manager)
+                compact = compact_rollout_observations(alg.storage, layouts)
+                report["compact_history_layouts"] = {
+                    name: {"order": layout.order, "terms": [vars(term) for term in layout.terms]}
+                    for name, layout in layouts.items()
+                }
+                report["rollout_dense_observation_bytes"] = compact.dense_bytes
+                report["compact_history_frames_bytes"] = sum(h.frame_bytes for h in compact.histories.values())
+                report["compact_history_storage_bytes"] = sum(h.storage_bytes for h in compact.histories.values())
+                report["compact_history_scope"] = (
+                    "Exact processed frames and reset boundaries in global storage; unchanged raw images. "
+                    "Minibatch gathering reconstructs histories; normalization reconstructs complete state groups."
+                )
             report["startup_s"] = time.perf_counter() - t0
             report["fused_spatial_softmax_modules"] = getattr(alg, "fused_spatial_softmax_modules", 0)
             obs = env.get_observations()
             report["observations"] = {k: {"shape": list(v.shape), "dtype": str(v.dtype)} for k, v in obs.items()}
             report["rollout_observation_bytes"] = sum(
-                v.numel() * v.element_size() for v in alg.storage.observations.values()
+                v.numel() * v.element_size() for v in observation_storage_tensors(alg.storage.observations)
             )
             image = obs["base_image"].float()
             report["initial_image"] = {"min": image.min().item(), "max": image.max().item(), "std": image.std().item()}
@@ -242,8 +298,10 @@ def main():
             report["train_wall_s"] = time.perf_counter() - train_start
             report["torch_peak_allocated_bytes"] = torch.cuda.max_memory_allocated(args.device)
             report["torch_peak_reserved_bytes"] = torch.cuda.max_memory_reserved(args.device)
+            if getattr(alg, "_persistent_critic", None) is not None:
+                report["persistent_critic_resources"] = alg._persistent_critic.resource_info
             storage_tensors = (
-                list(alg.storage.observations.values())
+                observation_storage_tensors(alg.storage.observations)
                 + [
                     getattr(alg.storage, name)
                     for name in ("actions", "rewards", "dones", "values", "returns", "advantages", "actions_log_prob")

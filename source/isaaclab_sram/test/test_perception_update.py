@@ -154,8 +154,16 @@ def test_native_camera_ppo_update_matches_stock_parameters_moments_and_normalize
 
 
 @pytest.mark.parametrize("device", test_devices(DeviceScope.CUDA))
-def test_graph_replay_matches_eager_after_resume_and_normalizer_changes(device):
-    """Capture preserves resumed Adam state and later replays consume current normalization."""
+@pytest.mark.parametrize(
+    "backend",
+    [
+        "isaaclab_sram.perception:SramGraphPerceptionPPO",
+        "isaaclab_sram.persistent_perception:SramPersistentCriticPPO",
+    ],
+    ids=["cuda_graph", "persistent_critic"],
+)
+def test_optimized_updates_match_eager_after_resume_and_normalizer_changes(device, backend):
+    """Optimized updates preserve resumed Adam and consume later normalization."""
     cfg = _config()
     cfg["algorithm"]["class_name"] = "isaaclab_sram.perception:SramPerceptionPPO"
     env = SimpleNamespace(num_envs=8, num_actions=23)
@@ -173,28 +181,28 @@ def test_graph_replay_matches_eager_after_resume_and_normalizer_changes(device):
             eager.compute_returns(last)
         eager.update()
 
-        cfg["algorithm"]["class_name"] = "isaaclab_sram.perception:SramGraphPerceptionPPO"
-        graphed = PPO.construct_algorithm(last, env, cfg, device)
-        graphed.load(copy.deepcopy(eager.save()), load_cfg=None, strict=True)
-        graphed.train_mode()
-        for parameter in graphed.actor.parameters():
-            state = graphed.optimizer.state[parameter]
+        cfg["algorithm"]["class_name"] = backend
+        optimized = PPO.construct_algorithm(last, env, cfg, device)
+        optimized.load(copy.deepcopy(eager.save()), load_cfg=None, strict=True)
+        optimized.train_mode()
+        for parameter in optimized.actor.parameters():
+            state = optimized.optimizer.state[parameter]
             assert state["step"].item() > 0
             assert all(value.device == parameter.device for value in state.values())
 
-        # The first update captures from nonzero Adam state; the second reuses
-        # that graph after the observed state distribution and normalizer change.
+        # The first update initializes compiled/captured state from nonzero Adam;
+        # the second consumes a changed observation distribution and normalizer.
         for iteration in range(2):
             torch.manual_seed(71 + iteration)
             last = _collect_rollout(eager, env.num_envs, device, offset=0.5 + iteration)
-            graphed.storage = copy.deepcopy(eager.storage)
+            optimized.storage = copy.deepcopy(eager.storage)
             with torch.inference_mode():
                 eager.compute_returns(last)
-                graphed.compute_returns(last)
+                optimized.compute_returns(last)
             torch.manual_seed(81 + iteration)
             expected_losses = eager.update()
             torch.manual_seed(81 + iteration)
-            actual_losses = graphed.update()
+            actual_losses = optimized.update()
             for name, expected in expected_losses.items():
                 assert actual_losses[name] == pytest.approx(expected, rel=3e-4, abs=2e-5), name
-            _assert_algorithm_states_close(eager, graphed)
+            _assert_algorithm_states_close(eager, optimized)

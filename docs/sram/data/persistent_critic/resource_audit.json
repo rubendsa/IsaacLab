@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-11-22T21:25:51.057677+00:00",
+  "audit_mode": "CPU-only inspection of existing cubin. No compile, CUDA context, launch, or runtime counters in this audit.",
+  "binary": {
+    "path": "/home/horde/.cache/isaaclab_sram/cubin/24d0bab79118c10310b39033.cubin",
+    "sha256": "2932244b0152197a24db4fb103ffbce0b7dc476fce901daf1317e4a93e80c841",
+    "cache_key": "24d0bab79118c10310b39033",
+    "kernel": "persistent_native_critic",
+    "architecture": "sm_120"
+  },
+  "configuration": {
+    "defines": {
+      "THREADS": 256,
+      "TILE": 64,
+      "N_CTAS": 188,
+      "SHARD_SIZE": 6200
+    },
+    "nvrtc_options": [
+      "--gpu-architecture=sm_120",
+      "-std=c++17",
+      "--device-as-default-execution-space",
+      "-DNVRTC=1",
+      "-I/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/nvidia/cu13/include",
+      "-DTHREADS=256",
+      "-DTILE=64",
+      "-DN_CTAS=188",
+      "-DSHARD_SIZE=6200",
+      "-Xptxas=-v"
+    ],
+    "nvrtc_version": [
+      13,
+      0
+    ],
+    "cache_key_verified": true,
+    "cache_key_algorithm": "sha256(repr((source, NVRTC options, sorted in-memory headers, nvrtcVersion tuple)))[:24]",
+    "device_library_sha256": "51c858cb577d17e72ff359c9f5ed12244bc549364ba03aacf9d2388b31691163"
+  },
+  "source_files": {
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_critic.cu": "ceaf46623ba4af24f7bbbad5360ddf1981009809d9d90458ef432ebdd5236a73",
+    "source/isaaclab_sram/isaaclab_sram/persistent_critic.py": "318b93e96444e70295b783bd5be03316ef181b2e38eb93bce328c171029463f1",
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49"
+  },
+  "tools": {
+    "cuobjdump": {
+      "path": "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "version_output": "cuobjdump: NVIDIA (R) fat binary listing tool\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Jan__3_19:19:51_PST_2025\nCuda compilation tools, release 12.8, V12.8.55\nBuild cuda_12.8.r12.8/compiler.35351055_0"
+    }
+  },
+  "commands": {
+    "resources": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-res-usage",
+      "/home/horde/.cache/isaaclab_sram/cubin/24d0bab79118c10310b39033.cubin"
+    ],
+    "sass": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-sass",
+      "/home/horde/.cache/isaaclab_sram/cubin/24d0bab79118c10310b39033.cubin"
+    ],
+    "elf": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-elf",
+      "/home/horde/.cache/isaaclab_sram/cubin/24d0bab79118c10310b39033.cubin"
+    ]
+  },
+  "resources": {
+    "raw_cuobjdump_output": "Resource usage:\n Common:\n  GLOBAL:0\n Function persistent_native_critic:\n  REG:254 STACK:0 SHARED:1168 LOCAL:0 CONSTANT[0]:1080 TEXTURE:0 SURFACE:0 SAMPLER:0",
+    "registers_per_thread": 254,
+    "stack_bytes_per_thread": 0,
+    "local_bytes_per_thread": 0,
+    "static_shared_bytes_cuobjdump_12_8": 1168,
+    "static_shared_bytes_driver_and_nvrtc_reported_in_prior_run": 144,
+    "dynamic_shared_bytes_per_block": 99200,
+    "resident_blocks_per_sm_prior_driver_query": 1,
+    "grid_blocks": 188,
+    "threads_per_block": 256,
+    "total_parameter_gradient_and_adam_bytes": 15704080,
+    "driver_reserved_shared_bytes_per_block": 1024,
+    "driver_reserved_shared_evidence": "/home/horde/sram-lab/scratch/profiling/reserved_shared.txt"
+  },
+  "findings": {
+    "sass_static_instruction_site_counts": {
+      "LDL": 0,
+      "STL": 0,
+      "LDS": 104,
+      "STS": 114,
+      "LDG": 809,
+      "STG": 32
+    },
+    "elf_all_frame_sizes_zero": true,
+    "elf_kernel_min_stack_zero": true,
+    "global_parameter_access_source_lines": {
+      "parameter_global_access": [
+        151,
+        267
+      ],
+      "first_moment_global_access": [
+        152,
+        268
+      ],
+      "second_moment_global_access": [
+        153,
+        269
+      ]
+    },
+    "optimizer_loop_source_lines": [
+      158,
+      259
+    ],
+    "classification": "No LDL/STL instruction sites, zero ELF frame/minimum-stack metadata, and prior compiler reports zero spill stores/loads. All weights, accumulated gradients and Adam moments are explicit shared-memory arrays throughout all epoch/minibatch loops. Global parameter and moment arrays are read only in entry import and written only in exit export, as verified in source. Inputs, activations, adjoint partials, correction scalars, statistics and grid barrier remain global."
+  },
+  "prior_compiler_log": "ptxas: 0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads; Used 254 registers, 1 barriers, 144 bytes smem. Compile time 326.554 ms.",
+  "limitations": [
+    "The source-boundary audit is not dynamic SASS pointer attribution. Static instruction sites are not execution counts or transferred bytes.",
+    "No local/shared/DRAM counters were collected in this CPU audit. Global mailboxes and boundary copies prevent a zero-DRAM claim.",
+    "CUDA12.8 cuobjdump reports1168 static shared bytes, equal to144 user bytes plus1024 bytes reserved by the CUDA driver. A separate runtime query of RESERVED_SHARED_MEMORY_PER_BLOCK confirmed1024 (scratch/profiling/reserved_shared.txt). The driver-reported user allocation and cooperative occupancy are authoritative; static plus dynamic user bytes are99344, and physical shared use including reservation is100368.",
+    "The254-register allocation consumes65024 registers per block before allocation rounding, and99200+144 shared bytes nearly exhausts SM shared memory; this binary does not reserve capacity for the actor or pixel history.",
+    "Claims apply only to this exact source/configuration/binary. Native architecture remains1595\u2192512\u2192256\u2192128\u21921; the full visual actor/simulator is outside scope."
+  ],
+  "torch_cuda_initialized_after_cpu_audit": false
+}
