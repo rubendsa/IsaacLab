@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-11-22T21:44:09.698215+00:00",
+  "audit_mode": "CPU-only inspection of existing cubin. No compile, CUDA context, launch, or runtime counters in this audit.",
+  "binary": {
+    "path": "/home/horde/.cache/isaaclab_sram/cubin/48897660c03cd06dd127ae50.cubin",
+    "sha256": "7f7584f7b3b0a947150decc3988f3bfa2dc90935e443343c81a9b618771b8113",
+    "cache_key": "48897660c03cd06dd127ae50",
+    "kernel": "persistent_native_actor",
+    "architecture": "sm_120"
+  },
+  "configuration": {
+    "defines": {
+      "THREADS": 256,
+      "TILE": 8,
+      "N_CTAS": 188,
+      "SHARD_SIZE": 4253
+    },
+    "nvrtc_options": [
+      "--gpu-architecture=sm_120",
+      "-std=c++17",
+      "--device-as-default-execution-space",
+      "-DNVRTC=1",
+      "-I/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/nvidia/cu13/include",
+      "-DTHREADS=256",
+      "-DTILE=8",
+      "-DN_CTAS=188",
+      "-DSHARD_SIZE=4253",
+      "-Xptxas=-v"
+    ],
+    "nvrtc_version": [
+      13,
+      0
+    ],
+    "cache_key_verified": true,
+    "cache_key_algorithm": "sha256(repr((source, NVRTC options, sorted in-memory headers, nvrtcVersion tuple)))[:24]",
+    "device_library_sha256": "51c858cb577d17e72ff359c9f5ed12244bc549364ba03aacf9d2388b31691163"
+  },
+  "source_files": {
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu": "8c567d3ab8c76d807ac6bdfbbbe1b025c613f9fbde7d658c8313e5877e0f5347",
+    "source/isaaclab_sram/isaaclab_sram/persistent_actor.py": "a82d0f2ff94678ca6b637dab7193d695450c6f1b4cf03b4b4e10c720ae92fac2",
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49"
+  },
+  "tools": {
+    "cuobjdump": {
+      "path": "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "version_output": "cuobjdump: NVIDIA (R) fat binary listing tool\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Jan__3_19:19:51_PST_2025\nCuda compilation tools, release 12.8, V12.8.55\nBuild cuda_12.8.r12.8/compiler.35351055_0"
+    }
+  },
+  "commands": {
+    "resources": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-res-usage",
+      "/home/horde/.cache/isaaclab_sram/cubin/48897660c03cd06dd127ae50.cubin"
+    ],
+    "sass": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-sass",
+      "/home/horde/.cache/isaaclab_sram/cubin/48897660c03cd06dd127ae50.cubin"
+    ],
+    "elf": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-elf",
+      "/home/horde/.cache/isaaclab_sram/cubin/48897660c03cd06dd127ae50.cubin"
+    ]
+  },
+  "resources": {
+    "raw_cuobjdump_output": "Resource usage:\n Common:\n  GLOBAL:0\n Function persistent_native_actor:\n  REG:254 STACK:0 SHARED:1232 LOCAL:0 CONSTANT[2]:376 CONSTANT[0]:1152 TEXTURE:0 SURFACE:0 SAMPLER:0",
+    "registers_per_thread_prior_driver_query": 254,
+    "local_bytes_per_thread_prior_driver_query": 0,
+    "static_shared_bytes_prior_driver_and_nvrtc": 208,
+    "driver_reserved_shared_bytes_per_block_prior_query": 1024,
+    "reserved_shared_query_evidence": "/home/horde/sram-lab/scratch/profiling/reserved_shared.txt",
+    "dynamic_shared_bytes_per_block": 68048,
+    "resident_blocks_per_sm_prior_driver_query": 1,
+    "grid_blocks": 188,
+    "threads_per_block": 256,
+    "parameter_count": 546206,
+    "total_parameter_gradient_and_adam_bytes": 8739296,
+    "adjoint_mailbox_bytes": 3686400,
+    "tile_samples": 8,
+    "prior_driver_resource_evidence": "/home/horde/sram-lab/scratch/actor-resident/parity_default_64.json"
+  },
+  "findings": {
+    "sass_static_instruction_site_counts": {
+      "LDL": 0,
+      "STL": 0,
+      "LDS": 147,
+      "STS": 54,
+      "LDG": 1227,
+      "STG": 54
+    },
+    "elf_frame_metadata_entry_count": 4,
+    "elf_all_frame_sizes_zero": true,
+    "elf_kernel_min_stack_zero": true,
+    "global_parameter_access_source_lines": {
+      "parameter_global_access": [
+        338,
+        444
+      ],
+      "first_moment_global_access": [
+        339,
+        445
+      ],
+      "second_moment_global_access": [
+        340,
+        446
+      ]
+    },
+    "optimizer_loop_source_lines": [
+      345,
+      436
+    ],
+    "classification": "No LDL/STL instruction sites and zero ELF frame/minimum-stack metadata. Prior compiler reports zero spill stores/loads and driver reports zero local bytes. Weights, accumulated gradients and Adam moments remain in explicit shared-memory shards across all epoch/minibatch loops. Source accesses global parameter and moment arrays only at entry import and exit export. Observations, activations, adjoint partials, Adam correction scalars, statistics, and the grid barrier remain global."
+  },
+  "prior_compiler_log": "ptxas info    : 0 bytes gmem\nptxas info    : Compiling entry function 'persistent_native_actor' for 'sm_120'\nptxas info    : Function properties for persistent_native_actor\nptxas         .     0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads\nptxas info    : Used 254 registers, used 1 barriers, 208 bytes smem\nptxas info    : Compile time = 667.092 ms",
+  "limitations": [
+    "Source-boundary inspection is not dynamic SASS pointer attribution. Static instruction sites are not execution counts or transferred bytes.",
+    "No memory traffic counters were collected in this CPU audit. Global inputs/mailboxes and boundary copies prevent a zero-DRAM claim.",
+    "CUDA12.8 ELF shared section includes 1024 bytes reserved by the driver, in addition to208 user static shared bytes. The existing driver occupancy query is authoritative; this audit does not infer occupancy from old-tool ELF metadata.",
+    "This254-register binary consumes65024 registers per block before allocation rounding. Actor and critic are separate cooperative phases and do not retain both models simultaneously on chip.",
+    "Claims apply only to the exact source/configuration/binary identified here. Native RGB64 actor architecture and trainable temperature/std are retained, but simulator/history/rollout storage is outside the resident-state claim."
+  ],
+  "torch_cuda_initialized_after_cpu_audit": false
+}

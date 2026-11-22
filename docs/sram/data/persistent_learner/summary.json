@@ -1,0 +1,186 @@
+{
+  "scope": "Tile 8 native RGB64 actor/CNN and critic in separate 40-step persistent launches; network W/grad/Adam working state shared, rollout/activations/mailboxes global, GAE and normalizers separate.",
+  "all_sram": false,
+  "zero_dram": false,
+  "convergence_claim": false,
+  "source": {
+    "base_commit": "df7392fb49d6441ae96e700d4d6b8eefd318ea5a",
+    "tested_actor_tree_clean": false,
+    "qualification": "Actor/full source was dirty; base commit alone does not reproduce it. Exact tested and archive-time hashes follow. The wrapper-only minimum-32-CTA safety guard explains their difference; the tested eight-sample tile and CUDA kernel are unchanged.",
+    "hashes": {
+      "scripts/sram/train_kuka_perception.py": {
+        "recorded_smoke_sha256": "d5bc9898ac8ecc330be246fb25bbb0d47ea2eb5e91d15b7be989a20ec49ad01e",
+        "archive_snapshot_sha256": "d5bc9898ac8ecc330be246fb25bbb0d47ea2eb5e91d15b7be989a20ec49ad01e",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu": {
+        "recorded_smoke_sha256": "8c567d3ab8c76d807ac6bdfbbbe1b025c613f9fbde7d658c8313e5877e0f5347",
+        "archive_snapshot_sha256": "8c567d3ab8c76d807ac6bdfbbbe1b025c613f9fbde7d658c8313e5877e0f5347",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/persistent_actor.py": {
+        "recorded_smoke_sha256": "a82d0f2ff94678ca6b637dab7193d695450c6f1b4cf03b4b4e10c720ae92fac2",
+        "archive_snapshot_sha256": "ed758a41d0e8e43fce65a1f73b6c5255f6352482563e177a7e1c2a928556e53d",
+        "snapshot_matches_smoke": false
+      },
+      "source/isaaclab_sram/isaaclab_sram/persistent_full_perception.py": {
+        "recorded_smoke_sha256": "e3abc05cae2b712b1bc64bacb1c96656fbfa748c30557c0ee3787186e239bc28",
+        "archive_snapshot_sha256": "e3abc05cae2b712b1bc64bacb1c96656fbfa748c30557c0ee3787186e239bc28",
+        "snapshot_matches_smoke": true
+      }
+    },
+    "actor_cubin_sha256": "7f7584f7b3b0a947150decc3988f3bfa2dc90935e443343c81a9b618771b8113",
+    "verified_wrapper_change": {
+      "path": "source/isaaclab_sram/isaaclab_sram/persistent_actor.py",
+      "tested_sha256": "a82d0f2ff94678ca6b637dab7193d695450c6f1b4cf03b4b4e10c720ae92fac2",
+      "archive_snapshot_sha256": "ed758a41d0e8e43fce65a1f73b6c5255f6352482563e177a7e1c2a928556e53d",
+      "change": "Added the minimum-32-resident-CTA ownership guard; removing precisely the guard and its comment reproduces the tested wrapper hash. TILE remains 8; the CUDA kernel hash is unchanged.",
+      "verified_by": "CPU source reconstruction and SHA256 comparison"
+    }
+  },
+  "correctness": {
+    "actor_default_and_fused_adam": {
+      "passed": true,
+      "reference": "Unmodified native trainable RGB64 actor and PyTorch Adam",
+      "num_envs": 64,
+      "batch": 2048,
+      "updates": 2,
+      "steps_per_update": 40,
+      "max_parameter_error": {
+        "default": 6.332993507385254e-08,
+        "fused": 7.543712854385376e-08
+      },
+      "artifacts": [
+        "actor_default64_parity.json",
+        "actor_fused64_parity.json"
+      ],
+      "timing_valid": false
+    },
+    "full_resumed_updates": {
+      "artifact": "full64_resumed_parity.json",
+      "passed": true,
+      "timing_valid": false,
+      "num_envs": 64,
+      "reference": "Production SramPerceptionPPO: native library CNN/MLP with separately verified fused PPO/spatial-softmax/fused-Adam operations; not a direct stock-PPO full-learner comparison",
+      "updates_after_eager_checkpoint": 2,
+      "optimizer_steps_per_network_per_update": 40,
+      "compact_actual_circular_buffer_histories": true,
+      "changed_observations_and_normalizers": true,
+      "exact_cpu_and_cuda_rng_states": true,
+      "maximum_model_or_optimizer_error": 6.984919309616089e-08
+    },
+    "production_update_tests": {
+      "passed": 4,
+      "artifact": "production_update_tests.txt",
+      "warnings": "35 PyTorch deprecation warnings; log has no embedded source hashes"
+    },
+    "real_native_rgb64": {
+      "artifact": "full64_camera_smoke_TIMING_EXCLUDED.json",
+      "passed": true,
+      "timing_valid": false,
+      "num_envs": 64,
+      "iterations": 3,
+      "native_reset_bank": true,
+      "precision": "Float32 with TF32 disabled",
+      "cnn_changed": true,
+      "all_parameters_finite": true,
+      "checkpoint_native_actor_matches": true,
+      "checkpoint_action_max_abs_error": 7.450580596923828e-08,
+      "image_action_sensitivity_max_abs": 0.002139568328857422,
+      "maximum_logged_training_success_fraction": 0.0
+    }
+  },
+  "actor_residency_evidence": {
+    "actor_artifact": "actor_resource_audit.json",
+    "actor_registers_per_thread": 254,
+    "actor_dynamic_shared_bytes_per_block": 68048,
+    "actor_user_static_shared_bytes_per_block": 208,
+    "runtime_reserved_shared_bytes_per_block": 1024,
+    "actor_shared_total_before_rounding_bytes_per_block": 69280,
+    "actor_parameter_gradient_and_adam_bytes": 8739296,
+    "actor_global_adjoint_mailbox_bytes": 3686400,
+    "zero_actor_local_load_store_instruction_sites": true,
+    "zero_actor_compiler_spills_and_stack": true,
+    "qualification": "Static binary/source inspection, not measured DRAM avoidance. Actor and critic launch separately; each exports its state to global tensors at its boundary."
+  },
+  "known_clean_critic_timings": {
+    "default": {
+      "artifact": "critic64_default_benchmark.json",
+      "timing_valid": true,
+      "clean_commit": "df7392fb49d6441ae96e700d4d6b8eefd318ea5a",
+      "started_utc": "2026-11-22T21:30:11.648038+00:00",
+      "finished_utc": "2026-11-22T21:30:15.898979+00:00",
+      "repeats": 20,
+      "warmup_updates": 2,
+      "cuda_event_ms": {
+        "torch": {
+          "median_ms": 92.32287979125977,
+          "p10_ms": 90.44329147338867,
+          "p90_ms": 96.25876846313477
+        },
+        "persistent": {
+          "median_ms": 34.47873497009277,
+          "p10_ms": 34.45353202819824,
+          "p90_ms": 34.51189842224121
+        }
+      },
+      "cuda_event_median_speedup": 2.6776759608884033,
+      "parity_passed": true
+    },
+    "fused": {
+      "artifact": "critic64_fused_benchmark.json",
+      "timing_valid": true,
+      "clean_commit": "df7392fb49d6441ae96e700d4d6b8eefd318ea5a",
+      "started_utc": "2026-11-22T21:30:30.603962+00:00",
+      "finished_utc": "2026-11-22T21:30:34.746538+00:00",
+      "repeats": 20,
+      "warmup_updates": 2,
+      "cuda_event_ms": {
+        "torch": {
+          "median_ms": 86.9839859008789,
+          "p10_ms": 85.52951507568359,
+          "p90_ms": 89.68543930053711
+        },
+        "persistent": {
+          "median_ms": 34.55824089050293,
+          "p10_ms": 34.5335090637207,
+          "p90_ms": 34.59165992736816
+        }
+      },
+      "cuda_event_median_speedup": 2.517025857203955,
+      "parity_passed": true
+    },
+    "scope": "Standalone fixed synthetic native critic, batch 2048 / minibatch 256, 40 steps, IEEE fp32. Wrapper pack/flush included; restore/compile/warmup excluded. Eager native baseline can include host launch gaps. No full visual learner or time-to-success claim."
+  },
+  "warm_critic_counters": {
+    "artifact": "critic_warm_ncu_raw.csv",
+    "memory_counter_evidence_valid": true,
+    "instrumented_timing_valid_for_performance": false,
+    "started_utc": "2026-11-22T21:31:02.672224+00:00",
+    "finished_utc": "2026-11-22T21:31:04.942090+00:00",
+    "clean_commit": "df7392fb49d6441ae96e700d4d6b8eefd318ea5a",
+    "replay_mode": "kernel",
+    "replay_passes": 3,
+    "cache_control": "none",
+    "clock_control": "none",
+    "dram_read_bytes": 31195136,
+    "dram_write_bytes": 5376768,
+    "l2_sector_hit_rate_percent": 99.940035,
+    "scope": "Only the full 40-step persistent critic kernel, including entry import and exit export; excludes outer wrapper packing/flushing and other kernels.",
+    "qualifications": [
+      "Three kernel-replay passes with uncontrolled warm cache state and unchanged clocks; profiler warns about possible inconsistency.",
+      "Counters cannot attribute traffic to entry/exit versus internal global mailboxes.",
+      "Observed high L2 hit rate and nonzero DRAM are not guaranteed SRAM residency or a zero-DRAM claim.",
+      "A paired quiet warm/cold comparison is not available."
+    ]
+  },
+  "exclusions": [
+    "Real full64 camera timing excluded: unrelated GPU process 1044001 recorded at start. It proves execution only.",
+    "Cold profiler capture and earlier clean64 stock camera timings overlap external pytest 963580 from 21:31:18UTC; exclude both. Clean critic benchmarks and warm capture ended before that process started."
+  ],
+  "manifest": {
+    "path": "validation.json",
+    "sha256": "7e6eb7a3e2882ed6936dd2e6cb6038b47ecabdb08e78be61bfaccad86c538961",
+    "contents": "Exact byte hashes, original locations and full provenance for every archived evidence file"
+  }
+}

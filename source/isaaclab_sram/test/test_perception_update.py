@@ -159,8 +159,9 @@ def test_native_camera_ppo_update_matches_stock_parameters_moments_and_normalize
     [
         "isaaclab_sram.perception:SramGraphPerceptionPPO",
         "isaaclab_sram.persistent_perception:SramPersistentCriticPPO",
+        "isaaclab_sram.persistent_full_perception:SramPersistentFullPerceptionPPO",
     ],
-    ids=["cuda_graph", "persistent_critic"],
+    ids=["cuda_graph", "persistent_critic", "persistent_full"],
 )
 def test_optimized_updates_match_eager_after_resume_and_normalizer_changes(device, backend):
     """Optimized updates preserve resumed Adam and consume later normalization."""
@@ -201,8 +202,15 @@ def test_optimized_updates_match_eager_after_resume_and_normalizer_changes(devic
                 optimized.compute_returns(last)
             torch.manual_seed(81 + iteration)
             expected_losses = eager.update()
+            expected_cpu_rng = torch.random.get_rng_state()
+            expected_cuda_rng = torch.cuda.get_rng_state(device)
             torch.manual_seed(81 + iteration)
             actual_losses = optimized.update()
+            if backend != "isaaclab_sram.perception:SramGraphPerceptionPPO":
+                # Persistent phases consume the same discarded action samples
+                # as native PPO. Graph replay deliberately omits those draws.
+                assert torch.equal(torch.random.get_rng_state(), expected_cpu_rng)
+                assert torch.equal(torch.cuda.get_rng_state(device), expected_cuda_rng)
             for name, expected in expected_losses.items():
                 assert actual_losses[name] == pytest.approx(expected, rel=3e-4, abs=2e-5), name
             _assert_algorithm_states_close(eager, optimized)

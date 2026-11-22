@@ -1,0 +1,442 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-22T21:49:00.198102+00:00",
+  "milestone": "Native RGB64 two-phase persistent actor/CNN and critic updates at 64 environments; tile 8 actor evidence",
+  "all_sram_claim": false,
+  "zero_dram_claim": false,
+  "convergence_claim": false,
+  "scope": "Each network keeps its own parameters, accumulated gradients and Adam moments in shared memory across 40 steps in a separate launch. Rollout, activation and communication buffers remain global; GAE, normalization, history reconstruction, packing/copyback and RNG draws remain separate operations.",
+  "archive_snapshot": {
+    "base_commit": "df7392fb49d6441ae96e700d4d6b8eefd318ea5a",
+    "tree_clean": false,
+    "git_status_before_archive": [
+      " M docs/sram/SRAM_TRAINING.md",
+      " M scripts/sram/train_kuka_perception.py",
+      " M source/isaaclab_sram/README.md",
+      " M source/isaaclab_sram/test/test_perception_update.py",
+      "?? source/isaaclab_sram/changelog.d/persistent-actor.added.rst",
+      "?? source/isaaclab_sram/changelog.d/persistent-actor.minor",
+      "?? source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu",
+      "?? source/isaaclab_sram/isaaclab_sram/persistent_actor.py",
+      "?? source/isaaclab_sram/isaaclab_sram/persistent_full_perception.py"
+    ],
+    "source_hashes": {
+      "scripts/sram/train_kuka_perception.py": {
+        "recorded_smoke_sha256": "d5bc9898ac8ecc330be246fb25bbb0d47ea2eb5e91d15b7be989a20ec49ad01e",
+        "archive_snapshot_sha256": "d5bc9898ac8ecc330be246fb25bbb0d47ea2eb5e91d15b7be989a20ec49ad01e",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/__init__.py": {
+        "recorded_smoke_sha256": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
+        "archive_snapshot_sha256": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/cartpole.py": {
+        "recorded_smoke_sha256": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
+        "archive_snapshot_sha256": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/compact_history.py": {
+        "recorded_smoke_sha256": "98caa9d2cbdaa8d9ae2db3ee50277a7eb8f16139881f7518d4fe43f0dd891625",
+        "archive_snapshot_sha256": "98caa9d2cbdaa8d9ae2db3ee50277a7eb8f16139881f7518d4fe43f0dd891625",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/compact_storage.py": {
+        "recorded_smoke_sha256": "8d8a902300e18fb366e3f93e1445b5b15027eebf9adec41aea98ba349a597c46",
+        "archive_snapshot_sha256": "8d8a902300e18fb366e3f93e1445b5b15027eebf9adec41aea98ba349a597c46",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": {
+        "recorded_smoke_sha256": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+        "archive_snapshot_sha256": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/export.py": {
+        "recorded_smoke_sha256": "8a3a3b69c2fe3b2fd244fafaa3d8e0561ceb23d59616bb7eaf9785cae88c05f0",
+        "archive_snapshot_sha256": "8a3a3b69c2fe3b2fd244fafaa3d8e0561ceb23d59616bb7eaf9785cae88c05f0",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/kernels/cartpole_physics.cuh": {
+        "recorded_smoke_sha256": "9e703f62392fa8adcd067a32cd55b417bcf230d4b8028468bbb4b276f8819da9",
+        "archive_snapshot_sha256": "9e703f62392fa8adcd067a32cd55b417bcf230d4b8028468bbb4b276f8819da9",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/kernels/ppo_cartpole.cu": {
+        "recorded_smoke_sha256": "50f06ad9493462237cfbf854b009ec1189128005e50c17040c9a2e44436eaf16",
+        "archive_snapshot_sha256": "50f06ad9493462237cfbf854b009ec1189128005e50c17040c9a2e44436eaf16",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu": {
+        "recorded_smoke_sha256": "8c567d3ab8c76d807ac6bdfbbbe1b025c613f9fbde7d658c8313e5877e0f5347",
+        "archive_snapshot_sha256": "8c567d3ab8c76d807ac6bdfbbbe1b025c613f9fbde7d658c8313e5877e0f5347",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_critic.cu": {
+        "recorded_smoke_sha256": "ceaf46623ba4af24f7bbbad5360ddf1981009809d9d90458ef432ebdd5236a73",
+        "archive_snapshot_sha256": "ceaf46623ba4af24f7bbbad5360ddf1981009809d9d90458ef432ebdd5236a73",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/kernels/sram_device.cuh": {
+        "recorded_smoke_sha256": "e754c81eb12bf6304fe10e2d94bbc45dc3a98e51bac6bbd7fc7a0aee4c007948",
+        "archive_snapshot_sha256": "e754c81eb12bf6304fe10e2d94bbc45dc3a98e51bac6bbd7fc7a0aee4c007948",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/megakernel.py": {
+        "recorded_smoke_sha256": "2eeccbdd42d505034bb297a6c4010137644d8e9922476dbaa9d83931fdd4e8c2",
+        "archive_snapshot_sha256": "2eeccbdd42d505034bb297a6c4010137644d8e9922476dbaa9d83931fdd4e8c2",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/perception.py": {
+        "recorded_smoke_sha256": "306c980b7b03f7db3a04ec4b0c4f82998106c7292bf994d0a47dcf6021e9ddf2",
+        "archive_snapshot_sha256": "306c980b7b03f7db3a04ec4b0c4f82998106c7292bf994d0a47dcf6021e9ddf2",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/persistent_actor.py": {
+        "recorded_smoke_sha256": "a82d0f2ff94678ca6b637dab7193d695450c6f1b4cf03b4b4e10c720ae92fac2",
+        "archive_snapshot_sha256": "ed758a41d0e8e43fce65a1f73b6c5255f6352482563e177a7e1c2a928556e53d",
+        "snapshot_matches_smoke": false
+      },
+      "source/isaaclab_sram/isaaclab_sram/persistent_critic.py": {
+        "recorded_smoke_sha256": "318b93e96444e70295b783bd5be03316ef181b2e38eb93bce328c171029463f1",
+        "archive_snapshot_sha256": "318b93e96444e70295b783bd5be03316ef181b2e38eb93bce328c171029463f1",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/persistent_full_perception.py": {
+        "recorded_smoke_sha256": "e3abc05cae2b712b1bc64bacb1c96656fbfa748c30557c0ee3787186e239bc28",
+        "archive_snapshot_sha256": "e3abc05cae2b712b1bc64bacb1c96656fbfa748c30557c0ee3787186e239bc28",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/persistent_perception.py": {
+        "recorded_smoke_sha256": "28f87b4d210d846e4399442fe318e846d63ddab1d2273790cec7012cc44889d7",
+        "archive_snapshot_sha256": "28f87b4d210d846e4399442fe318e846d63ddab1d2273790cec7012cc44889d7",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/ppo_kernels.py": {
+        "recorded_smoke_sha256": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+        "archive_snapshot_sha256": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/rl_backend.py": {
+        "recorded_smoke_sha256": "25eea34640901f31ed63097173e2cb6f1b49f7dedb40a0b1ef07e5430fb5e79d",
+        "archive_snapshot_sha256": "25eea34640901f31ed63097173e2cb6f1b49f7dedb40a0b1ef07e5430fb5e79d",
+        "snapshot_matches_smoke": true
+      },
+      "source/isaaclab_sram/isaaclab_sram/spatial_softmax.py": {
+        "recorded_smoke_sha256": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b",
+        "archive_snapshot_sha256": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b",
+        "snapshot_matches_smoke": true
+      }
+    },
+    "qualification": "The actor/full implementation is uncommitted at this snapshot. The base commit does not identify its tested source; use the exact source and cubin hashes in each record. The wrapper-only minimum-32-CTA safety guard explains the recorded hash difference; TILE remains 8 and the CUDA kernel is unchanged.",
+    "verified_wrapper_change": {
+      "path": "source/isaaclab_sram/isaaclab_sram/persistent_actor.py",
+      "tested_sha256": "a82d0f2ff94678ca6b637dab7193d695450c6f1b4cf03b4b4e10c720ae92fac2",
+      "archive_snapshot_sha256": "ed758a41d0e8e43fce65a1f73b6c5255f6352482563e177a7e1c2a928556e53d",
+      "change": "Added the minimum-32-resident-CTA ownership guard; removing precisely the guard and its comment reproduces the tested wrapper hash. TILE remains 8; the CUDA kernel hash is unchanged.",
+      "verified_by": "CPU source reconstruction and SHA256 comparison"
+    }
+  },
+  "correctness": {
+    "actor_default_adam": {
+      "artifact": "actor_default64_parity.json",
+      "passed": true,
+      "timing_valid": false,
+      "reference": "Unmodified native trainable RGB64 actor and PyTorch Adam",
+      "num_envs": 64,
+      "batch_size": 2048,
+      "updates": 2,
+      "optimizer_steps_per_update": 40,
+      "resume": "Two 40-step updates from nonzero Adam state; detailed per-round tensors retained in artifact",
+      "maximum_errors": {
+        "parameter_max_abs": 6.332993507385254e-08,
+        "gradient_max_abs": 3.650784492492676e-07,
+        "exp_avg_max_abs": 5.8673322200775146e-08,
+        "exp_avg_sq_max_abs": 2.3283064365386963e-10
+      }
+    },
+    "actor_fused_adam": {
+      "artifact": "actor_fused64_parity.json",
+      "passed": true,
+      "timing_valid": false,
+      "reference": "Unmodified native trainable RGB64 actor and PyTorch Adam",
+      "num_envs": 64,
+      "batch_size": 2048,
+      "updates": 2,
+      "optimizer_steps_per_update": 40,
+      "resume": "Two 40-step updates from nonzero Adam state; detailed per-round tensors retained in artifact",
+      "maximum_errors": {
+        "parameter_max_abs": 7.543712854385376e-08,
+        "gradient_max_abs": 3.0547380447387695e-07,
+        "exp_avg_max_abs": 6.612390279769897e-08,
+        "exp_avg_sq_max_abs": 2.3283064365386963e-10
+      }
+    },
+    "full_resumed_updates": {
+      "artifact": "full64_resumed_parity.json",
+      "passed": true,
+      "timing_valid": false,
+      "num_envs": 64,
+      "reference": "Production SramPerceptionPPO: native library CNN/MLP with separately verified fused PPO/spatial-softmax/fused-Adam operations; not a direct stock-PPO full-learner comparison",
+      "updates_after_eager_checkpoint": 2,
+      "optimizer_steps_per_network_per_update": 40,
+      "compact_actual_circular_buffer_histories": true,
+      "changed_observations_and_normalizers": true,
+      "exact_cpu_and_cuda_rng_states": true,
+      "maximum_model_or_optimizer_error": 6.984919309616089e-08,
+      "checks": "Every actor/critic parameter, normalizer buffer, optimizer tensor/step and loss; production checker uses explicit assert_close gates before writing the artifact"
+    },
+    "production_update_tests": {
+      "artifact": "production_update_tests.txt",
+      "passed": 4,
+      "warnings": 35,
+      "warning_scope": "PyTorch torch.jit.script deprecation",
+      "timing_valid": false,
+      "source_provenance": "Test log does not embed source hashes. Snapshot hashes above describe archive-time source; exact smoke and binary records have their own captured hashes."
+    },
+    "real_rgb64_smoke": {
+      "artifact": "full64_camera_smoke_TIMING_EXCLUDED.json",
+      "passed": true,
+      "timing_valid": false,
+      "task": "Isaac-Lift-KukaAllegro-Camera",
+      "backend": "sram_full",
+      "num_envs": 64,
+      "iterations": 3,
+      "seed": 42,
+      "native_reset_bank": true,
+      "compact_history": true,
+      "precision": "Float32 with TF32 disabled",
+      "started_utc": "2026-11-22T21:43:25.385163+00:00",
+      "finished_utc": "2026-11-22T21:43:51.098746+00:00",
+      "captured_tree_clean": false,
+      "cnn_changed": true,
+      "all_parameters_finite": true,
+      "checkpoint_native_actor_matches": true,
+      "checkpoint_action_max_abs_error": 7.450580596923828e-08,
+      "image_action_sensitivity_max_abs": 0.002139568328857422,
+      "initial_image": {
+        "min": 0.0,
+        "max": 238.0,
+        "std": 72.79090118408203
+      },
+      "maximum_logged_training_success_fraction": 0.0,
+      "rollout_dense_observation_bytes": 38232064,
+      "rollout_observation_bytes": 28132352,
+      "rollout_storage_bytes": 28740608,
+      "convergence_claim": false,
+      "held_out_evaluation": false
+    }
+  },
+  "critic_standalone_timings": {
+    "default": {
+      "artifact": "critic64_default_benchmark.json",
+      "timing_valid": true,
+      "clean_commit": "df7392fb49d6441ae96e700d4d6b8eefd318ea5a",
+      "started_utc": "2026-11-22T21:30:11.648038+00:00",
+      "finished_utc": "2026-11-22T21:30:15.898979+00:00",
+      "repeats": 20,
+      "warmup_updates": 2,
+      "batch_size": 2048,
+      "minibatch_size": 256,
+      "optimizer_steps": 40,
+      "scope": "Standalone native critic on a fixed normalized synthetic rollout; no actor, GAE, simulation or images",
+      "timing_scope": "Complete 40-step update including wrapper pack/flush; restoration and compilation warmup excluded",
+      "precision": "IEEE float32, TF32 disabled, deterministic algorithms enabled",
+      "cuda_event_ms": {
+        "torch": {
+          "median_ms": 92.32287979125977,
+          "p10_ms": 90.44329147338867,
+          "p90_ms": 96.25876846313477
+        },
+        "persistent": {
+          "median_ms": 34.47873497009277,
+          "p10_ms": 34.45353202819824,
+          "p90_ms": 34.51189842224121
+        }
+      },
+      "host_wall_ms": {
+        "torch": {
+          "median_ms": 92.37772302003577,
+          "p10_ms": 90.4834269429557,
+          "p90_ms": 96.30320045398548
+        },
+        "persistent": {
+          "median_ms": 34.51863501686603,
+          "p10_ms": 34.48607835453004,
+          "p90_ms": 34.546064282767475
+        }
+      },
+      "cuda_event_median_speedup": 2.6776759608884033,
+      "parity_passed": true,
+      "qualifications": [
+        "Both runs finished before the identified external pytest started.",
+        "Fixed synthetic inputs and restored nonzero Adam state; no actor, image rendering, GAE or simulation.",
+        "Eager native baseline; CUDA-event spans can include host launch gaps. No graph-native critic control.",
+        "Twenty repeats in one process per mode; not independent training seeds or confidence intervals."
+      ]
+    },
+    "fused": {
+      "artifact": "critic64_fused_benchmark.json",
+      "timing_valid": true,
+      "clean_commit": "df7392fb49d6441ae96e700d4d6b8eefd318ea5a",
+      "started_utc": "2026-11-22T21:30:30.603962+00:00",
+      "finished_utc": "2026-11-22T21:30:34.746538+00:00",
+      "repeats": 20,
+      "warmup_updates": 2,
+      "batch_size": 2048,
+      "minibatch_size": 256,
+      "optimizer_steps": 40,
+      "scope": "Standalone native critic on a fixed normalized synthetic rollout; no actor, GAE, simulation or images",
+      "timing_scope": "Complete 40-step update including wrapper pack/flush; restoration and compilation warmup excluded",
+      "precision": "IEEE float32, TF32 disabled, deterministic algorithms enabled",
+      "cuda_event_ms": {
+        "torch": {
+          "median_ms": 86.9839859008789,
+          "p10_ms": 85.52951507568359,
+          "p90_ms": 89.68543930053711
+        },
+        "persistent": {
+          "median_ms": 34.55824089050293,
+          "p10_ms": 34.5335090637207,
+          "p90_ms": 34.59165992736816
+        }
+      },
+      "host_wall_ms": {
+        "torch": {
+          "median_ms": 87.02317799907178,
+          "p10_ms": 85.59582302113995,
+          "p90_ms": 89.72631881479174
+        },
+        "persistent": {
+          "median_ms": 34.59168248809874,
+          "p10_ms": 34.56711396574974,
+          "p90_ms": 34.628423454705626
+        }
+      },
+      "cuda_event_median_speedup": 2.517025857203955,
+      "parity_passed": true,
+      "qualifications": [
+        "Both runs finished before the identified external pytest started.",
+        "Fixed synthetic inputs and restored nonzero Adam state; no actor, image rendering, GAE or simulation.",
+        "Eager native baseline; CUDA-event spans can include host launch gaps. No graph-native critic control.",
+        "Twenty repeats in one process per mode; not independent training seeds or confidence intervals."
+      ]
+    }
+  },
+  "warm_critic_memory_profile": {
+    "artifact": "critic_warm_ncu_raw.csv",
+    "instrumented_execution_artifact": "critic_warm_ncu_instrumented_TIMING_EXCLUDED.json",
+    "memory_counter_evidence_valid": true,
+    "instrumented_timing_valid_for_performance": false,
+    "started_utc": "2026-11-22T21:31:02.672224+00:00",
+    "finished_utc": "2026-11-22T21:31:04.942090+00:00",
+    "clean_commit": "df7392fb49d6441ae96e700d4d6b8eefd318ea5a",
+    "timing_provenance": "Finished before identified external pytest 963580 started at 2026-11-22T21:31:18UTC; this bounds that specific contention concern, not all possible background activity.",
+    "tool": "Nsight Compute 2025.3.1.0 build 36398880",
+    "official_archive_version": "2025.3.1.4",
+    "kernel": "persistent_native_critic",
+    "replay_mode": "kernel",
+    "replay_passes": 3,
+    "cache_control": "none",
+    "clock_control": "none",
+    "dram_read_bytes": 31195136,
+    "dram_write_bytes": 5376768,
+    "l2_sector_hit_rate_percent": 99.940035,
+    "l2_sectors": 2981817879,
+    "original_report_sha256": "ba9925988bd654e1dea6d998c95324cc5ad4a273a7d99eb965ee95e4799bcd58",
+    "scope": "Only the full 40-step persistent critic kernel, including entry import and exit export; excludes outer wrapper packing/flushing and other kernels.",
+    "qualifications": [
+      "Three kernel-replay passes with uncontrolled warm cache state and unchanged clocks; profiler warns about possible inconsistency.",
+      "Counters cannot attribute traffic to entry/exit versus internal global mailboxes.",
+      "Observed high L2 hit rate and nonzero DRAM are not guaranteed SRAM residency or a zero-DRAM claim.",
+      "A paired quiet warm/cold comparison is not available."
+    ]
+  },
+  "excluded_evidence": [
+    {
+      "path": "../persistent_learner/full64_camera_smoke_TIMING_EXCLUDED.json",
+      "timing_valid": false,
+      "reason": "An unrelated IsaacLab-megakernel GPU Python process 1044001 is recorded at camera-run start; this three-iteration smoke establishes execution/integration only."
+    },
+    {
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/clean64_torch_100/perception_summary.json",
+      "timing_valid": false,
+      "reason": "Overlapped external GPU pytest 963580 starting 2026-11-22T21:31:18UTC; excluded from performance comparison."
+    },
+    {
+      "original_path": "/home/horde/sram-lab/scratch/profiling/persistent_critic_cold.ncu-rep",
+      "memory_counters_valid_for_quiet_comparison": false,
+      "reason": "Cold capture 21:31:28.696\u201321:31:30.057UTC overlapped that external pytest; needs quiet rerun."
+    }
+  ],
+  "files": {
+    "actor_default64_parity.json": {
+      "sha256": "1699f68f434f68ab0a091527aa969d0f0ea5a90b688c50c1161082d85d68021c",
+      "bytes": 11964,
+      "original_path": "/home/horde/sram-lab/scratch/actor-resident/parity_default_64.json"
+    },
+    "actor_fused64_parity.json": {
+      "sha256": "b872f26d2c050340a8adff525c60c74ca7678934e781cf42361c359c5c3fb85a",
+      "bytes": 11606,
+      "original_path": "/home/horde/sram-lab/scratch/actor-resident/parity_fused_64.json"
+    },
+    "full64_resumed_parity.json": {
+      "sha256": "e5be57e0dda624aa1ff1c495d1f5253245bcd19e807899d3411667b7e99138f4",
+      "bytes": 13521,
+      "original_path": "/home/horde/sram-lab/scratch/actor-resident/full_64.json"
+    },
+    "full64_camera_smoke_TIMING_EXCLUDED.json": {
+      "sha256": "4466a4a589b443bb97323f012f090d2210f279b863078d0183b6878fb31477ab",
+      "bytes": 13676,
+      "original_path": "/home/horde/sram-lab/scratch/actor-resident/real_full64_tile8_3/perception_summary.json"
+    },
+    "actor_resource_audit.json": {
+      "sha256": "4ac3c5925bed7f54c08b62506a3ab298d97d88347a0fadb3d63139515634c310",
+      "bytes": 6338,
+      "original_path": "/home/horde/sram-lab/scratch/persistent_actor_resource_audit.json"
+    },
+    "critic64_default_benchmark.json": {
+      "sha256": "aeaa80584935fc058e24c2fcf71b2eeced9997b7779215fa70e5af06d0a9f040",
+      "bytes": 31625,
+      "original_path": "/home/horde/sram-lab/scratch/persistent_critic_64_clean_default.json"
+    },
+    "critic64_fused_benchmark.json": {
+      "sha256": "fa6bfd877a7cf4c4cf4ea983b34be313074aa39a531744ea6adccf9497dd7301",
+      "bytes": 31608,
+      "original_path": "/home/horde/sram-lab/scratch/persistent_critic_64_clean_fused.json"
+    },
+    "critic_warm_ncu_raw.csv": {
+      "sha256": "544b6b1b1c05ff5638880e8a039f7dbf4681accdf02fd8e8d05a5a7b0df7e00c",
+      "bytes": 13677,
+      "original_path": "/home/horde/sram-lab/scratch/profiling/persistent_critic_warm_base.csv"
+    },
+    "critic_warm_ncu_instrumented_TIMING_EXCLUDED.json": {
+      "sha256": "2460aee23fb70aa6e01f73e36009c5fe96fd324cc25e92a99996bdae085f4c34",
+      "bytes": 9637,
+      "original_path": "/home/horde/sram-lab/scratch/profiling/persistent_critic_warm_instrumented.json"
+    },
+    "production_update_tests.txt": {
+      "sha256": "179cde5682dcb0c68579ad8619bb9e4e742b0ebb0793814ee6073073a808f599",
+      "bytes": 558,
+      "original_path": "/home/horde/sram-lab/scratch/actor-resident/production_update_tests.log"
+    }
+  },
+  "resources": {
+    "actor_artifact": "actor_resource_audit.json",
+    "audit_source_matches_archive_snapshot": {
+      "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu": true,
+      "source/isaaclab_sram/isaaclab_sram/persistent_actor.py": false,
+      "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": true
+    },
+    "actor_cubin_sha256": "7f7584f7b3b0a947150decc3988f3bfa2dc90935e443343c81a9b618771b8113",
+    "actor_registers_per_thread": 254,
+    "actor_dynamic_shared_bytes_per_block": 68048,
+    "actor_user_static_shared_bytes_per_block": 208,
+    "runtime_reserved_shared_bytes_per_block": 1024,
+    "actor_shared_total_before_rounding_bytes_per_block": 69280,
+    "actor_parameter_gradient_and_adam_bytes": 8739296,
+    "actor_global_adjoint_mailbox_bytes": 3686400,
+    "zero_actor_local_load_store_instruction_sites": true,
+    "zero_actor_compiler_spills_and_stack": true,
+    "qualification": "Static binary/source inspection, not measured DRAM avoidance. Actor and critic launch separately; each exports its state to global tensors at its boundary."
+  }
+}

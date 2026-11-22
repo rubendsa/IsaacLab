@@ -1,10 +1,10 @@
 # Isaac Lab: SRAM-oriented training (prototype)
 
 This package contains a persistent Cartpole training megakernel, fused operations in the native Kuka-Allegro
-camera PPO learner, and an experimental persistent native critic. The Kuka paths retain the task's trainable
-visual encoder, state observations, privileged critic and full PPO rollout. The persistent critic keeps its
-parameter and optimizer working state in shared memory during its update; images, rollouts and the actor still
-use global allocations. The complete visual training run is not in SRAM. See
+camera PPO learner, and experimental persistent native actor and critic updates. The Kuka paths retain the task's
+trainable visual encoder, state observations, privileged critic and full PPO rollout. Each persistent network
+keeps its parameter and optimizer working state in shared memory during its update; images, rollouts and
+activation/reduction buffers still use global allocations. The complete visual training run is not in SRAM. See
 [the technical report](../../docs/sram/SRAM_TRAINING.md) for the memory budget, research,
 measurement protocol and current evidence.
 
@@ -35,8 +35,10 @@ at kernel boundaries, and compiler spill information must be inspected separatel
 | `isaaclab_sram/ppo_kernels.py` | Fused PPO objective and GAE operations |
 | `isaaclab_sram/perception.py` | Native camera PPO integration with selectable learner operations |
 | `isaaclab_sram/persistent_perception.py` | Camera PPO with a separate persistent native critic update |
+| `isaaclab_sram/persistent_full_perception.py` | Native RGB64 PPO with persistent actor and critic phases |
 | `isaaclab_sram/persistent_critic.py` | Native critic checkpoint packing, residency checks and cooperative launch |
 | `isaaclab_sram/kernels/ppo_native_critic.cu` | All critic forward/backward, clipping and Adam steps in one launch |
+| `isaaclab_sram/persistent_actor.py`, `kernels/ppo_native_actor.cu` | Native CNN/MLP actor, learned temperatures/std, PPO backward and Adam in one launch |
 | `isaaclab_sram/compact_history.py`, `compact_storage.py` | Lossless state-history storage and native rollout adapter |
 | `scripts/sram/train_sram.py` | Training command line (in the repository, not the package) |
 | `scripts/sram/train_kuka_perception.py` | Real Kuka-Allegro camera rollout and training command |
@@ -120,11 +122,26 @@ gradients for clipping; floating-point reduction order can differ from PyTorch.
 Neither a smaller stored rollout nor a persistent critic proves that the full
 camera learner is resident, or that global buffers avoid DRAM traffic.
 
+The `sram_full` backend additionally replaces the actor's 40 optimizer steps with
+one persistent kernel. This includes all three convolutions and their gradients,
+learned-temperature spatial softmax, the native MLP, Gaussian standard deviations,
+clipped PPO surrogate, entropy, actor-wide gradient clipping and Adam. It supports
+the RGB64 actor at 1–64 environments. The two networks execute in separate phases
+with the same permutation; native discarded action samples preserve the RNG state.
+Running normalization and GAE remain separate operations. The name refers to full
+native actor/critic optimizer coverage, not complete SRAM residency.
+
+```bash
+OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
+    --backend sram_full --camera rgb64 --num_envs 64 --iterations 100 --warmup_iterations 5 \
+    --compact_history --ieee_fp32 --seed 42 --output logs/sram/kuka_rgb64_persistent_full
+```
+
 The fused perception backend currently supports CUDA float32 model operations, the fixed-learning-rate Gaussian
 camera recipe, clipped values and global advantage normalization. It rejects mixed precision, distributed or
 recurrent training, RND, symmetry, adaptive learning-rate schedules and other unsupported algorithm settings.
 The code uses Triton supplied by the Linux PyTorch environment. Convolutions and GEMMs still use PyTorch's CUDA
-libraries in the selective-fusion paths; the persistent critic replaces its own MLP and optimizer operations.
+libraries in the selective-fusion paths; persistent backends replace their selected networks and optimizers.
 All paths retain global rollout buffers and native checkpoint tensors.
 
 ## Cartpole training

@@ -13,9 +13,9 @@ Example::
 The full task, renderer, CNN, privileged critic and PPO settings come from Isaac
 Lab. The report separates iteration timings, finite-parameter checks, CNN weight
 changes and checkpoint replay. A short run establishes integration; it does not
-establish convergence. The persistent-critic experiment retains critic working
-state during its optimizer phase; all paths still use global rollout buffers
-and global CNN activations. This is not a complete SRAM-resident visual learner.
+establish convergence. Persistent backends retain selected network working state
+during their optimizer phases; all paths still use global rollout buffers and
+global CNN activations. This is not a complete SRAM-resident visual learner.
 """
 
 from __future__ import annotations
@@ -37,7 +37,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "source" / "isaacla
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--backend", choices=("torch", "sram", "sram_graph", "sram_critic"), default="sram")
+    parser.add_argument(
+        "--backend", choices=("torch", "sram", "sram_graph", "sram_critic", "sram_full"), default="sram"
+    )
     parser.add_argument("--camera", choices=("rgb64", "depth64"), default="rgb64")
     parser.add_argument("--num_envs", type=int, default=4096)
     parser.add_argument("--iterations", type=int, default=100)
@@ -60,8 +62,10 @@ def parse_args():
     args = parser.parse_args()
     if args.num_envs < 1 or args.iterations < 1 or args.warmup_iterations < 0:
         parser.error("num_envs and iterations must be positive; warmup_iterations must be nonnegative")
-    if args.backend == "sram_critic" and args.num_envs > 64:
-        parser.error("sram_critic currently supports at most 64 environments")
+    if args.backend in ("sram_critic", "sram_full") and args.num_envs > 64:
+        parser.error("Persistent camera backends currently support at most 64 environments")
+    if args.backend == "sram_full" and args.camera != "rgb64":
+        parser.error("sram_full currently supports the native RGB64 actor only")
     return args
 
 
@@ -113,6 +117,8 @@ def main():
         agent_cfg.algorithm.class_name = "isaaclab_sram.perception:SramGraphPerceptionPPO"
     elif args.backend == "sram_critic":
         agent_cfg.algorithm.class_name = "isaaclab_sram.persistent_perception:SramPersistentCriticPPO"
+    elif args.backend == "sram_full":
+        agent_cfg.algorithm.class_name = "isaaclab_sram.persistent_full_perception:SramPersistentFullPerceptionPPO"
     if args.smoke_reset_bank is not None:
         env_cfg.events.conditional_reset.params["buffer_size_per_group"] = args.smoke_reset_bank
         env_cfg.events.conditional_reset.params["oversample_factor"] = 1.0
@@ -157,10 +163,15 @@ def main():
         "cuda": torch.version.cuda,
         "gpu": torch.cuda.get_device_name(args.device),
         "storage_scope": (
-            "Persistent critic parameters/gradients/Adam during its update; global rollout, actor, activation and "
-            "cross-block reduction buffers"
-            if args.backend == "sram_critic"
-            else "SRAM tiles inside fused kernels; rollouts, model, optimizer and CNN activations use GPU global memory"
+            "Actor and critic parameters/gradients/Adam in shared memory during their separate persistent phases; "
+            "global rollout, activation and cross-block reduction buffers; separate GAE and normalizer kernels"
+            if args.backend == "sram_full"
+            else (
+                "Persistent critic parameters/gradients/Adam during its update; global rollout, actor, activation and "
+                "cross-block reduction buffers"
+                if args.backend == "sram_critic"
+                else "Global rollout/model/optimizer allocations; temporary working tiles in individual CUDA kernels"
+            )
         ),
         "timing_scope": (
             "Native runner collection/learning timers with CUDA synchronization before update returns; "
@@ -300,6 +311,8 @@ def main():
             report["torch_peak_reserved_bytes"] = torch.cuda.max_memory_reserved(args.device)
             if getattr(alg, "_persistent_critic", None) is not None:
                 report["persistent_critic_resources"] = alg._persistent_critic.resource_info
+            if getattr(alg, "_persistent_actor", None) is not None:
+                report["persistent_actor_resources"] = alg._persistent_actor.resource_info
             storage_tensors = (
                 observation_storage_tensors(alg.storage.observations)
                 + [
