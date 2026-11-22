@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-11-22T22:07:53.211446+00:00",
+  "raw_records_preserved": true,
+  "artifacts": [
+    {
+      "file": "resource_audit.json",
+      "source_path": "/home/horde/sram-lab/scratch/persistent_actor_replica_resource_audit.json",
+      "sha256": "54d59604d779c163e2a674f04faa77bf93c71f38b4114217c6be8f52b1cbd262",
+      "bytes": 7092,
+      "copied_byte_for_byte": true,
+      "role": "Exact replica binary resource inspection; CPU-only audit"
+    },
+    {
+      "file": "actor_default64_parity.json",
+      "source_path": "/home/horde/sram-lab/scratch/actor-resident/replica_default_64.json",
+      "sha256": "3f55e942f706ad4f3c0aff8093921e0cc96873ce047a3c622c0039189a32274e",
+      "bytes": 11762,
+      "copied_byte_for_byte": true,
+      "role": "Native actor/default Adam resumed two-update correctness"
+    },
+    {
+      "file": "actor_fused64_parity.json",
+      "source_path": "/home/horde/sram-lab/scratch/actor-resident/replica_fused_64.json",
+      "sha256": "751b50f1fec56adaeda977683e44e211dd7f27a4f6d9de1382941825006df01d",
+      "bytes": 11759,
+      "copied_byte_for_byte": true,
+      "role": "Native actor/fused Adam resumed two-update correctness"
+    },
+    {
+      "file": "full64_resumed_parity.json",
+      "source_path": "/home/horde/sram-lab/scratch/actor-resident/replica_full_64.json",
+      "sha256": "6f632fbaaf1a39d86a118052b42a0a845f99f18c3e06083a17cf86607dd0154a",
+      "bytes": 14066,
+      "copied_byte_for_byte": true,
+      "role": "Complete two-update resumed learner and exact RNG correctness"
+    },
+    {
+      "file": "screened_pairs_t8.json",
+      "source_path": "/home/horde/sram-lab/scratch/actor-resident/replica_valid_pairs_t8.json",
+      "sha256": "1bae8d0e6e0dcd28d5e9c7c2ef57dd124e486e61c2fb64863797d7c1aab185ff",
+      "bytes": 180121,
+      "copied_byte_for_byte": true,
+      "role": "All six timing attempts and process samples, including rejected attempt"
+    },
+    {
+      "file": "production_update_tests.txt",
+      "source_path": "/home/horde/sram-lab/scratch/actor-resident/replica_production_tests.log",
+      "sha256": "624a8c8d4a3df510c5d7dfac9085de0438be757106aafb73ed89a27ef8a6c804",
+      "bytes": 558,
+      "copied_byte_for_byte": true,
+      "role": "Four production complete-update tests"
+    },
+    {
+      "file": "full64_camera_smoke_TIMING_EXCLUDED.json",
+      "source_path": "/home/horde/sram-lab/scratch/actor-resident/real_full64_replica_3/perception_summary.json",
+      "sha256": "686ff3d021d07740f1829b2d7f9405823adb2ec304949d17c78995e87c819343",
+      "bytes": 13892,
+      "copied_byte_for_byte": true,
+      "role": "Real camera execution correctness only; all timing fields excluded"
+    },
+    {
+      "file": "summary.json",
+      "sha256": "aaeb0b4635ad3b7a8ffacc417be78ece4c1f450a998fc691d826c3dc98d7dd69",
+      "bytes": 15518,
+      "role": "Derived publication scope, correctness, resource and screened timing summary; not raw evidence"
+    }
+  ],
+  "tested_source_sha256": {
+    "scripts/sram/train_kuka_perception.py": "d5bc9898ac8ecc330be246fb25bbb0d47ea2eb5e91d15b7be989a20ec49ad01e",
+    "source/isaaclab_sram/isaaclab_sram/__init__.py": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
+    "source/isaaclab_sram/isaaclab_sram/cartpole.py": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
+    "source/isaaclab_sram/isaaclab_sram/compact_history.py": "98caa9d2cbdaa8d9ae2db3ee50277a7eb8f16139881f7518d4fe43f0dd891625",
+    "source/isaaclab_sram/isaaclab_sram/compact_storage.py": "8d8a902300e18fb366e3f93e1445b5b15027eebf9adec41aea98ba349a597c46",
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+    "source/isaaclab_sram/isaaclab_sram/export.py": "8a3a3b69c2fe3b2fd244fafaa3d8e0561ceb23d59616bb7eaf9785cae88c05f0",
+    "source/isaaclab_sram/isaaclab_sram/kernels/cartpole_physics.cuh": "9e703f62392fa8adcd067a32cd55b417bcf230d4b8028468bbb4b276f8819da9",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_cartpole.cu": "50f06ad9493462237cfbf854b009ec1189128005e50c17040c9a2e44436eaf16",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_actor.cu": "fc251d7834394fff81af27c062922c5bce80cf4ec86097aceaf4ef259419326c",
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_native_critic.cu": "ceaf46623ba4af24f7bbbad5360ddf1981009809d9d90458ef432ebdd5236a73",
+    "source/isaaclab_sram/isaaclab_sram/kernels/sram_device.cuh": "e754c81eb12bf6304fe10e2d94bbc45dc3a98e51bac6bbd7fc7a0aee4c007948",
+    "source/isaaclab_sram/isaaclab_sram/megakernel.py": "2eeccbdd42d505034bb297a6c4010137644d8e9922476dbaa9d83931fdd4e8c2",
+    "source/isaaclab_sram/isaaclab_sram/perception.py": "306c980b7b03f7db3a04ec4b0c4f82998106c7292bf994d0a47dcf6021e9ddf2",
+    "source/isaaclab_sram/isaaclab_sram/persistent_actor.py": "2bb7781611b8fb44eef6dcc3bcfd664be4dd730f845c66ed422f9dbc84a1597a",
+    "source/isaaclab_sram/isaaclab_sram/persistent_critic.py": "318b93e96444e70295b783bd5be03316ef181b2e38eb93bce328c171029463f1",
+    "source/isaaclab_sram/isaaclab_sram/persistent_full_perception.py": "e3abc05cae2b712b1bc64bacb1c96656fbfa748c30557c0ee3787186e239bc28",
+    "source/isaaclab_sram/isaaclab_sram/persistent_perception.py": "28f87b4d210d846e4399442fe318e846d63ddab1d2273790cec7012cc44889d7",
+    "source/isaaclab_sram/isaaclab_sram/ppo_kernels.py": "195efd50b8a4189037099ca3d141c6ca32f327e542025bbe8cba33a37a43c0ba",
+    "source/isaaclab_sram/isaaclab_sram/rl_backend.py": "25eea34640901f31ed63097173e2cb6f1b49f7dedb40a0b1ef07e5430fb5e79d",
+    "source/isaaclab_sram/isaaclab_sram/spatial_softmax.py": "bc1b46141406716c3d85965d7a0e5856c0c2660a0b7b5b1278c08d1cd85b8b1b"
+  },
+  "archive_source_snapshot_matches_tested_smoke": true,
+  "actor_cubin_sha256": "ff231dd8bfc1c513eff740d7fd12cf3f469774efa5e0bc622f5e896a4b1d3e13",
+  "qualification": "The raw timing publication flag remains false; summary.json records subsequent acceptance only for the screened prototype comparison. Camera smoke timings are excluded. No GPU work was performed while archiving."
+}

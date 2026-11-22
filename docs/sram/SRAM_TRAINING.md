@@ -276,18 +276,30 @@ working state, held in block-owned shared memory for the actor's 40 optimizer
 steps. This preserves the 23 actions and trainable encoder; it does not substitute
 cached or frozen image features.
 
-The production actor uses eight-sample tiles. Its
-[binary audit](data/persistent_learner/actor_resource_audit.json) records
+The production actor replicates CNN filters across the 188 blocks so more blocks
+can share convolution work. The canonical 546,206 parameters still define the
+native model and checkpoint. Another 118,372 parameter copies add 1,893,952 bytes
+of weight/gradient/Adam state: 10,633,248 bytes (10.14 MiB) total logical resident
+state, within a 12,793,024-byte (12.20 MiB) uniform shared allocation. Replicas
+reduce their partial gradients once per minibatch and apply identical clipped
+Adam updates; only canonical copies contribute to the actor-wide gradient norm
+and checkpoint export.
+
+The actor retains eight-sample tiles. Its current
+[binary audit](data/actor_replication/resource_audit.json) records
 254 registers per thread and 68,048 dynamic plus 208
 user-static shared bytes per block. Including the runtime's 1,024-byte reserve
 gives 69,280 bytes per block. Compiler reports show zero stack/spills and the
-driver reports zero local bytes. Its global adjoint mailbox is 3,686,400 bytes
-(3.52 MiB); image inputs, convolution/MLP activation tiles, deltas, probabilities
-and output statistics also remain global. Both networks load native parameters
+driver reports zero local bytes; disassembly has no local load/store sites.
+Its global adjoint mailbox is 3,686,400 bytes (3.52 MiB). CNN replica gradients
+use 555,728 bytes aliased within that mailbox once per minibatch, so keeping
+gradient shards resident does not eliminate global gradient traffic. Image
+inputs, convolution/MLP activation tiles, deltas, probabilities and output
+statistics also remain global. Both networks load native parameters
 and moments on entry and export updates on exit. The two launches do not retain
 both networks' state simultaneously, and neither stores the full rollout on chip.
 
-Synthetic complete-update checks at 1 and 64 environments passed against the
+For the earlier actor prototype, synthetic complete-update checks at 1 and 64 environments passed against the
 production `SramPerceptionPPO` baseline after loading nonzero Adam state and
 performing two subsequent 40-step updates with changed observations and running
 normalizers. They compare every actor/critic parameter, normalizer buffer, Adam
@@ -300,7 +312,7 @@ The [archived validation summary](data/persistent_learner/summary.json) links
 the numerical gates and exact source/cubin hashes. The 64-environment resumed
 full-update comparison's largest model or optimizer error was `6.98e-8`.
 
-An [actual three-iteration native RGB64 run](data/persistent_learner/full64_camera_smoke_TIMING_EXCLUDED.json)
+An [earlier three-iteration native RGB64 run](data/persistent_learner/full64_camera_smoke_TIMING_EXCLUDED.json)
 also passed at 64 environments with compact histories, native reset initialization
 and IEEE float32. Camera images varied, CNN weights changed, all parameters
 remained finite, and actions depended on the images. A fresh unmodified native
@@ -311,6 +323,19 @@ performance claim. The tested source was uncommitted; its recorded hashes identi
 the implementation. The later wrapper-only minimum-32-CTA safety guard leaves
 the eight-sample tile and CUDA kernel unchanged.
 
+The replicated actor passed new independent default/fused-Adam checks at 64
+environments and two resumed full updates with exact CPU/CUDA RNG equality. The
+largest full-update model or optimizer error was `1.19e-7`; all four production
+update tests passed. The [replication validation summary](data/actor_replication/summary.json)
+links these checks, the raw test log and exact source/cubin hashes. A new
+[three-iteration real RGB64 run](data/actor_replication/full64_camera_smoke_TIMING_EXCLUDED.json)
+passed with native reset initialization, compact histories, changing CNN weights
+and finite parameters. Its fresh native checkpoint actor matched actions within
+`5.96e-8`, and image changes affected actions. No continuous GPU-process monitor
+covered this smoke, so all its timings are excluded. These runs identify the
+uncommitted tested implementation by hash and establish execution and numerical
+parity, without a convergence claim.
+
 The full backend preserves native discarded action-sampling RNG consumption with
 one equivalent-shaped `torch.normal` call per optimizer minibatch. Normalizers
 update after both phases; GAE, history reconstruction, normalization, permutation
@@ -319,6 +344,35 @@ global tensors. The persistent actor currently supports one uint8 `3 × 64 × 64
 RGB camera; depth and multiple cameras are unsupported. An entirely on-chip
 visual learner therefore remains a further implementation step, despite both
 networks' forward/backward and optimizer loops now being persistent.
+
+### Screened CNN replication comparison
+
+Five independently screened pairs compared the previous persistent actor
+prototype with the replicated actor on one fixed synthetic 2,048-sample rollout,
+using 256-sample minibatches, 40 optimizer steps, fused Adam and eight-sample tiles
+for both implementations. Identical resumed state was restored outside each
+measurement, after three warmups per implementation. The median complete actor
+wrapper host times were:
+
+| Previous persistent prototype | Replicated persistent actor | Ratio of median times |
+| ---: | ---: | ---: |
+| 466.65 ms | 240.48 ms | 1.9405× |
+
+The [raw paired record](data/actor_replication/screened_pairs_t8.json) preserves
+all six attempts, including one rejected for an external CUDA process. Each pair
+required 500 ms of sampled quiet beforehand, alternated execution order and
+sampled processes every 100 ms plus both boundaries. Sampling cannot exclude
+activity between samples, and listed desktop services were excluded. Every
+accepted measurement passed model and metric parity. The interval includes
+packing, validation, launch, copyback and final synchronization; compilation,
+warmup, checkpoint restoration, reference checks and device queries are excluded.
+
+The raw record's historical `publication_allowed: false` flag is unchanged. The
+[publication summary](data/actor_replication/summary.json) records the subsequent
+review accepting only this screened comparison against the prior prototype.
+This is one GPU and one synthetic rollout, without confidence intervals. It is
+not a native-PyTorch or whole-camera speedup; those component and complete-task
+comparisons remain pending.
 
 ### Controlled critic timing and measured traffic
 

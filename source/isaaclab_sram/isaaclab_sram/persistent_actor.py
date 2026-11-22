@@ -170,6 +170,11 @@ class PersistentActor:
             shapes = [(699, 512), (512, 256), (256, 128), (128, 23), (192, 16), (256, 32), (288, 32), (0, 32), (0, 23)]
             self.shard_size = sum(math.ceil(no / self.num_ctas) * (ni + 1) for ni, no in shapes)
             self.shared_bytes = 16 * self.shard_size
+            # Each CTA retains one filter per CNN layer, including its optimizer
+            # state. The maximum shard is unchanged: CTA0 already owns all three.
+            replicated_cnn_parameters = sum(
+                (self.num_ctas - channels) * (inputs + 1) for inputs, channels in shapes[4:7]
+            )
             limit = rt.device_attr("MAX_SHARED_MEMORY_PER_BLOCK_OPTIN", self.device.index)
             if self.shared_bytes + 256 > limit:
                 raise ValueError("Native actor state cannot fit device shared memory; architecture is not reduced")
@@ -195,12 +200,24 @@ class PersistentActor:
                 "threads_per_block": THREADS,
                 "parameter_count": NUM_PARAMS,
                 "working_state_bytes": NUM_PARAMS * 16,
+                "canonical_parameter_count": NUM_PARAMS,
+                "canonical_working_state_bytes": NUM_PARAMS * 16,
+                "resident_parameter_count": NUM_PARAMS + replicated_cnn_parameters,
+                "resident_working_state_bytes": (NUM_PARAMS + replicated_cnn_parameters) * 16,
+                "replicated_cnn_parameter_count": replicated_cnn_parameters,
+                "replicated_cnn_working_state_bytes": replicated_cnn_parameters * 16,
+                "allocated_model_shared_bytes": self.shared_bytes * self.num_ctas,
                 "compiler_log": self.module.log,
                 "cubin_sha256": hashlib.sha256(self.module.cubin).hexdigest(),
                 "source_sha256": hashlib.sha256(source.encode()).hexdigest(),
-                "scope": "Actor W/G/Adam shared during all steps; rollout/mailboxes global; separate critic phase",
+                "scope": (
+                    "Canonical and replicated actor W/G/Adam shared during all steps; "
+                    "rollout/mailboxes global; separate critic phase"
+                ),
                 "zero_dram_claim": False,
                 "tile_samples": TILE,
+                "cnn_replica_groups": [16, 32, 32],
+                "replica_gradient_mailbox_bytes": self.num_ctas * 739 * 4,
             }
 
             def buffer(count, dtype=torch.float32):
@@ -211,7 +228,9 @@ class PersistentActor:
             self.probs = buffer(TILE * 512)
             self.acts = buffer(TILE * 1618)
             self.deltas = buffer(TILE * 1618)
-            self.partials = buffer(TILE * max(self.num_ctas * 512, min(self.num_ctas, 32) * 3600))
+            self.partials = buffer(
+                max(TILE * max(self.num_ctas * 512, min(self.num_ctas, 32) * 3600), self.num_ctas * 739)
+            )
             self.norms = buffer(self.num_ctas, torch.float64)
             self.stds = buffer(23)
             self.std_grads = buffer(TILE * 23)

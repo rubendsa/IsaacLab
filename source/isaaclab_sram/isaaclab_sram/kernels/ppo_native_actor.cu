@@ -3,7 +3,6 @@
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
-
 // Experimental native RGB64 actor: explicit resident W/G/Adam shards.
 // Inputs, activations and cross-block reductions are global. Separate actor phase.
 #include "device_lib.cuh"
@@ -26,7 +25,11 @@ __device__ __forceinline__ int output_dim(int l) {
            : l == 7 ? 32
                     : 23;
 }
-__device__ __forceinline__ int row_count(int l, int c) { return (output_dim(l) + N_CTAS - 1 - c) / N_CTAS; }
+// Each CTA retains one replica of one filter in each convolution.
+// MLP, temperature and std ownership remains cyclic and canonical.
+__device__ __forceinline__ int row_count(int l, int c) {
+    return l >= 4 && l <= 6 ? 1 : (output_dim(l) + N_CTAS - 1 - c) / N_CTAS;
+}
 __device__ __forceinline__ int shard_base(int l, int c) {
     int b = 0;
     for (int k = 0; k < l; k++) b += row_count(k, c) * (input_dim(k) + 1);
@@ -77,16 +80,17 @@ __device__ __forceinline__ float cnn_input(const unsigned char* images, const i6
                    y * cnn_input_height(L) + x];
 }
 
-// One block owns whole output filters. Pixels are tiled across its warps.
+// Replica groups own output filters; their warps divide sample/pixel work.
 template <int L>
 __device__ __forceinline__ void cnn_forward(const float* w, const unsigned char* images, const i64* perm, int offset,
                                             int count, float* cnn, u32* bar) {
     const int c = blockIdx.x, t = threadIdx.x, lane = t & 31, warp = t >> 5, channels = output_dim(L + 4),
               h = cnn_output_height(L), k = cnn_kernel_size(L), inputs = input_dim(L + 4);
-    for (int pair = warp; pair < row_count(L + 4, c) * count * h * h; pair += WARPS) {
-        int row = pair / (count * h * h), rem = pair % (count * h * h), sample = rem / (h * h), pixel = rem % (h * h),
-            oc = c + row * N_CTAS;
-        const float* rw = w + shard_base(L + 4, c) + row * (inputs + 1);
+    const int oc = c % channels, replica = c / channels;
+    const int replicas = (N_CTAS + channels - 1 - oc) / channels;
+    for (int pair = replica * WARPS + warp; pair < count * h * h; pair += replicas * WARPS) {
+        int sample = pair / (h * h), pixel = pair % (h * h);
+        const float* rw = w + shard_base(L + 4, c);
         float v = 0.f;
         for (int j = lane; j < inputs; j += 32) {
             int ic = j / (k * k), ky = (j / k) % k, kx = j % k;
@@ -109,19 +113,18 @@ __device__ __forceinline__ void cnn_gradient(float* g, const unsigned char* imag
                                              int count, const float* cnn, const float* cd) {
     const int c = blockIdx.x, inputs = input_dim(L + 4), h = cnn_output_height(L), k = cnn_kernel_size(L),
               channels = output_dim(L + 4), b = shard_base(L + 4, c);
-    for (int p = threadIdx.x; p < row_count(L + 4, c) * (inputs + 1); p += THREADS) {
-        int row = p / (inputs + 1), j = p % (inputs + 1), oc = c + row * N_CTAS;
-        float v = g[b + p];
-        for (int sample = 0; sample < count; sample++)
-            for (int y = 0; y < h; y++)
-                for (int x = 0; x < h; x++) {
-                    float xv = j == inputs
-                                   ? 1.f
+    const int oc = c % channels, replica = c / channels;
+    const int replicas = (N_CTAS + channels - 1 - oc) / channels;
+    for (int j = threadIdx.x; j < inputs + 1; j += THREADS) {
+        float v = g[b + j];
+        for (int point = replica; point < count * h * h; point += replicas) {
+            int sample = point / (h * h), y = (point / h) % h, x = point % h;
+            float xv = j == inputs ? 1.f
                                    : cnn_input<L>(images, perm, offset, sample, j / (k * k),
                                                   y * cnn_stride(L) + (j / k) % k, x * cnn_stride(L) + j % k, cnn);
-                    v = fmaf(xv, cd[cnn_activation_base(L) + (sample * channels + oc) * h * h + y * h + x], v);
-                }
-        g[b + p] = v;
+            v = fmaf(xv, cd[cnn_activation_base(L) + (sample * channels + oc) * h * h + y * h + x], v);
+        }
+        g[b + j] = v;
     }
 }
 
@@ -133,22 +136,22 @@ __device__ __forceinline__ void cnn_backward(const float* w, const float* cnn, f
     const int c = blockIdx.x, inputs = input_dim(L + 4), h = cnn_output_height(L), hin = cnn_input_height(L),
               channels = output_dim(L + 4), cin = cnn_input_channels(L), k = cnn_kernel_size(L), s = cnn_stride(L);
     const int width = cin * hin * hin, b = shard_base(L + 4, c);
-    if (row_count(L + 4, c))
-        for (int p = threadIdx.x; p < count * width; p += THREADS) {
-            int sample = p / width, rem = p % width, ic = rem / (hin * hin), y = (rem / hin) % hin, x = rem % hin;
-            float v = 0.f;
-            for (int r = 0; r < row_count(L + 4, c); r++)
-                for (int ky = 0; ky < k; ky++)
-                    for (int kx = 0; kx < k; kx++) {
-                        int oy = y - ky, ox = x - kx;
-                        if (oy >= 0 && ox >= 0 && oy % s == 0 && ox % s == 0 && oy / s < h && ox / s < h)
-                            v = fmaf(w[b + r * (inputs + 1) + (ic * k + ky) * k + kx],
-                                     cd[cnn_activation_base(L) + (sample * channels + c + r * N_CTAS) * h * h +
-                                        (oy / s) * h + ox / s],
-                                     v);
-                    }
-            partial[(c * TILE + sample) * width + rem] = v;
-        }
+    const int oc = c % channels, replica = c / channels;
+    const int replicas = (N_CTAS + channels - 1 - oc) / channels;
+    for (int p = replica * THREADS + threadIdx.x; p < count * width; p += replicas * THREADS) {
+        int sample = p / width, rem = p % width, ic = rem / (hin * hin), y = (rem / hin) % hin, x = rem % hin;
+        float v = 0.f;
+        for (int r = 0; r < row_count(L + 4, c); r++)
+            for (int ky = 0; ky < k; ky++)
+                for (int kx = 0; kx < k; kx++) {
+                    int oy = y - ky, ox = x - kx;
+                    if (oy >= 0 && ox >= 0 && oy % s == 0 && ox % s == 0 && oy / s < h && ox / s < h)
+                        v = fmaf(w[b + r * (inputs + 1) + (ic * k + ky) * k + kx],
+                                 cd[cnn_activation_base(L) + (sample * channels + oc) * h * h + (oy / s) * h + ox / s],
+                                 v);
+                }
+        partial[(oc * TILE + sample) * width + rem] = v;
+    }
     grid_barrier(bar);
     for (int p = c * THREADS + threadIdx.x; p < count * width; p += N_CTAS * THREADS) {
         int sample = p / width, j = p % width;
@@ -313,6 +316,29 @@ __device__ __forceinline__ void ppo_gradient(const float* w, float* g, const flo
     }
 }
 
+// Accumulate a complete native minibatch before reducing replica gradients.
+// Reuse the adjoint mailbox only after the last microtile's reader barrier.
+// All replicas receive the same fp32 sum and therefore apply identical Adam.
+__device__ __forceinline__ void reduce_cnn_gradients(float* gradients, float* partial, u32* barrier) {
+    const int c = blockIdx.x, t = threadIdx.x;
+    for (int layer = 4; layer <= 6; layer++) {
+        const int offset = layer == 4 ? 0 : layer == 5 ? 193 : 450;
+        for (int j = t; j <= input_dim(layer); j += THREADS)
+            partial[c * 739 + offset + j] = gradients[shard_base(layer, c) + j];
+    }
+    grid_barrier(barrier);
+    for (int layer = 4; layer <= 6; layer++) {
+        const int channels = output_dim(layer), channel = c % channels;
+        const int offset = layer == 4 ? 0 : layer == 5 ? 193 : 450;
+        for (int j = t; j <= input_dim(layer); j += THREADS) {
+            float sum = 0.f;
+            for (int owner = channel; owner < N_CTAS; owner += channels) sum += partial[owner * 739 + offset + j];
+            gradients[shard_base(layer, c) + j] = sum;
+        }
+    }
+    grid_barrier(barrier);
+}
+
 extern "C" __global__ __launch_bounds__(THREADS, 1) void persistent_native_actor(
     float* params, float* adam_m, float* adam_v, float* last_grad, const float* state, const unsigned char* images,
     const float* actions, const float* oldlp, const float* advantages, const i64* perm, const float* xy,
@@ -331,7 +357,8 @@ extern "C" __global__ __launch_bounds__(THREADS, 1) void persistent_native_actor
     // Import native checkpoint state once, before all PPO minibatches.
     for (int l = 0; l < 9; l++)
         for (int p = t; p < row_count(l, c) * (input_dim(l) + 1); p += THREADS) {
-            int row = c + (p / (input_dim(l) + 1)) * N_CTAS, j = p % (input_dim(l) + 1),
+            int row = l >= 4 && l <= 6 ? c % output_dim(l) : c + (p / (input_dim(l) + 1)) * N_CTAS,
+                j = p % (input_dim(l) + 1),
                 index =
                     flat_base(l) + (j == input_dim(l) ? output_dim(l) * input_dim(l) + row : row * input_dim(l) + j),
                 b = shard_base(l, c) + p;
@@ -382,10 +409,15 @@ extern "C" __global__ __launch_bounds__(THREADS, 1) void persistent_native_actor
                 cnn_gradient<0>(g, images, perm, offset, count, cnn, cd);
                 grid_barrier(bar);
             }
+            reduce_cnn_gradients(g, partial, bar);
             double n = 0.;
-            for (int p = t; p < owned; p += THREADS) {
-                double gv = g[p];
-                n += gv * gv;
+            for (int layer = 0; layer < 9; layer++) {
+                // Each logical CNN gradient contributes exactly once to norm.
+                if (layer >= 4 && layer <= 6 && c >= output_dim(layer)) continue;
+                for (int p = t; p < row_count(layer, c) * (input_dim(layer) + 1); p += THREADS) {
+                    double gv = g[shard_base(layer, c) + p];
+                    n += gv * gv;
+                }
             }
             n = warp_sum_double(n);
             if ((t & 31) == 0) warp_norm[t >> 5] = n;
@@ -434,10 +466,12 @@ extern "C" __global__ __launch_bounds__(THREADS, 1) void persistent_native_actor
                 }
             grid_barrier(bar);
         }
-    // Export checkpoint state only after every optimizer step.
-    for (int l = 0; l < 9; l++)
+    // Only canonical owners export; replicas preserve identical state.
+    for (int l = 0; l < 9; l++) {
+        if (l >= 4 && l <= 6 && c >= output_dim(l)) continue;
         for (int p = t; p < row_count(l, c) * (input_dim(l) + 1); p += THREADS) {
-            int row = c + (p / (input_dim(l) + 1)) * N_CTAS, j = p % (input_dim(l) + 1),
+            int row = l >= 4 && l <= 6 ? c % output_dim(l) : c + (p / (input_dim(l) + 1)) * N_CTAS,
+                j = p % (input_dim(l) + 1),
                 index =
                     flat_base(l) + (j == input_dim(l) ? output_dim(l) * input_dim(l) + row : row * input_dim(l) + j),
                 b = shard_base(l, c) + p;
@@ -446,6 +480,7 @@ extern "C" __global__ __launch_bounds__(THREADS, 1) void persistent_native_actor
             adam_v[index] = v[b];
             last_grad[index] = g[b];
         }
+    }
     if (c == 0 && t == 0) {
         mean_metrics[0] = total_sur / (epochs * minibatches);
         mean_metrics[1] = total_ent / (epochs * minibatches);
