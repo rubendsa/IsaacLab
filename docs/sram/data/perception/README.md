@@ -1,8 +1,31 @@
 # Real Kuka-Allegro camera runs
 
-These are unmodified `perception_summary.json` outputs from
-`scripts/sram/train_kuka_perception.py`, renamed to identify each run. The main
+The per-run JSON files are unmodified `perception_summary.json` outputs from
+`scripts/sram/train_kuka_perception.py`, renamed to identify each run. The comparison
+JSON and timing figure are derived from those reports. The main
 [report](../../SRAM_TRAINING.md) gives interpretation and reproduction commands.
+
+The headline `4096_200` runs use seed 42, the native reset bank, 200 iterations and
+five warmup iterations. They ran sequentially in the order graph, stock, fused on
+clean commit `c117928647ddad83c480c7a267c8f4225ab9ff6e`, with identical source
+hashes. Each includes 26,214,400 transitions and 8,000 optimizer minibatches. The
+derived [comparison](comparison_4096_200.json) contains full, early (5–29) and late
+(150–199) timing windows, checks, task metrics and periodic GPU samples. Samples
+are diagnostic snapshots, not energy measurements or hardware traffic counters.
+
+The [timing figure](kuka_rgb64_200_timings.jpg) plots all 195 measured rows and
+centered nine-iteration medians. These are sequential single-seed runs; the
+percentiles describe within-run spread, not confidence intervals. Simulation
+work evolves with policy trajectories. Reproduce the figure from the repository
+root with:
+
+```bash
+uv run python scripts/sram/plot_perception_timings.py \
+    --stock docs/sram/data/perception/torch_rgb64_4096_200.json \
+    --fused docs/sram/data/perception/sram_rgb64_4096_200.json \
+    --graph docs/sram/data/perception/sram_graph_rgb64_4096_200.json \
+    --out /tmp/kuka_rgb64_200_timings.jpg
+```
 
 The `4096_30` runs use the native reset bank, RGB64 images, seed 42 and 30 training
 iterations; the first five iterations are excluded from medians. They were run
@@ -14,7 +37,7 @@ The smoke runs use 64 environments, three iterations and an explicitly reduced
 success or native-scale throughput. `sram_rgb64_smoke2` is the successful rerun
 after the checkpoint comparison separated IEEE float32 from TF32 rounding.
 
-The JPEG shows 16 actual camera observations from the native 4,096-environment
+The camera-preview JPEG shows 16 actual camera observations from the native 4,096-environment
 graph run. It was saved outside the timed iterations.
 
 Provenance includes source SHA-256 values, base commit, dirty status and installed

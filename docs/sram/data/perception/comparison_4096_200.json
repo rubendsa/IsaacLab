@@ -1,0 +1,430 @@
+{
+  "scope": "Single seed42 sequential native Kuka RGB runs: graph, torch, sram. 200 iterations each; exclude first5. Training stability/throughput, not held-out convergence. Total timing is observational because policy-dependent simulator workload changes; phase splits use native host attribution.",
+  "identical_source_sha256": true,
+  "runs": {
+    "torch": {
+      "backend": "torch",
+      "integration_passed": true,
+      "all_parameters_finite": true,
+      "cnn_changed": true,
+      "checkpoint_native_actor_matches": true,
+      "checkpoint_action_max_abs_error": 0.0,
+      "checkpoint_tf32_action_max_abs_error": 0.0,
+      "image_action_sensitivity_max_abs": 1.528411626815796,
+      "fused_spatial_softmax_modules": 0,
+      "train_wall_s": 293.3539812109666,
+      "startup_s": 13.09583858307451,
+      "torch_peak_allocated_bytes": 9347942912,
+      "torch_peak_reserved_bytes": 9930014720,
+      "rollout_storage_bytes": 2485780480,
+      "rollout_observation_bytes": 2446852096,
+      "git_commit": "c117928647ddad83c480c7a267c8f4225ab9ff6e",
+      "git_status": [],
+      "camera_preview": "/home/horde/sram-lab/scratch/perception-integration/torch_rgb64_4096_200/camera_preview.jpg",
+      "checkpoint": "/home/horde/sram-lab/scratch/perception-integration/torch_rgb64_4096_200/model_199.pt",
+      "source_summary": "/home/horde/sram-lab/scratch/perception-integration/torch_rgb64_4096_200/perception_summary.json",
+      "transitions": 26214400,
+      "optimizer_updates": 8000,
+      "all": {
+        "iteration_s": {
+          "median_ms": 1466.0518169403076,
+          "p10_ms": 1351.2231826782227,
+          "p90_ms": 1513.307523727417
+        },
+        "learning_s": {
+          "median_ms": 485.6553077697754,
+          "p10_ms": 483.69531631469727,
+          "p90_ms": 491.8527126312256
+        },
+        "collection_s": {
+          "median_ms": 973.3033180236816,
+          "p10_ms": 867.2630786895752,
+          "p90_ms": 1023.787832260132
+        }
+      },
+      "early": {
+        "iteration_s": {
+          "median_ms": 1368.4968948364258,
+          "p10_ms": 1345.316457748413,
+          "p90_ms": 1450.844144821167
+        },
+        "learning_s": {
+          "median_ms": 486.8192672729492,
+          "p10_ms": 483.93802642822266,
+          "p90_ms": 499.2847442626953
+        },
+        "collection_s": {
+          "median_ms": 881.7031383514404,
+          "p10_ms": 860.3498458862305,
+          "p90_ms": 949.0426063537598
+        }
+      },
+      "late": {
+        "iteration_s": {
+          "median_ms": 1506.484031677246,
+          "p10_ms": 1498.640537261963,
+          "p90_ms": 1519.6067094802856
+        },
+        "learning_s": {
+          "median_ms": 485.6802225112915,
+          "p10_ms": 483.90843868255615,
+          "p90_ms": 496.16549015045166
+        },
+        "collection_s": {
+          "median_ms": 1019.3921327590942,
+          "p10_ms": 1013.4418487548828,
+          "p90_ms": 1028.185224533081
+        }
+      },
+      "max_logged_training_success": 0.0,
+      "final_logged_training_success": 0.0,
+      "final_reward": -0.23723103418946268,
+      "final_length": 130.33,
+      "final_object_out_of_bound": 0.7299,
+      "all_losses_finite": true,
+      "cnn_changes": {
+        "cnns.base_image.0.weight": 0.07283347845077515,
+        "cnns.base_image.0.bias": 0.03380259498953819,
+        "cnns.base_image.2.weight": 0.0829882025718689,
+        "cnns.base_image.2.bias": 0.04458285868167877,
+        "cnns.base_image.4.weight": 0.10264091193675995,
+        "cnns.base_image.4.bias": 0.023072950541973114
+      },
+      "temperature_changes": {
+        "softmaxes.base_image.log_temperature": 0.054479848593473434
+      },
+      "gpu_samples": [
+        {
+          "timestamp": "2026/11/22 20:52:05.577",
+          "pstate": "P0",
+          "sm_clock": "2407 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "278.57 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "68",
+          "gpu_util": "91 %",
+          "memory_util": "59 %",
+          "memory_used": "11290 MiB"
+        },
+        {
+          "timestamp": "2026/11/22 20:53:06.815",
+          "pstate": "P0",
+          "sm_clock": "2392 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "333.94 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "67",
+          "gpu_util": "73 %",
+          "memory_util": "23 %",
+          "memory_used": "11290 MiB"
+        },
+        {
+          "timestamp": "2026/11/22 20:54:09.746",
+          "pstate": "P0",
+          "sm_clock": "2400 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "339.23 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "69",
+          "gpu_util": "73 %",
+          "memory_util": "26 %",
+          "memory_used": "11290 MiB"
+        },
+        {
+          "timestamp": "2026/11/22 20:55:13.361",
+          "pstate": "P0",
+          "sm_clock": "2392 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "321.19 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "72",
+          "gpu_util": "91 %",
+          "memory_util": "59 %",
+          "memory_used": "11290 MiB"
+        }
+      ]
+    },
+    "sram": {
+      "backend": "sram",
+      "integration_passed": true,
+      "all_parameters_finite": true,
+      "cnn_changed": true,
+      "checkpoint_native_actor_matches": true,
+      "checkpoint_action_max_abs_error": 5.364418029785156e-07,
+      "checkpoint_tf32_action_max_abs_error": 0.0004665851593017578,
+      "image_action_sensitivity_max_abs": 1.873155117034912,
+      "fused_spatial_softmax_modules": 1,
+      "train_wall_s": 286.0214425630402,
+      "startup_s": 13.25914311897941,
+      "torch_peak_allocated_bytes": 9346969600,
+      "torch_peak_reserved_bytes": 9841934336,
+      "rollout_storage_bytes": 2485780480,
+      "rollout_observation_bytes": 2446852096,
+      "git_commit": "c117928647ddad83c480c7a267c8f4225ab9ff6e",
+      "git_status": [],
+      "camera_preview": "/home/horde/sram-lab/scratch/perception-integration/sram_rgb64_4096_200/camera_preview.jpg",
+      "checkpoint": "/home/horde/sram-lab/scratch/perception-integration/sram_rgb64_4096_200/model_199.pt",
+      "source_summary": "/home/horde/sram-lab/scratch/perception-integration/sram_rgb64_4096_200/perception_summary.json",
+      "transitions": 26214400,
+      "optimizer_updates": 8000,
+      "all": {
+        "iteration_s": {
+          "median_ms": 1438.1413459777832,
+          "p10_ms": 1328.7463188171387,
+          "p90_ms": 1462.4812602996826
+        },
+        "learning_s": {
+          "median_ms": 435.70494651794434,
+          "p10_ms": 432.8113555908203,
+          "p90_ms": 443.5094356536865
+        },
+        "collection_s": {
+          "median_ms": 994.6467876434326,
+          "p10_ms": 888.9380931854248,
+          "p90_ms": 1025.2522468566895
+        }
+      },
+      "early": {
+        "iteration_s": {
+          "median_ms": 1335.4263305664062,
+          "p10_ms": 1307.875680923462,
+          "p90_ms": 1389.1377449035645
+        },
+        "learning_s": {
+          "median_ms": 436.98883056640625,
+          "p10_ms": 432.6753616333008,
+          "p90_ms": 443.2803153991699
+        },
+        "collection_s": {
+          "median_ms": 900.5012512207031,
+          "p10_ms": 873.6740112304688,
+          "p90_ms": 945.8025932312012
+        }
+      },
+      "late": {
+        "iteration_s": {
+          "median_ms": 1454.7576904296875,
+          "p10_ms": 1448.2349395751953,
+          "p90_ms": 1463.0128622055054
+        },
+        "learning_s": {
+          "median_ms": 434.6727132797241,
+          "p10_ms": 432.53095149993896,
+          "p90_ms": 443.05419921875
+        },
+        "collection_s": {
+          "median_ms": 1019.6791887283325,
+          "p10_ms": 1014.7477626800536,
+          "p90_ms": 1026.8869161605835
+        }
+      },
+      "max_logged_training_success": 4.901622742181644e-05,
+      "final_logged_training_success": 4.762575190397911e-05,
+      "final_reward": -0.14759305583313106,
+      "final_length": 143.89,
+      "final_object_out_of_bound": 0.678,
+      "all_losses_finite": true,
+      "cnn_changes": {
+        "cnns.base_image.0.weight": 0.0631261095404625,
+        "cnns.base_image.0.bias": 0.03808751702308655,
+        "cnns.base_image.2.weight": 0.06902514398097992,
+        "cnns.base_image.2.bias": 0.044507674872875214,
+        "cnns.base_image.4.weight": 0.0689532682299614,
+        "cnns.base_image.4.bias": 0.029608817771077156
+      },
+      "temperature_changes": {
+        "softmaxes.base_image.log_temperature": 0.05837194249033928
+      },
+      "gpu_samples": [
+        {
+          "timestamp": "2026/11/22 20:57:22.548",
+          "pstate": "P0",
+          "sm_clock": "2415 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "238.42 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "67",
+          "gpu_util": "69 %",
+          "memory_util": "10 %",
+          "memory_used": "11282 MiB"
+        },
+        {
+          "timestamp": "2026/11/22 20:58:22.517",
+          "pstate": "P0",
+          "sm_clock": "2385 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "324.46 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "72",
+          "gpu_util": "96 %",
+          "memory_util": "64 %",
+          "memory_used": "11282 MiB"
+        },
+        {
+          "timestamp": "2026/11/22 20:59:23.361",
+          "pstate": "P0",
+          "sm_clock": "2415 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "336.57 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "67",
+          "gpu_util": "72 %",
+          "memory_util": "9 %",
+          "memory_used": "11282 MiB"
+        },
+        {
+          "timestamp": "2026/11/22 21:00:25.683",
+          "pstate": "P0",
+          "sm_clock": "2422 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "255.56 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "72",
+          "gpu_util": "74 %",
+          "memory_util": "9 %",
+          "memory_used": "11282 MiB"
+        }
+      ]
+    },
+    "sram_graph": {
+      "backend": "sram_graph",
+      "integration_passed": true,
+      "all_parameters_finite": true,
+      "cnn_changed": true,
+      "checkpoint_native_actor_matches": true,
+      "checkpoint_action_max_abs_error": 4.76837158203125e-07,
+      "checkpoint_tf32_action_max_abs_error": 0.0005124807357788086,
+      "image_action_sensitivity_max_abs": 2.0355749130249023,
+      "fused_spatial_softmax_modules": 1,
+      "train_wall_s": 284.7519873519195,
+      "startup_s": 12.982290896004997,
+      "torch_peak_allocated_bytes": 9695697408,
+      "torch_peak_reserved_bytes": 10183770112,
+      "rollout_storage_bytes": 2485780480,
+      "rollout_observation_bytes": 2446852096,
+      "git_commit": "c117928647ddad83c480c7a267c8f4225ab9ff6e",
+      "git_status": [],
+      "camera_preview": "/home/horde/sram-lab/scratch/perception-integration/sram_graph_rgb64_4096_200/camera_preview.jpg",
+      "checkpoint": "/home/horde/sram-lab/scratch/perception-integration/sram_graph_rgb64_4096_200/model_199.pt",
+      "source_summary": "/home/horde/sram-lab/scratch/perception-integration/sram_graph_rgb64_4096_200/perception_summary.json",
+      "transitions": 26214400,
+      "optimizer_updates": 8000,
+      "all": {
+        "iteration_s": {
+          "median_ms": 1420.7773208618164,
+          "p10_ms": 1318.9515113830566,
+          "p90_ms": 1463.2165908813477
+        },
+        "learning_s": {
+          "median_ms": 433.1545829772949,
+          "p10_ms": 432.37128257751465,
+          "p90_ms": 433.4566116333008
+        },
+        "collection_s": {
+          "median_ms": 987.4045848846436,
+          "p10_ms": 886.3044738769531,
+          "p90_ms": 1029.9804210662842
+        }
+      },
+      "early": {
+        "iteration_s": {
+          "median_ms": 1326.8518447875977,
+          "p10_ms": 1311.9676113128662,
+          "p90_ms": 1374.9870777130127
+        },
+        "learning_s": {
+          "median_ms": 432.2926998138428,
+          "p10_ms": 431.9612979888916,
+          "p90_ms": 432.55295753479004
+        },
+        "collection_s": {
+          "median_ms": 895.0269222259521,
+          "p10_ms": 879.3871402740479,
+          "p90_ms": 942.916202545166
+        }
+      },
+      "late": {
+        "iteration_s": {
+          "median_ms": 1462.3310565948486,
+          "p10_ms": 1445.4506874084473,
+          "p90_ms": 1467.399263381958
+        },
+        "learning_s": {
+          "median_ms": 433.20703506469727,
+          "p10_ms": 433.03327560424805,
+          "p90_ms": 433.5429906845093
+        },
+        "collection_s": {
+          "median_ms": 1029.1175842285156,
+          "p10_ms": 1012.0377779006957,
+          "p90_ms": 1033.8334560394287
+        }
+      },
+      "max_logged_training_success": 0.00010231224587187171,
+      "final_logged_training_success": 8.457589865429327e-05,
+      "final_reward": -0.7043300565332175,
+      "final_length": 130.26,
+      "final_object_out_of_bound": 0.7003,
+      "all_losses_finite": true,
+      "cnn_changes": {
+        "cnns.base_image.0.weight": 0.0777144655585289,
+        "cnns.base_image.0.bias": 0.051353033632040024,
+        "cnns.base_image.2.weight": 0.07575445622205734,
+        "cnns.base_image.2.bias": 0.042233020067214966,
+        "cnns.base_image.4.weight": 0.07221361994743347,
+        "cnns.base_image.4.bias": 0.031168071553111076
+      },
+      "temperature_changes": {
+        "softmaxes.base_image.log_temperature": 0.05725685507059097
+      },
+      "gpu_samples": [
+        {
+          "timestamp": "2026/11/22 20:47:53.918",
+          "pstate": "P0",
+          "sm_clock": "2415 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "284.43 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "71",
+          "gpu_util": "100 %",
+          "memory_util": "67 %",
+          "memory_used": "12468 MiB"
+        },
+        {
+          "timestamp": "2026/11/22 20:48:54.542",
+          "pstate": "P0",
+          "sm_clock": "2415 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "339.43 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "67",
+          "gpu_util": "75 %",
+          "memory_util": "9 %",
+          "memory_used": "12468 MiB"
+        },
+        {
+          "timestamp": "2026/11/22 20:49:57.219",
+          "pstate": "P0",
+          "sm_clock": "2415 MHz",
+          "memory_clock": "12481 MHz",
+          "power": "341.76 W",
+          "power_limit": "600.00 W",
+          "temperature_c": "68",
+          "gpu_util": "72 %",
+          "memory_util": "21 %",
+          "memory_used": "12468 MiB"
+        }
+      ]
+    }
+  },
+  "ratios": {
+    "sram": {
+      "iteration_s": 1.0194073211514187,
+      "learning_s": 1.114642630640352
+    },
+    "sram_graph": {
+      "iteration_s": 1.0318660042032686,
+      "learning_s": 1.1212055161268661
+    }
+  }
+}

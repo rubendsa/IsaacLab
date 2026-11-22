@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-11-22T20:51:35.451978+00:00",
+  "audit_mode": "CPU-only inspection of an existing cubin; no compilation, GPU context, kernel launch or runtime performance measurement",
+  "binary": {
+    "path": "/home/horde/.cache/isaaclab_sram/cubin/56ab54840bf7b58ccd2a40b1.cubin",
+    "sha256": "3d6aa258e01bafe46aa2b610be06b242b4807bb12573616da10f8a1f843aafb6",
+    "source_config_cache_key": "56ab54840bf7b58ccd2a40b1",
+    "architecture": "sm_120",
+    "kernel": "sram_ppo_cartpole",
+    "cache_key_algorithm": "sha256(repr((source, NVRTC options, sorted in-memory headers, nvrtcVersion tuple)))[:24]",
+    "cache_key_verification": "Reconstructed from current source, default CartpoleTask/PPOConfig, launch plan below, PROF=0 and PROF_MAX_IT=4096; exact cache hit. Earlier reconstruction confirmed torch.cuda.is_initialized() == False.",
+    "nvrtc_version_at_key_verification": [
+      13,
+      0
+    ]
+  },
+  "source_files": {
+    "source/isaaclab_sram/isaaclab_sram/kernels/ppo_cartpole.cu": {
+      "sha256": "50f06ad9493462237cfbf854b009ec1189128005e50c17040c9a2e44436eaf16",
+      "matches_archived_manifest": true
+    },
+    "source/isaaclab_sram/isaaclab_sram/kernels/cartpole_physics.cuh": {
+      "sha256": "9e703f62392fa8adcd067a32cd55b417bcf230d4b8028468bbb4b276f8819da9",
+      "matches_archived_manifest": true
+    },
+    "source/isaaclab_sram/isaaclab_sram/kernels/sram_device.cuh": {
+      "sha256": "e754c81eb12bf6304fe10e2d94bbc45dc3a98e51bac6bbd7fc7a0aee4c007948",
+      "matches_archived_manifest": true
+    },
+    "source/isaaclab_sram/isaaclab_sram/cuda_rt.py": {
+      "sha256": "87debaa09e5d4b0a096f26036f455b57e8e61b4f075ba70a134e5654decbab49",
+      "matches_archived_manifest": true
+    }
+  },
+  "configuration": {
+    "num_envs": 4096,
+    "num_ctas": 188,
+    "threads_per_cta": 256,
+    "envs_per_cta_max": 22,
+    "rollout_storage": "shared",
+    "permutation_storage": "shared",
+    "debug": false,
+    "profile": false,
+    "ppo": {
+      "num_steps_per_env": 16,
+      "max_iterations": 150,
+      "hidden_dims": [
+        32,
+        32
+      ],
+      "init_noise_std": 1.0,
+      "value_loss_coef": 1.0,
+      "use_clipped_value_loss": true,
+      "clip_param": 0.2,
+      "entropy_coef": 0.005,
+      "num_learning_epochs": 5,
+      "num_mini_batches": 4,
+      "learning_rate": 0.001,
+      "schedule": "adaptive",
+      "gamma": 0.99,
+      "lam": 0.95,
+      "desired_kl": 0.01,
+      "max_grad_norm": 1.0,
+      "init_at_random_ep_len": true
+    }
+  },
+  "tools": {
+    "cuobjdump": {
+      "path": "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "version_output": "cuobjdump: NVIDIA (R) fat binary listing tool\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Jan__3_19:19:51_PST_2025\nCuda compilation tools, release 12.8, V12.8.55\nBuild cuda_12.8.r12.8/compiler.35351055_0"
+    },
+    "nvdisasm": {
+      "path": "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/nvdisasm",
+      "version_output": "nvdisasm: NVIDIA (R) CUDA disassembler\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Jan__3_19:13:46_PST_2025\nCuda compilation tools, release 12.8, V12.8.55\nBuild cuda_12.8.r12.8/compiler.35351055_0"
+    }
+  },
+  "commands": {
+    "resource_usage": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-res-usage",
+      "/home/horde/.cache/isaaclab_sram/cubin/56ab54840bf7b58ccd2a40b1.cubin"
+    ],
+    "sass": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-sass",
+      "/home/horde/.cache/isaaclab_sram/cubin/56ab54840bf7b58ccd2a40b1.cubin"
+    ],
+    "elf": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/cuobjdump",
+      "-elf",
+      "/home/horde/.cache/isaaclab_sram/cubin/56ab54840bf7b58ccd2a40b1.cubin"
+    ],
+    "control_flow": [
+      "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/triton/backends/nvidia/bin/nvdisasm",
+      "-c",
+      "/home/horde/.cache/isaaclab_sram/cubin/56ab54840bf7b58ccd2a40b1.cubin"
+    ]
+  },
+  "resources": {
+    "raw_cuobjdump_output": "Resource usage:\n Common:\n  GLOBAL:24 CONSTANT[4]:8\n Function sram_ppo_cartpole:\n  REG:223 STACK:32 SHARED:1232 LOCAL:0 CONSTANT[0]:1016 TEXTURE:0 SURFACE:0 SAMPLER:0",
+    "registers_per_thread": 223,
+    "stack_bytes_per_thread": 32,
+    "static_local_bytes_per_thread": 0,
+    "static_shared_bytes_per_block_reported": 1232,
+    "dynamic_shared_bytes_per_block_from_archived_launch_plan": 72696,
+    "common_global_bytes": 24,
+    "common_constant4_bytes": 8,
+    "kernel_constant0_bytes": 1016
+  },
+  "findings": {
+    "local_load_static_instruction_sites": 6,
+    "local_store_static_instruction_sites": 4,
+    "local_instruction_disassembly": [
+      "/*6ba0*/                   STL [R81], R68                                                           &rd=0x0                    ?trans2;",
+      "/*6bf0*/                   STL [R1+0x18], R68                                                       &rd=0x0                    ?trans3;",
+      "/*6c60*/                   LDL R69, [R71+0x18]                                                      &wr=0x2                    ?trans4;",
+      "/*6c70*/                   LDL R64, [R71+0x14]                                                      &wr=0x2                    ?trans4;",
+      "/*6c80*/               @P0 LDL R65, [R71+0x10]                                                      &wr=0x3                    ?trans1;",
+      "/*73d0*/                   STL [R71], R64                                                           &rd=0x0                    ?trans2;",
+      "/*7420*/                   STL [R1+0x18], R64                                                       &rd=0x0                    ?trans3;",
+      "/*7490*/                   LDL R6, [R65+0x18]                                                       &wr=0x2                    ?trans4;",
+      "/*74a0*/                   LDL R5, [R65+0x14]                                                       &wr=0x2                    ?trans4;",
+      "/*74b0*/               @P0 LDL R4, [R65+0x10]                                                       &wr=0x3                    ?trans1;"
+    ],
+    "guarded_regions": [
+      {
+        "source_operation": "first unrolled cartpole_substep sincosf(theta)",
+        "guard_offset": "0x6930",
+        "guard": "FSETP.GE.AND P0, PT, |R5|, 105615, PT",
+        "skip_offset": "0x6a70",
+        "skip_condition": "@!P0 BRA 0x6e40",
+        "local_store_offsets": [
+          "0x6ba0",
+          "0x6bf0"
+        ],
+        "local_load_offsets": [
+          "0x6c60",
+          "0x6c70",
+          "0x6c80"
+        ]
+      },
+      {
+        "source_operation": "second unrolled cartpole_substep sincosf(theta)",
+        "guard_offset": "0x7290",
+        "guard": "FSETP.GE.AND P0, PT, |R82|, 105615, PT",
+        "skip_offset": "0x72f0",
+        "skip_condition": "@!P0 BRA 0x76a0",
+        "local_store_offsets": [
+          "0x73d0",
+          "0x7420"
+        ],
+        "local_load_offsets": [
+          "0x7490",
+          "0x74a0",
+          "0x74b0"
+        ]
+      }
+    ],
+    "classification": "All explicit LDL/STL sites belong to the two inlined sincosf large-angle argument-reduction branches. Each uses a 7-word stack temporary and the __cudart_i2opi_f table; no explicit LDL/STL sites occur in PPO, Adam or MLP calculations. This supports math-helper stack allocation rather than register-pressure spills of learner state.",
+    "metadata_corroboration": "ELF EIATTR_FRAME_SIZE and EIATTR_MIN_STACK_SIZE report 0x20 for sram_ppo_cartpole; cuobjdump reports STACK:32 and LOCAL:0."
+  },
+  "limitations": [
+    "Static instruction sites are not dynamic execution counts or transferred bytes.",
+    "No runtime trace proves the large-angle branches are never reached for every valid state/action or checkpoint.",
+    "No local-memory, cache-hit or DRAM-byte counters were collected; static allocation does not prove actual DRAM traffic.",
+    "LOCAL:0 alone does not establish zero register spills; classification also uses the complete disassembly and guarded-region analysis.",
+    "Disassembly tools are CUDA 12.8.55; the cubin was produced by NVRTC 13.0. Both tools decoded the sm_120 binary successfully.",
+    "Cross-block reductions, synchronization, statistics and launch-boundary checkpoint buffers still explicitly use global memory.",
+    "Findings apply only to this exact binary and configuration; different debug/profile flags, environment counts, compiler versions or source edits may change allocation."
+  ],
+  "suggested_next_step": "After performance runs, collect local-memory and DRAM counters for this exact launch. Consider bounded-angle math specialization only with a proved input-range contract and renewed independent physics/learning parity tests."
+}

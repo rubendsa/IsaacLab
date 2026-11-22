@@ -10,11 +10,16 @@ can keep its rollout, environment state, parameters and optimizer
 working state in shared memory and registers during a launch. Real Kuka RGB64 measurements below test selective
 fusion with the original trainable CNN. The native camera rollout cannot fit entirely in the GPU's SRAM.
 
-For Ruben: the useful experiment is to measure how much a fused learner saves on the real Kuka-Allegro lift recipe,
-then measure the effect on complete training iterations and time to task success. The native RGB64 rollout alone
-contains 1.5 GiB of images at 4,096 environments. The credible destination is a learner that streams compact inputs
-and keeps each computation tile on chip, with a separately measured small-model experiment for fully persistent
-training. Neither CUDA graphs nor a persistent kernel imply zero device-memory traffic.
+For Ruben: real RGB64 Kuka training measured **11–12% higher learner throughput and 2–3% higher full-iteration
+throughput** in 200-iteration runs at 4,096 environments on one RTX PRO 6000 Blackwell. The native trainable CNN,
+23-action policy, critic and PPO recipe are preserved. These are single-seed throughput observations, not a
+time-to-success result. All 111 targeted tests passed.
+
+**The complete perception learner is not yet SRAM-resident.** Its dense native rollout alone contains 1.5 GiB of
+images and 797.5 MiB of state/history. This branch implements selective fusion and a separate complete Cartpole
+megakernel; a persistent visual learner at smaller scale remains unimplemented. Neither CUDA graphs nor a
+persistent kernel imply zero device-memory traffic. The measurements and capacity analysis below make that
+remaining engineering work concrete.
 
 ## What is implemented, and what each result would prove
 
@@ -96,23 +101,30 @@ A fresh 150-iteration run at 4,096 environments and seed 42 measured the followi
 on the same GPU. Both exported policies were evaluated in stock Newton Cartpole
 on 8,192 held-out episodes with evaluation seed 10002:
 
-| Cartpole path | Process wall time | Training loop | Held-out return (maximum ≈5) |
+| Cartpole path | Process wall time | Training loop | Held-out return, mean ± episode std (maximum ≈5) |
 | --- | ---: | ---: | ---: |
 | Stock Isaac Lab/RSL-RL | 30.64 s | 21.13 s | 4.9455 ± 0.0697 |
 | Persistent analytic megakernel | 3.28 s | 0.0738 s | 4.9502 ± 0.0685 |
 
 Process wall time, including imports, setup and checkpoint export, improved 9.34×.
-The loop comparison uses rounded host iteration times for stock and CUDA events
-for the megakernel; it excludes compilation/setup and substitutes specialized
-analytic physics for the general engine. NVRTC's cache was warm. This is a small
+The loop comparison uses host iteration times rounded to 0.01 s for stock and
+CUDA events for the megakernel. Both exclude process imports and environment
+construction, but stock includes first-iteration setup (including 0.430 s graph
+capture), while megakernel compilation/initialization are outside its CUDA events.
+Specialized analytic physics replaces the general engine. NVRTC's cache was warm.
+Only one training seed was evaluated. This is a small
 complete-loop feasibility result, **not a predicted Kuka speedup**. See the
 [raw stock run](data/cartpole/stock_torch_s42.json),
 [megakernel run](data/cartpole/sram_s42.json) and
 [commands/source hashes](data/cartpole/manifest.json).
 
-The compiled kernel used 223 registers and reported 32 bytes local memory per
-thread, with 72,696 bytes dynamic shared memory per block. The local-memory report
-and global cross-block reductions prevent a zero-DRAM claim even for this path.
+The compiled kernel used 223 registers per thread and 72,696 bytes dynamic plus
+1,232 bytes static shared memory per block. Its driver report of 32 bytes local
+memory corresponds to a 32-byte stack frame. An [audit of the matching binary](data/cartpole/resource_audit.json)
+found local loads/stores only in `sincosf` large-angle reduction branches, with
+none in the learner loops. That supports absence of spilled learner state, but
+does not measure runtime branch execution or DRAM traffic. Global cross-block
+reductions and checkpoint transfers remain.
 
 ## Native Kuka-Allegro perception workload
 
@@ -219,30 +231,52 @@ working perception implementation is the selective fusion described above.
 ## How fast could it be?
 
 On one RTX PRO 6000 Blackwell Server Edition (188 SMs, driver 580.178.04, CUDA 13.0,
-PyTorch 2.11.0, RSL-RL 5.5.1), the first paired real RGB64 runs measured:
+PyTorch 2.11.0, RSL-RL 5.5.1), the longer real RGB64 comparison measured:
 
 | Native Kuka RGB64, 4,096 environments | Iteration median (p10–p90) | Learner median | Transitions/s |
 | --- | ---: | ---: | ---: |
-| Stock RSL-RL | 1.526 s (1.374–1.595) | 563 ms | 85,882 |
-| Fused operations | 1.307 s (1.300–1.353) | 433 ms | 100,322 |
-| Fused operations + CUDA graph | 1.317 s (1.304–1.357) | 432 ms | 99,491 |
+| Stock RSL-RL | 1.466 s (1.351–1.513) | 486 ms | 89,405 |
+| Fused operations | 1.438 s (1.329–1.462) | 436 ms | 91,140 |
+| Fused operations + CUDA graph | 1.421 s (1.319–1.463) | 433 ms | 92,254 |
 
-Each run uses seed 42, native reset initialization, 30 iterations and five warmup
-iterations. Total iteration timing synchronizes CUDA and includes physics,
+Each run uses seed 42, native reset initialization, **200 iterations**, and five
+warmup iterations. Each performs 26,214,400 transitions and 8,000 optimizer
+minibatches. Runs were sequential in the order graph, stock, fused, on clean
+implementation commit `c117928647ddad83c480c7a267c8f4225ab9ff6e`, with identical
+source hashes. Total iteration timing synchronizes CUDA and includes physics,
 rendering, collection and learning. The phase split uses host timer attribution;
-startup/compilation, logging and checkpoint writes are outside the steady-state
-numbers. Raw rows and source hashes are in [the run summaries](data/perception/README.md).
-The short pair gives **1.17× iteration throughput** and **1.30× learner throughput**.
-Stock timings varied substantially, so this is preliminary. Graph replay adds no
-measurable benefit at this batch size; at 64 environments it reduced the fused
-learner from about 146 ms to 28 ms in a three-iteration execution smoke test.
+startup/compilation, logging and checkpoint writes are outside steady-state
+timings. Raw rows, early/late windows and GPU samples are in the
+[comparison record](data/perception/comparison_4096_200.json) and
+[run summaries](data/perception/README.md).
+
+Learner throughput improved **1.115× with fusion** and **1.121× with fusion plus
+graphs**. Observed iteration throughput improved **1.019× and 1.032×**. Simulation
+work changes as trajectories and reset frequency evolve, so these full-iteration
+ratios are single-seed observations, not isolated causal gains or confidence
+intervals. The graph backend also changes the random stream by omitting unused
+optimization-time samples. Multiple training seeds and held-out evaluation remain
+necessary for a time-to-success claim.
+
+![Native Kuka RGB64 timing traces over 200 iterations](data/perception/kuka_rgb64_200_timings.jpg)
+
+The initial 30-iteration comparison suggested 1.17× overall and 1.30× learner
+throughput, but its stock learner median was 563 ms rather than the longer run's
+486 ms. Those [short-run records](data/perception/README.md) are retained for
+transparency; the longer comparison is the headline result. Graph replay adds
+little at this batch size. At 64 environments it reduced the fused learner from
+about 146 ms to 28 ms in a three-iteration execution smoke test, a separate
+launch-overhead result with only two measured iterations.
 
 All three native-scale runs produced real RGB observations, changed CNN weights,
 kept parameters finite and loaded checkpoints into an unmodified native actor.
-Maximum action disagreement in IEEE float32 was below `4.2e-7`; TF32 comparisons
+Maximum action disagreement in IEEE float32 was below `5.4e-7`; TF32 comparisons
 are separately recorded because library matmul and fused reductions round
-differently. RGB and depth graph smoke runs also passed. None established lift
-success: the native task success metric remained zero through these short runs.
+differently. RGB and depth graph smoke runs also passed. Peak PyTorch allocations
+were 8.71 GiB for stock/fused and 9.03 GiB for the graph path, excluding allocations
+made by simulation/rendering outside PyTorch. Global-memory use remains substantial.
+No run solved the lift task. Maximum logged training success was 0%, 0.0049% and
+0.0102% respectively; these are training metrics, not held-out success estimates.
 
 ![Real RGB64 camera observations from 16 native Kuka environments](data/perception/kuka_rgb64_camera_preview.jpg)
 
@@ -265,16 +299,19 @@ and partial reductions remain. DRAM-byte profiling has not been performed.
 
 Separate three quantities when interpreting these results:
 
-- **Learner speedup:** same collected transitions, same network, PPO settings and precision, eager versus optimized.
+- **Controlled learner speedup:** replay identical collected transitions with the same network, PPO settings and
+  precision, eager versus optimized. The real-environment phase timings above use separate trajectories.
 - **Iteration speedup:** collection plus learning, including physics, cameras, reset and observation handling.
 - **Time to success:** evaluation against the same lift criterion across several seeds, including startup and
   compilation where those costs matter to the use case.
 
 For a measured learner fraction `f` and learner-only speedup `s`, the iteration speedup is
-`1 / ((1 - f) + f / s)` when collection time is unchanged. For example, if learning consumes half the iteration,
-doubling learner throughput gives `1.33×` overall; even a zero-time learner would only yield `2×`. These are
-illustrative arithmetic, not results from this branch. If fused inference also improves collection, measure that
-term separately rather than crediting the update benchmark for it.
+`1 / ((1 - f) + f / s)` when collection time is unchanged. Here learning accounts
+for approximately one third of stock iteration time: a 1.12× learner predicts
+roughly 1.04× overall, and a zero-time learner would cap the gain near 1.5× if
+collection were unchanged. These are arithmetic bounds under that assumption,
+not measured implementations. If fused inference also improves collection,
+measure that term separately.
 
 The CNN benchmark already supports synchronized host timing, CUDA-event spans, profiler kernel counts,
 activation/storage accounting and optional comparison with recorded labperf collection times. Its synthetic
@@ -289,6 +326,9 @@ one file per process. The perception tests compare outputs, gradients and comple
 native PPO updates, including all model parameters, normalizer buffers and Adam
 state. Graph tests resume nonzero optimizer state and change observations across
 updates to detect stale captured buffers. Multi-GPU execution was not tested.
+Repository formatting/lint checks and a clean Sphinx HTML build with warnings
+treated as errors also passed. This GitHub-native report is excluded from Sphinx;
+its links and generated timing figure were checked separately.
 
 The Cartpole verifier uses float64 autograd for its first-minibatch gradient
 oracle: at 65,536 environments the CPU float32 reduction erred by `2.38e-6`, while

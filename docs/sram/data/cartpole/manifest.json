@@ -9,7 +9,7 @@
   "rsl_rl": "5.5.1",
   "training_command": "uv run --no-sync python scripts/sram/benchmark_cartpole.py run --out OUTPUT --seeds 42 --configs stock_torch sram --iterations 150 --num_envs 4096",
   "evaluation_command": "uv run --no-sync python scripts/sram/benchmark_cartpole.py eval --out OUTPUT --num_envs 4096 --num_episodes 2 --eval_seed 10002",
-  "timing_note": "Stock loop uses reported host iteration times rounded to milliseconds; SRAM loop uses CUDA events. Process wall times include imports, setup and checkpoint export. NVRTC cache was warm. Analytic Cartpole physics is specialized; this is not Kuka performance.",
+  "timing_note": "Stock loop sums reported host iteration times rounded to 0.01 s and includes first-iteration graph capture. SRAM loop uses CUDA events excluding compilation/initialization. Both exclude process imports and environment construction. Process wall times include imports, setup and checkpoint export. NVRTC cache was warm. Analytic Cartpole physics is specialized; this is not Kuka performance.",
   "source_sha256": {
     "source/isaaclab_sram/isaaclab_sram/__init__.py": "a2000bba95e863dbc2f2e297d252a1751ac5c84b014310d5a6c6eb1d0a3f0d75",
     "source/isaaclab_sram/isaaclab_sram/cartpole.py": "afaa6342a06c466b1f5f3d8c9a0010149abfcaec816f4f9e802f1d38ab63573c",
