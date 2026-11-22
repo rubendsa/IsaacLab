@@ -11,8 +11,9 @@ Combines MEASURED inputs:
   * the training working set and per-step physics FLOPs of those tasks (docs/sram/data/locomotion_footprint.json,
     measured by instantiating the tasks and walking every device buffer; FLOPs are an analytic count
     of the MuJoCo-Warp pipeline at the observed contact / solver-iteration counts),
-  * the PPO-update cost of those networks: stock RSL-RL vs the same update captured in one CUDA graph
-    (scripts/sram/projection/measure_update_cost.py output, optional),
+  * the PPO-update cost of those networks: stock RSL-RL vs the same update captured in CUDA graphs, and its FLOP
+    count (scripts/sram/projection/measure_update_cost.py output, optional; without it the update is counted as
+    6 FLOPs per MAC),
   * this GPU's measured on-chip capacities / bandwidths and the achieved efficiency of the Cartpole
     megakernel,
 with three explicit efficiency scenarios for the parts that do not exist yet (a persistent,
@@ -59,7 +60,10 @@ def project(task: dict, stock: dict, upd: dict | None) -> dict:
     macs = task["actor_macs"] + task["critic_macs"]
     flops_inf = n * T * 2 * macs
     nmb = task["num_learning_epochs"] * task["num_mini_batches"]
-    flops_upd = task["num_learning_epochs"] * n * T * 6 * macs  # fwd (2) + bwd (4) FLOPs per MAC
+    if upd and upd.get("update_gflop"):  # counted by measure_update_cost.py (no input gradient for the first layer)
+        flops_upd = upd["update_gflop"] * 1e9
+    else:  # fwd (2) + bwd (4) FLOPs per MAC
+        flops_upd = task["num_learning_epochs"] * n * T * 6 * macs
     out = dict(
         task=task["name"],
         working_set_mib=task["lean_working_set_bytes"] / 2**20,
@@ -74,7 +78,7 @@ def project(task: dict, stock: dict, upd: dict | None) -> dict:
         ),
     )
     if upd:
-        out["measured_update_s"] = upd
+        out["measured_update"] = {k: upd[k] for k in ("update_gflop", "tf32_on", "tf32_off") if k in upd}
     sc = {}
     for name, p in SCENARIOS.items():
         phys = p["pad"] * (flops_phys + flops_act) / (p["physics_eff"] * FP32_PEAK) + T * SYNC_PER_ENV_STEP_S

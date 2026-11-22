@@ -21,7 +21,7 @@ import argparse
 import glob
 import json
 import os
-import statistics
+import sys
 
 import matplotlib
 
@@ -69,7 +69,13 @@ SHORT = {
     "torch_analytic": "Analytic env + RSL-RL",
 }
 SLOT = {c: i for i, c in enumerate(CURVES)}
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import summarize_benchmarks as sb  # noqa: E402
+
 PX = 72.0 / 100.0  # 1 px at the 100-dpi layout scale, in points
+# label for global-memory rollouts: the 128 MiB L2 of the RTX PRO 6000 Blackwell holds a rollout buffer of up to
+# ~100 MiB next to the kernel's other data (measured: throughput is flat up to 131K envs = 96 MiB, then drops)
+L2_RESIDENT_BYTES = 100 * 2**20
 
 
 def _load_json(path: str):
@@ -116,13 +122,21 @@ def curve(r):
         dt = r["train_gpu_s"] / max(1, len(its))
         t = np.arange(1, len(its) + 1) * dt
     else:
-        t = np.cumsum([x.get("iteration_s", np.nan) for x in its])
+        # collection + learning time have 1 ms resolution in RSL-RL's log ("Iteration time" only 10 ms)
+        t = np.cumsum(
+            [
+                (x["collection_s"] + x["learning_s"])
+                if "collection_s" in x and "learning_s" in x
+                else x.get("iteration_s", np.nan)
+                for x in its
+            ]
+        )
     y = np.array([x.get("mean_episode_return", np.nan) for x in its], dtype=float)
     return t, y
 
 
 def fig_learning(runs, t, out):
-    fig, ax = new_fig(t)
+    fig, ax = new_fig(t, h=5.2)
     ax.set_xscale("log")
     for cfg in CURVES:
         rs = [r for r in runs.get(cfg, []) if r.get("per_iter")]
@@ -168,7 +182,15 @@ def fig_learning(runs, t, out):
     ax.set_xlabel("training-loop wall-clock time [s] (log scale)", color=t["ink2"], fontsize=9.5)
     ax.set_ylabel("mean training-episode return", color=t["ink2"], fontsize=9.5)
     ax.set_ylim(top=5.6)
-    ax.legend(loc="lower right", frameon=False, fontsize=8.5, labelcolor=t["ink"])
+    # below the plot: inside, it would cover the stock curves, which converge in the lower right
+    ax.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.16),
+        ncol=2,
+        frameon=False,
+        fontsize=8.5,
+        labelcolor=t["ink"],
+    )
     title(
         fig,
         ax,
@@ -181,15 +203,13 @@ def fig_learning(runs, t, out):
     plt.close(fig)
 
 
-def fig_iteration(runs, t, out):
+def fig_iteration(main_rows, t, out):
+    """Median time per PPO iteration per configuration (summarize_benchmarks.summarize_runs rows)."""
     fig, ax = new_fig(t, h=3.4)
     ax.set_xscale("log")
-    rows = []
-    for cfg, _ in CONFIGS:
-        rs = runs.get(cfg, [])
-        v = [r["median_iteration_s"] for r in rs if r.get("median_iteration_s")]
-        if v:
-            rows.append((cfg, statistics.median(v)))
+    rows = [
+        (cfg, main_rows[cfg]["per_iteration_s"]) for cfg, _ in CONFIGS if main_rows.get(cfg, {}).get("per_iteration_s")
+    ]
     rows = rows[::-1]
     for i, (cfg, v) in enumerate(rows):
         col = t["series"][0] if cfg == "sram" else t["gray"]  # emphasis: one hue, the rest gray
@@ -236,7 +256,7 @@ def fig_scaling(rows, t, out, stock_ref=None, stock_rows=None):
         tier = (
             "SMEM"
             if "shared" in r["storage"]
-            else ("L2" if r["describe"]["rollout_buffer_bytes_total"] < 96 * 2**20 else "DRAM")
+            else ("L2" if r["describe"]["rollout_buffer_bytes_total"] <= L2_RESIDENT_BYTES else "DRAM")
         )
         ax.annotate(
             tier,
@@ -284,7 +304,53 @@ def fig_scaling(rows, t, out, stock_ref=None, stock_rows=None):
         ax,
         t,
         "Training throughput vs. environment count",
-        "SRAM labels: where the megakernel's rollout buffer lives (shared memory, L2 or DRAM)",
+        "labels: where the megakernel's rollout buffer lives: SMEM (shared memory), L2 or DRAM",
+    )
+    fig.tight_layout()
+    fig.savefig(out, dpi=200, facecolor=t["surface"])
+    plt.close(fig)
+
+
+def fig_time_to_policy(rows, t, out, threshold):
+    """Time to a mean training return >= threshold vs env count, SRAM and stock (median over seeds)."""
+    series = [("sram", "SRAM megakernel"), ("stock_torch", "Stock Isaac Lab 3.0 (Newton + RSL-RL)")]
+    fig, ax = new_fig(t)
+    ax.set_xscale("log", base=2)
+    ax.set_yscale("log")
+    xs_all = []
+    for cfg, label in series:
+        pts = [(r["num_envs"], (r.get(cfg) or {}).get("time_to_threshold_s")) for r in rows]
+        pts = [(x, y) for x, y in pts if y]
+        if not pts:
+            continue
+        x, y = np.array([p[0] for p in pts]), np.array([p[1] for p in pts])
+        xs_all += list(x)
+        col = t["series"][SLOT[cfg]]
+        ax.plot(x, y, color=col, linewidth=2 * PX, zorder=3, label=label)
+        ax.plot(x, y, "o", color=col, markersize=8 * PX, markeredgecolor=t["surface"], markeredgewidth=2 * PX, zorder=4)
+        for xi, yi in zip(x, y):  # values are few (4-5 per series): label each point
+            ax.annotate(
+                f"{yi:.1f} s" if yi >= 1 else f"{1e3 * yi:.0f} ms",
+                (xi, yi),
+                xytext=(0, 9),
+                textcoords="offset points",
+                ha="center",
+                color=t["ink"],
+                fontsize=8.5,
+            )
+    xs = sorted(set(xs_all))
+    ax.set_xticks(xs)
+    ax.set_xticklabels([f"{v // 1024}K" if v >= 1024 else str(v) for v in xs])
+    ax.set_xlabel("parallel environments", color=t["ink2"], fontsize=9.5)
+    ax.set_ylabel(f"training-loop time to mean return ≥ {threshold} [s], log scale", color=t["ink2"], fontsize=9.5)
+    # left, between the two series (the right side holds the value labels of the larger env counts)
+    ax.legend(loc="upper left", bbox_to_anchor=(0.0, 0.62), frameon=False, fontsize=8.5, labelcolor=t["ink"])
+    title(
+        fig,
+        ax,
+        t,
+        "Time to a working Cartpole policy vs. environment count",
+        "median over 3 seeds; ~30-50 PPO iterations at every env count, so the time follows the time per iteration",
     )
     fig.tight_layout()
     fig.savefig(out, dpi=200, facecolor=t["surface"])
@@ -303,19 +369,21 @@ def main():
         if os.path.exists(os.path.join(a.bench, "scaling.json"))
         else []
     )
-    stock = [r.get("median_iteration_s") for r in runs.get("stock_torch", []) if r.get("median_iteration_s")]
-    stock_ref = (4096 * 16 / statistics.median(stock)) if stock else None
-    stock_rows = []
-    if os.path.exists(os.path.join(a.bench, "stock_scaling.json")):
-        stock_rows = [r for r in _load_json(os.path.join(a.bench, "stock_scaling.json")) if r.get("env_steps_per_s")]
-        if stock_ref:
-            stock_rows.append({"num_envs": 4096, "env_steps_per_s": stock_ref})
+    sightings = sb.foreign_sightings(a.bench)
+    _, main_rows = sb.summarize_runs(a.bench, sightings)
+    stock_it = main_rows.get("stock_torch", {}).get("per_iteration_s")
+    stock_ref = 4096 * 16 / stock_it if stock_it else None
+    # stock throughput vs env count, recomputed from the training logs (1 ms resolution)
+    stock_rows = sb.stock_scaling_rows(a.bench, main_rows.get("stock_torch"))
+    ttp = sb.time_to_policy_rows(a.bench, sightings, main_rows)
     for mode, t in THEMES.items():
         if runs:
             fig_learning(runs, t, os.path.join(a.out, f"learning_curves_{mode}.png"))
-            fig_iteration(runs, t, os.path.join(a.out, f"iteration_time_{mode}.png"))
+            fig_iteration(main_rows, t, os.path.join(a.out, f"iteration_time_{mode}.png"))
         if scaling:
             fig_scaling(scaling, t, os.path.join(a.out, f"scaling_{mode}.png"), stock_ref, stock_rows)
+        if ttp:
+            fig_time_to_policy(ttp, t, os.path.join(a.out, f"time_to_policy_{mode}.png"), sb.THRESHOLD)
     print("figures written to", a.out)
 
 

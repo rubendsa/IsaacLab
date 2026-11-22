@@ -10,16 +10,22 @@ Every configuration runs as its own process, strictly sequentially, and is timed
 
 Configurations
 --------------
-``stock_torch``    stock Isaac Lab 3.0: Newton (MuJoCo-Warp) physics, torch env, RSL-RL PPO
-``stock_warp``     stock Isaac Lab 3.0 with the experimental Warp env frontend (``--frontend warp``)
-``torch_analytic`` ablation: same MDP with closed-form physics as a batched torch VecEnv + stock RSL-RL
-``sram``           this prototype: the whole PPO loop in one SRAM-resident CUDA megakernel
+``stock_torch``              stock Isaac Lab 3.0: Newton (MuJoCo-Warp) physics, torch env, RSL-RL PPO
+``stock_warp``               stock Isaac Lab 3.0 with the experimental Warp env frontend (``--frontend warp``)
+``torch_analytic``           ablation: same MDP with closed-form physics as a batched torch VecEnv + stock RSL-RL
+``torch_analytic_compiled``  ablation: that env step fused by ``torch.compile`` (CUDA graph) + stock RSL-RL
+``sram``                     this prototype: the whole PPO loop in one SRAM-resident CUDA megakernel
+
+Run on a quiet host: stock training is host-latency bound and the megakernel is timed on the GPU, so other GPU
+jobs or CPU-heavy processes distort the numbers. ``run``, ``stock_scaling`` and ``locomotion`` watch for other
+GPU compute processes and, with ``--quiet_retries N``, repeat a measurement that overlapped one.
 
 Usage::
 
-    # quiet host! (no other GPU jobs / agents): timings are CPU-latency sensitive
-    python scripts/sram/benchmark_cartpole.py run --out /tmp/sram_bench --seeds 1 2 3
+    python scripts/sram/benchmark_cartpole.py run --out /tmp/sram_bench --seeds 1 2 3 --quiet_retries 3
+    python scripts/sram/benchmark_cartpole.py eval --out /tmp/sram_bench
     python scripts/sram/benchmark_cartpole.py scaling --out /tmp/sram_bench
+    python scripts/sram/benchmark_cartpole.py stock_scaling --out /tmp/sram_bench
     python scripts/sram/benchmark_cartpole.py report --out /tmp/sram_bench
 """
 
@@ -82,6 +88,83 @@ def parse_rsl_rl_log(text: str) -> list[dict]:
     return recs
 
 
+IGNORED_GPU_APPS = re.compile(r"dcvagent|gnome|Xorg|remote-desktop")
+
+
+def _gpu_compute_pids() -> dict[int, str]:
+    try:
+        out = subprocess.run(
+            ["nvidia-smi", "--query-compute-apps=pid,process_name", "--format=csv,noheader"],
+            capture_output=True,
+            text=True,
+            timeout=20,
+        ).stdout
+    except (OSError, subprocess.SubprocessError):
+        return {}
+    pids = {}
+    for line in out.splitlines():
+        pid, _, name = line.partition(",")
+        if pid.strip().isdigit() and not IGNORED_GPU_APPS.search(name):
+            pids[int(pid)] = name.strip()
+    return pids
+
+
+def _descends_from(pid: int, root: int) -> bool | None:
+    """True/False, or None if the process exited before its ancestry could be read."""
+    first = True
+    for _ in range(64):
+        if pid == root:
+            return True
+        if pid <= 1:
+            return False
+        try:
+            with open(f"/proc/{pid}/stat") as fh:
+                pid = int(fh.read().rsplit(")", 1)[1].split()[1])
+        except (OSError, ValueError, IndexError):
+            return None if first else False
+        first = False
+    return False
+
+
+class ForeignGpuWatch:
+    """Records GPU compute processes that are not descendants of this process while a measurement runs.
+
+    Stock Isaac Lab training is host-latency bound and the megakernel is timed on the GPU, so any other GPU job
+    during a run invalidates it. ``run`` retries such runs (``--quiet_retries``).
+    """
+
+    def __init__(self, period_s: float = 2.0):
+        import threading
+
+        self.period_s, self.seen, self.vanished = period_s, {}, {}
+        self.polls = self.foreign_polls = 0  # foreign_polls * period_s ~ seconds with another GPU job present
+        self._stop = threading.Event()
+        self._thread = threading.Thread(target=self._loop, daemon=True)
+
+    def _loop(self):
+        me = os.getpid()
+        while not self._stop.is_set():
+            foreign = False
+            for pid, name in _gpu_compute_pids().items():
+                ours = _descends_from(pid, me)
+                if ours is None:  # exited between nvidia-smi and /proc: one of ours finishing, or a sub-2 s job
+                    self.vanished[pid] = name
+                elif not ours:
+                    self.seen[pid] = name
+                    foreign = True
+            self.polls += 1
+            self.foreign_polls += foreign
+            self._stop.wait(self.period_s)
+
+    def __enter__(self):
+        self._thread.start()
+        return self
+
+    def __exit__(self, *exc):
+        self._stop.set()
+        self._thread.join()
+
+
 def run_proc(
     cmd: list[str], cwd: str, log_path: str, env: dict | None = None, timeout: int = 3600
 ) -> tuple[float, str, int]:
@@ -94,9 +177,26 @@ def run_proc(
         cmd, cwd=cwd, env=e, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=timeout
     )
     wall = time.perf_counter() - t0
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
     with open(log_path, "w") as fh:
         fh.write(p.stdout)
     return wall, p.stdout, p.returncode
+
+
+def watched(fn, retries: int, tag: str) -> dict:
+    """Call ``fn() -> dict`` under a ForeignGpuWatch; repeat (up to *retries* times) while other GPU jobs ran."""
+    for attempt in range(retries + 1):
+        with ForeignGpuWatch() as watch:
+            row = fn()
+        row["foreign_gpu_processes"] = sorted(set(watch.seen.values()))
+        row["foreign_gpu_seconds"] = watch.foreign_polls * watch.period_s
+        row["attempt"] = attempt + 1
+        if not watch.seen:
+            break
+        print(
+            f"[{tag}] other GPU processes ran during attempt {attempt + 1}: {row['foreign_gpu_processes']}", flush=True
+        )
+    return row
 
 
 SRAM_RUNNER = r"""
@@ -113,7 +213,9 @@ t1 = time.perf_counter()
 tr = SramPPOCartpole(task, ppo, num_envs={num_envs}, seed={seed})
 torch.cuda.synchronize()
 t2 = time.perf_counter()
-res = tr.train({iterations})
+# the GPU drives a display (kernel watchdog on): above 16K envs every iteration gets its own launch, which
+# does not change the result (training is bitwise invariant to launch chunking); GPU time includes the gaps
+res = tr.train({iterations}, iters_per_launch=None if {num_envs} <= 16384 else 1)
 t3 = time.perf_counter()
 ckpt = None
 try:
@@ -135,6 +237,37 @@ print("SRAM_RESULT " + json.dumps(dict(
 
 
 def run_config(config: str, seed: int, args, out_dir: str) -> dict:
+    """Run one configuration; retry up to ``--quiet_retries`` times if a foreign GPU process was seen meanwhile."""
+    tag = f"{config}_s{seed}"
+    retries = getattr(args, "quiet_retries", 0)
+    for attempt in range(retries + 1):
+        work = os.path.join(out_dir, "work", tag)
+        if os.path.exists(work):  # keep an earlier attempt's files, but out of the checkpoint search path
+            k = 1
+            while os.path.exists(f"{work}.prev{k}"):
+                k += 1
+            os.rename(work, f"{work}.prev{k}")
+        with ForeignGpuWatch() as watch:
+            rec = _run_config_once(config, seed, args, out_dir)
+        rec["foreign_gpu_processes"] = sorted(set(watch.seen.values()))
+        rec["foreign_gpu_seconds"] = watch.foreign_polls * watch.period_s
+        rec["attempt"] = attempt + 1
+        if not watch.seen:
+            break
+        print(
+            f"[{tag}] other GPU processes ran during attempt {attempt + 1}: {rec['foreign_gpu_processes']}", flush=True
+        )
+    with open(os.path.join(out_dir, f"{tag}.json"), "w") as fh:
+        json.dump(rec, fh, indent=1)
+    print(
+        f"[{tag}] rc={rec.get('returncode')} wall={rec.get('process_wall_s', 0):.2f}s "
+        f"loop={rec.get('sum_iteration_s', 0):.3f}s it_med={1e3 * (rec.get('median_iteration_s') or 0):.2f}ms",
+        flush=True,
+    )
+    return rec
+
+
+def _run_config_once(config: str, seed: int, args, out_dir: str) -> dict:
     tag = f"{config}_s{seed}"
     work = os.path.join(out_dir, "work", tag)
     os.makedirs(work, exist_ok=True)
@@ -218,7 +351,12 @@ def run_config(config: str, seed: int, args, out_dir: str) -> dict:
     # derived quantities
     if rec.get("per_iter") and config != "sram":
         its = rec["per_iter"]
-        times = [r.get("iteration_s") for r in its if r.get("iteration_s") is not None]
+        # collection + learning (1 ms resolution) rather than RSL-RL's 10-ms-resolution "Iteration time"
+        times = [
+            r["collection_s"] + r["learning_s"] if "collection_s" in r and "learning_s" in r else r.get("iteration_s")
+            for r in its
+        ]
+        times = [x for x in times if x is not None]
         rec["sum_iteration_s"] = sum(times)
         steady = times[3:] if len(times) > 6 else times
         rec["median_iteration_s"] = statistics.median(steady) if steady else None
@@ -229,13 +367,6 @@ def run_config(config: str, seed: int, args, out_dir: str) -> dict:
     if config == "sram" and rec.get("train_gpu_s"):
         rec["sum_iteration_s"] = rec["train_gpu_s"]
         rec["median_iteration_s"] = rec["train_gpu_s"] / args.iterations
-    with open(os.path.join(out_dir, f"{tag}.json"), "w") as fh:
-        json.dump(rec, fh, indent=1)
-    print(
-        f"[{tag}] rc={rec.get('returncode')} wall={rec.get('process_wall_s', 0):.2f}s "
-        f"loop={rec.get('sum_iteration_s', 0):.3f}s it_med={1e3 * (rec.get('median_iteration_s') or 0):.2f}ms",
-        flush=True,
-    )
     return rec
 
 
@@ -291,12 +422,14 @@ def cmd_scaling(args):
 def cmd_eval(args):
     """Evaluate every trained checkpoint with the same protocol in the stock Isaac Lab Newton env."""
     for path in sorted(glob.glob(os.path.join(args.out, "*_s[0-9]*.json"))):
+        tag = os.path.basename(path)[: -len(".json")]
+        if args.tags and tag not in args.tags:
+            continue
         rec = _load_json(path)
         ck = rec.get("checkpoint")
         if not ck or not os.path.exists(ck):
-            print(f"[eval] {os.path.basename(path)}: no checkpoint, skipped", flush=True)
+            print(f"[eval] {tag}: no checkpoint, skipped", flush=True)
             continue
-        tag = os.path.basename(path)[: -len(".json")]
         out_json = os.path.join(args.out, "eval", f"{tag}.json")
         os.makedirs(os.path.dirname(out_json), exist_ok=True)
         cmd = [
@@ -378,21 +511,25 @@ def cmd_locomotion(args):
             f"loco_{key}",
             "physics=newton_mjwarp",
         ] + extra
-        wall, out, rc = run_proc(cmd, work, os.path.join(args.out, "logs", f"loco_{key}.log"))
-        its = parse_rsl_rl_log(out)[2:]  # drop warm-up iterations (CUDA graph capture, JIT)
-        med = lambda k: statistics.median([r[k] for r in its if k in r]) if its else None  # noqa: E731
-        row = dict(
-            task_key=key,
-            task=task,
-            num_envs=args.num_envs,
-            returncode=rc,
-            process_wall_s=wall,
-            collection_s=med("collection_s"),
-            learning_s=med("learning_s"),
-            iteration_s=med("iteration_s"),
-            steps_per_s=med("steps_per_s"),
-            iterations_measured=len(its),
-        )
+
+        def once(cmd=cmd, work=work, key=key, task=task):
+            wall, out, rc = run_proc(cmd, work, os.path.join(args.out, "logs", f"loco_{key}.log"))
+            its = parse_rsl_rl_log(out)[2:]  # drop warm-up iterations (CUDA graph capture, JIT)
+            med = lambda k: statistics.median([r[k] for r in its if k in r]) if its else None  # noqa: E731
+            return dict(
+                task_key=key,
+                task=task,
+                num_envs=args.num_envs,
+                returncode=rc,
+                process_wall_s=wall,
+                collection_s=med("collection_s"),
+                learning_s=med("learning_s"),
+                iteration_s=med("iteration_s"),
+                steps_per_s=med("steps_per_s"),
+                iterations_measured=len(its),
+            )
+
+        row = watched(once, args.quiet_retries, f"loco_{key}")
         rows.append(row)
         print(row, flush=True)
     with open(os.path.join(args.out, "locomotion.json"), "w") as fh:
@@ -426,18 +563,25 @@ def cmd_stock_scaling(args):
             tag,
             "physics=newton_mjwarp",
         ]
-        wall, out, rc = run_proc(cmd, work, os.path.join(args.out, "logs", f"{tag}.log"))
-        its = parse_rsl_rl_log(out)[3:]  # drop warm-up iterations
-        it_s = statistics.median([r["iteration_s"] for r in its if "iteration_s" in r]) if its else None
-        row = dict(
-            num_envs=n,
-            returncode=rc,
-            iterations_measured=len(its),
-            median_iteration_s=it_s,
-            env_steps_per_s=(n * 16 / it_s) if it_s else None,
-            median_collection_s=statistics.median([r["collection_s"] for r in its if "collection_s" in r] or [0]),
-            median_learning_s=statistics.median([r["learning_s"] for r in its if "learning_s" in r] or [0]),
-        )
+
+        def once(cmd=cmd, work=work, tag=tag, n=n):
+            wall, out, rc = run_proc(cmd, work, os.path.join(args.out, "logs", f"{tag}.log"))
+            its = parse_rsl_rl_log(out)[3:]  # drop warm-up iterations
+            # collection + learning (1 ms resolution) rather than RSL-RL's 10-ms-resolution "Iteration time"
+            times = [r["collection_s"] + r["learning_s"] for r in its if "collection_s" in r and "learning_s" in r]
+            it_s = statistics.median(times) if times else None
+            return dict(
+                num_envs=n,
+                returncode=rc,
+                process_wall_s=wall,
+                iterations_measured=len(its),
+                median_iteration_s=it_s,
+                env_steps_per_s=(n * 16 / it_s) if it_s else None,
+                median_collection_s=statistics.median([r["collection_s"] for r in its if "collection_s" in r] or [0]),
+                median_learning_s=statistics.median([r["learning_s"] for r in its if "learning_s" in r] or [0]),
+            )
+
+        row = watched(once, args.quiet_retries, tag)
         rows.append(row)
         print(row, flush=True)
     with open(os.path.join(args.out, "stock_scaling.json"), "w") as fh:
@@ -481,6 +625,12 @@ def main():
     )
     r.add_argument("--iterations", type=int, default=150)
     r.add_argument("--num_envs", type=int, default=4096)
+    r.add_argument(
+        "--quiet_retries",
+        type=int,
+        default=0,
+        help="re-run a configuration up to this many times when another GPU process ran during it",
+    )
     s = sub.add_parser("scaling")
     s.add_argument("--out", required=True)
     s.add_argument(
@@ -493,15 +643,20 @@ def main():
     ev.add_argument("--num_envs", type=int, default=4096)
     ev.add_argument("--num_episodes", type=int, default=2)
     ev.add_argument("--eval_seed", type=int, default=10002)
+    ev.add_argument("--tags", nargs="*", default=None, help="evaluate only these runs, e.g. sram_s1 stock_torch_s2")
     lo = sub.add_parser("locomotion")
     lo.add_argument("--out", required=True)
     lo.add_argument("--tasks", nargs="+", default=["anymal_c", "g1"])
     lo.add_argument("--num_envs", type=int, default=4096)
     lo.add_argument("--iterations", type=int, default=12)
+    lo.add_argument("--quiet_retries", type=int, default=0)
     ss = sub.add_parser("stock_scaling")
     ss.add_argument("--out", required=True)
-    ss.add_argument("--env_counts", type=int, nargs="+", default=[1024, 16384, 65536])
+    ss.add_argument(
+        "--env_counts", type=int, nargs="+", default=[1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144]
+    )
     ss.add_argument("--iterations", type=int, default=20)
+    ss.add_argument("--quiet_retries", type=int, default=0)
     p = sub.add_parser("report")
     p.add_argument("--out", required=True)
     args = ap.parse_args()
