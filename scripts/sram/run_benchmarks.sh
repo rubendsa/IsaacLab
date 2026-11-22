@@ -49,6 +49,16 @@ trap 'kill ${MONITOR} 2>/dev/null' EXIT
 echo "== 1/8 numerical verification"
 "${PY}" scripts/sram/verify_megakernel.py --num_envs 4096 --seed 3 --out "${OUT}/verify_4096.json" > "${OUT}/verify_4096.log" 2>&1
 "${PY}" scripts/sram/verify_megakernel.py --num_envs 4096 --seed 3 --warmup_iters 3 --out "${OUT}/verify_4096_warm.json" > "${OUT}/verify_4096_warm.log" 2>&1
+# closed-form physics against recorded Newton/MuJoCo-Warp transitions (and the megakernel against the closed form)
+mkdir -p "${OUT}/newton_check"
+(
+    cd "${OUT}/newton_check"
+    "${PY}" "${REPO}/scripts/sram/baselines/record_newton_rollouts.py" --actions random --resets on > record_resets_on.log 2>&1
+    "${PY}" "${REPO}/scripts/sram/baselines/record_newton_rollouts.py" --actions random --resets off --action_amp 10 \
+        --steps 120 > record_resets_off.log 2>&1
+    "${PY}" "${REPO}/scripts/sram/baselines/torch_cartpole_vecenv.py" --check --megakernel \
+        --dataset ref_random_resetson_n4096.npz ref_random_resetsoff_n4096_amp10.npz --out check.json > check.log 2>&1
+)
 
 echo "== 2/8 training runs (stock torch, stock warp, analytic ablations, SRAM) x seeds ${SEEDS}"
 # shellcheck disable=SC2086
@@ -60,6 +70,11 @@ echo "== 3/8 evaluation of every trained policy in the stock Newton env"
 echo "== 4/8 throughput vs the environment count: SRAM megakernel and stock Isaac Lab"
 "${PY}" scripts/sram/benchmark_cartpole.py scaling --out "${OUT}"
 "${PY}" scripts/sram/profile_megakernel.py --num_envs 4096 --out "${OUT}/profile_4096.json" > "${OUT}/profile_4096.log" 2>&1
+# does the rollout buffer's placement matter? shared memory vs global memory at the same env counts, twice
+for rep in 1 2; do
+    "${PY}" scripts/sram/benchmark_cartpole.py scaling --out "${OUT}/storage_ablation/rep${rep}" --env_counts 4096 8192 \
+        --storages smem global --iterations 50
+done
 "${PY}" scripts/sram/benchmark_cartpole.py stock_scaling --out "${OUT}" --quiet_retries 3
 # a second stock sweep: the report takes the faster of the two per env count (stock is host-latency bound)
 "${PY}" scripts/sram/benchmark_cartpole.py stock_scaling --out "${OUT}/stock_rep2" --quiet_retries 3

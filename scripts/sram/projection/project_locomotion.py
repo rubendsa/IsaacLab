@@ -35,15 +35,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FOOTPRINT = os.path.join(HERE, "..", "..", "..", "docs", "sram", "data", "locomotion_footprint.json")
 
 # efficiency scenarios for code that would have to be written (fraction of the measured FP32 FFMA peak,
-# 112.8 TFLOP/s on this GPU), and the per-sync overhead of a persistent kernel (measured: grid barrier
-# 0.73 us; Cartpole megakernel all-reduce 4.4 us per mini-batch incl. two barriers)
+# 112.8 TFLOP/s on this GPU), and the per-sync overhead of a persistent kernel (the Cartpole megakernel's
+# gradient all-reduce, two grid barriers included, measured by scripts/sram/profile_megakernel.py; the per-env-step
+# sync is an assumption)
 SCENARIOS = {
     "conservative": dict(physics_eff=0.02, learner_eff=0.08, pad=3.0),  # 2.3 / 9 TFLOP/s, 3x padded FLOPs
     "expected": dict(physics_eff=0.05, learner_eff=0.25, pad=2.0),  # 5.6 / 28 TFLOP/s
     "optimistic": dict(physics_eff=0.12, learner_eff=0.45, pad=1.5),  # 13.5 / 51 TFLOP/s (TF32 MMA)
 }
 FP32_PEAK = 112.8e12
-SYNC_PER_MINIBATCH_S = 4.4e-6
+SYNC_PER_MINIBATCH_S = 4.46e-6  # profile_megakernel.py at 4,096 envs: 89.2 us for 20 mini-batch all-reduces
 SYNC_PER_ENV_STEP_S = 2.0e-6
 
 

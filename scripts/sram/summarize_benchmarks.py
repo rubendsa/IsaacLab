@@ -108,13 +108,21 @@ def iter_times(rec):
 
 
 def first_crossing(rec, threshold):
-    """(iteration index, cumulative training-loop seconds) at which the mean training return first reaches it."""
+    """When the logged mean training return first reaches *threshold*.
+
+    Returns (iterations, steady-state seconds, cumulative seconds). Steady-state time is iterations x the run's median
+    time per iteration (iterations 4 on), so one-time warm-up is excluded on both sides: stock's first iteration
+    (Warp and CUDA-graph warm-up) and the megakernel's kernel load and initialization, which happen outside its timed
+    launch. Cumulative time sums the logged iteration times, stock's warm-up included.
+    """
+    times = iter_times(rec)
+    steady = med(times[3:])
     cum = 0.0
-    for i, (r, t) in enumerate(zip(rec.get("per_iter") or [], iter_times(rec))):
+    for i, (r, t) in enumerate(zip(rec.get("per_iter") or [], times)):
         cum += t or 0.0
         if (r.get("mean_episode_return") or -1e9) >= threshold:
-            return i + 1, cum
-    return None, None
+            return i + 1, (i + 1) * steady if steady else None, cum
+    return None, None, None
 
 
 def fmt_t(s):
@@ -154,6 +162,7 @@ def summarize_runs(bench, sightings):
             iterations_to_threshold=med([c[0] for c in cross]),
             iterations_to_threshold_by_seed=[c[0] for c in cross],
             time_to_threshold_s=med([c[1] for c in cross]),
+            time_to_threshold_cumulative_s=med([c[2] for c in cross]),
             eval_return_by_seed=ev,
             eval_return_mean=statistics.mean(ev) if ev else None,
             eval_return_spread=(max(ev) - min(ev)) if len(ev) > 1 else None,
@@ -193,7 +202,12 @@ def stock_scaling_rows(bench, base_row):
                 t = r.get("median_iteration_s")
             if t:
                 by_n.setdefault(r["num_envs"], []).append(
-                    dict(t=t, contended=bool(r.get("foreign_gpu_processes")), foreign_s=r.get("foreign_gpu_seconds"))
+                    dict(
+                        source=f"{os.path.relpath(d, bench)}/stock_scaling.json (20 iterations)",
+                        t=t,
+                        contended=bool(r.get("foreign_gpu_processes")),
+                        foreign_s=r.get("foreign_gpu_seconds"),
+                    )
                 )
     # the 150-iteration training runs at the same env counts (main runs, time-to-policy runs) are measurements too
     for d, n_fixed in [(bench, 4096)] + [
@@ -204,7 +218,12 @@ def stock_scaling_rows(bench, base_row):
             t = med(iter_times(r)[3:])
             if t:
                 by_n.setdefault(n_fixed, []).append(
-                    dict(t=t, contended=bool(r.get("foreign_gpu_processes")), foreign_s=r.get("foreign_gpu_seconds"))
+                    dict(
+                        source=f"{os.path.relpath(p, bench)} (150 iterations)",
+                        t=t,
+                        contended=bool(r.get("foreign_gpu_processes")),
+                        foreign_s=r.get("foreign_gpu_seconds"),
+                    )
                 )
     out = []
     for n, cands in by_n.items():
@@ -214,10 +233,19 @@ def stock_scaling_rows(bench, base_row):
             dict(
                 num_envs=n,
                 iteration_s=best["t"],
-                iteration_s_by_sweep=[c["t"] for c in cands],
+                source=best["source"],
                 contended=best["contended"],
                 foreign_gpu_seconds=best["foreign_s"],
                 env_steps_per_s=n * STEPS_PER_ENV / best["t"],
+                candidates=[
+                    dict(
+                        source=c["source"],
+                        iteration_s=c["t"],
+                        other_gpu_job=c["contended"],
+                        other_gpu_job_seconds=c["foreign_s"],
+                    )
+                    for c in sorted(cands, key=lambda c: c["source"])
+                ],
             )
         )
     return sorted(out, key=lambda r: r["num_envs"])
@@ -435,14 +463,12 @@ def export(bench, out_dir, runs, rows, stock_rows, scaling, ttp):
                     other_gpu_job_seconds=r.get("foreign_gpu_seconds"),
                 )
             )
-    originals = (
-        sorted(
-            f[: -len(".json")] for f in os.listdir(os.path.join(bench, "contended_originals")) if f.endswith(".json")
-        )
-        if os.path.isdir(os.path.join(bench, "contended_originals"))
-        else []
+    originals = sorted(
+        os.path.relpath(p, bench)[: -len(".json")].replace("contended_originals/", "")
+        for p in glob.glob(os.path.join(bench, "contended_originals", "*.json"))
+        + glob.glob(os.path.join(bench, "envs_*", "contended_originals", "*.json"))
     )
-    dump("run_attempts.json", dict(first_pass_runs_repeated=originals, runs=attempts))
+    dump("run_attempts.json", dict(runs_repeated_after_overlapping_other_gpu_jobs=originals, runs=attempts))
     for name in (
         "locomotion.json",
         "update_cost.json",
@@ -454,6 +480,19 @@ def export(bench, out_dir, runs, rows, stock_rows, scaling, ttp):
         p = os.path.join(bench, name)
         if os.path.exists(p):
             dump(name.replace("locomotion.json", "stock_iteration_times.json"), load(p))
+    # closed-form physics against recorded Newton transitions, and the rollout-placement ablation
+    nc = os.path.join(bench, "newton_check", "check.json")
+    if os.path.exists(nc):
+        dump("newton_check.json", load(nc))
+    ablation = sorted(glob.glob(os.path.join(bench, "storage_ablation", "rep*", "scaling.json")))
+    if ablation:
+        dump("storage_ablation.json", {os.path.basename(os.path.dirname(p)): load(p) for p in ablation})
+    # host monitors (5-s and 2-s samples of other GPU processes), with user paths removed
+    for log in sorted(glob.glob(os.path.join(bench, "contention*.log"))):
+        with open(log) as fh:
+            text = re.sub(r"/home/[^/\s,;]+/", "~/", fh.read())
+        with open(os.path.join(out_dir, os.path.basename(log)), "w") as fh:
+            fh.write(text)
     prov = os.path.join(bench, "provenance.txt")
     if os.path.exists(prov):
         with open(prov) as fh:

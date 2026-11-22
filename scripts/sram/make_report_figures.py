@@ -179,7 +179,11 @@ def fig_learning(runs, t, out):
                 color=t["ink"],
                 fontsize=9,
             )
-    ax.set_xlabel("training-loop wall-clock time [s] (log scale)", color=t["ink2"], fontsize=9.5)
+    ax.set_xlabel(
+        "training-loop time [s], log scale (stock: RSL-RL's host timers; megakernel: CUDA events)",
+        color=t["ink2"],
+        fontsize=9.5,
+    )
     ax.set_ylabel("mean training-episode return", color=t["ink2"], fontsize=9.5)
     ax.set_ylim(top=5.6)
     # below the plot: inside, it would cover the stock curves, which converge in the lower right
@@ -196,7 +200,7 @@ def fig_learning(runs, t, out):
         ax,
         t,
         "Same task, same PPO: SRAM megakernel vs stock Isaac Lab on Cartpole",
-        "Isaac-Cartpole-Direct, 4,096 envs, 150 PPO iterations, median over seeds; dots mark the end of training",
+        "4,096 envs, 150 iterations, median over seeds; stock includes its first-iteration warm-up (1.4-2.5 s)",
     )
     fig.tight_layout()
     fig.savefig(out, dpi=200, facecolor=t["surface"])
@@ -328,9 +332,11 @@ def fig_time_to_policy(rows, t, out, threshold):
         col = t["series"][SLOT[cfg]]
         ax.plot(x, y, color=col, linewidth=2 * PX, zorder=3, label=label)
         ax.plot(x, y, "o", color=col, markersize=8 * PX, markeredgecolor=t["surface"], markeredgewidth=2 * PX, zorder=4)
+        flagged = {r["num_envs"] for r in rows if (r.get(cfg) or {}).get("contended_seeds")}
         for xi, yi in zip(x, y):  # values are few (4-5 per series): label each point
+            text = f"{yi:.1f} s" if yi >= 1 else (f"{1e3 * yi:.0f} ms" if yi >= 0.01 else f"{1e3 * yi:.1f} ms")
             ax.annotate(
-                f"{yi:.1f} s" if yi >= 1 else f"{1e3 * yi:.0f} ms",
+                text + (" †" if xi in flagged else ""),
                 (xi, yi),
                 xytext=(0, 9),
                 textcoords="offset points",
@@ -342,7 +348,7 @@ def fig_time_to_policy(rows, t, out, threshold):
     ax.set_xticks(xs)
     ax.set_xticklabels([f"{v // 1024}K" if v >= 1024 else str(v) for v in xs])
     ax.set_xlabel("parallel environments", color=t["ink2"], fontsize=9.5)
-    ax.set_ylabel(f"training-loop time to mean return ≥ {threshold} [s], log scale", color=t["ink2"], fontsize=9.5)
+    ax.set_ylabel(f"steady-state time to mean return ≥ {threshold} [s], log scale", color=t["ink2"], fontsize=9.5)
     # left, between the two series (the right side holds the value labels of the larger env counts)
     ax.legend(loc="upper left", bbox_to_anchor=(0.0, 0.62), frameon=False, fontsize=8.5, labelcolor=t["ink"])
     title(
@@ -350,7 +356,7 @@ def fig_time_to_policy(rows, t, out, threshold):
         ax,
         t,
         "Time to a working Cartpole policy vs. environment count",
-        "median over 3 seeds; ~30-50 PPO iterations at every env count, so the time follows the time per iteration",
+        "iterations to the threshold × steady time per iteration, median over 3 seeds; † overlapped other GPU jobs",
     )
     fig.tight_layout()
     fig.savefig(out, dpi=200, facecolor=t["surface"])
