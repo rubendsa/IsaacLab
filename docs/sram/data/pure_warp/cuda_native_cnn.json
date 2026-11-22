@@ -1,0 +1,154 @@
+{
+  "status": "PASS",
+  "device": "cuda:0",
+  "batch": 64,
+  "seed": 47,
+  "versions": {
+    "warp-lang": "1.17.0",
+    "torch": "2.11.0+cu130",
+    "rsl-rl-lib": "5.5.1"
+  },
+  "native_class": "isaaclab_tasks.core.lift.config.kuka_allegro.agents.models.SpatialSoftmaxCNNModel",
+  "candidate": "Pure Warp scalar convolution/ELU forward + Tape adjoints + explicit spatial-softmax adjoint",
+  "scope": "Native RGB64 CNN/keypoint VJP: three convolution weights/biases and learned temperature; no PPO",
+  "residency": "Global inputs, weights, intermediate activations and gradients; no persistent-state claim",
+  "performance_claim": false,
+  "metrics": {
+    "normalized_rgb": {
+      "max_abs": 0.0,
+      "relative_l2": 0.0,
+      "reference_l2": 256.9247131347656,
+      "atol": 1e-07,
+      "rtol": 1e-06
+    },
+    "cnn_features": {
+      "max_abs": 1.0244548320770264e-06,
+      "relative_l2": 1.1702439036106525e-06,
+      "reference_l2": 11.89338207244873,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "keypoints": {
+      "max_abs": 1.4901161193847656e-07,
+      "relative_l2": 2.5405688748315753e-06,
+      "reference_l2": 0.7226141691207886,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "feature_gradient": {
+      "max_abs": 2.980232238769531e-07,
+      "relative_l2": 1.6289403596021412e-07,
+      "reference_l2": 14.1167573928833,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "normalized_rgb_gradient": {
+      "max_abs": 1.30385160446167e-08,
+      "relative_l2": 4.2943967591856975e-07,
+      "reference_l2": 2.5131912231445312,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "log_temperature_gradient": {
+      "max_abs": 9.834766387939453e-07,
+      "relative_l2": 2.2999904354287314e-06,
+      "reference_l2": 0.6806726455688477,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "conv0_weight_gradient": {
+      "max_abs": 4.649162292480469e-06,
+      "relative_l2": 2.0863748073913744e-06,
+      "reference_l2": 17.415464401245117,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "conv0_bias_gradient": {
+      "max_abs": 1.7136335372924805e-06,
+      "relative_l2": 7.248341388784312e-06,
+      "reference_l2": 0.39333099126815796,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "conv1_weight_gradient": {
+      "max_abs": 1.1324882507324219e-06,
+      "relative_l2": 9.712138918405786e-07,
+      "reference_l2": 19.33692741394043,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "conv1_bias_gradient": {
+      "max_abs": 1.0468065738677979e-06,
+      "relative_l2": 7.99349871694465e-06,
+      "reference_l2": 0.34011608362197876,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "conv2_weight_gradient": {
+      "max_abs": 5.942769348621368e-06,
+      "relative_l2": 2.324409727480575e-06,
+      "reference_l2": 20.245431900024414,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "conv2_bias_gradient": {
+      "max_abs": 2.086162567138672e-06,
+      "relative_l2": 9.588808266692104e-06,
+      "reference_l2": 0.36819255352020264,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    }
+  },
+  "temperature_clamp": {
+    "keypoints": {
+      "max_abs": 1.1920928955078125e-07,
+      "relative_l2": 1.217806398573835e-07,
+      "reference_l2": 3.293898582458496,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "feature_gradient": {
+      "max_abs": 9.1552734375e-05,
+      "relative_l2": 1.3802194532288015e-07,
+      "reference_l2": 2118.5478515625,
+      "atol": 0.0002,
+      "rtol": 0.0003
+    },
+    "temperature_gradient": {
+      "max_abs": 2.980232238769531e-07,
+      "relative_l2": 4.840296996598974e-07,
+      "reference_l2": 0.828392505645752,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    "tested_log_temperatures": [
+      -7.907755374908447,
+      -6.9077558517456055,
+      -6.907755374908447,
+      -6.907754898071289,
+      -5.907755374908447,
+      0.0
+    ],
+    "native_unclamped_temperatures": [
+      0.00036787940189242363,
+      0.0009999994654208422,
+      0.0009999999310821295,
+      0.0010000003967434168,
+      0.002718281466513872,
+      1.0
+    ],
+    "note": "FP32 exp(log_temperature) may skip exact temperature equality; adjacent log values are included."
+  },
+  "source_sha256": {
+    "/home/horde/sram-lab/IsaacLab-unified/scripts/sram/experiment_warp_perception.py": "8bf3ed1fb6a8f6b815a44ba9944693959b8875a992094d2875c31f7d5474e588",
+    "/home/horde/sram-lab/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/core/lift/config/kuka_allegro/agents/models.py": "05270cdf639960eb47d5620093d29722c0f1e42c45e3dd9e8d10a919601d06e0",
+    "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/rsl_rl/modules/cnn.py": "4f5bab5f192c42180125f32a4af350108dd1c247e1e84c81f6cf4ea560037ccf",
+    "/home/horde/sram-lab/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/core/lift/config/kuka_allegro/agents/rsl_rl_ppo_cfg.py": "49cdf51f8f97ce00d6c4290c4a7e3e09ec7dc348400528d42e3bdc86b6c78c11",
+    "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/warp/native/builtin.h": "9a8c44dda8453dcee2308ec016a648da43bc77d41427c7694b6555a1f810d7bf",
+    "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/warp/native/warp.cu": "f8b9f4cef163b2c24fd45e8ded06d608c99d0392b8f89b45bef2931fa143c709",
+    "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/warp/_src/context.py": "22641ad0b95746a72a68c06d583d311efb63a048e9e1f4e22311389b24b17a66",
+    "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/warp/_src/builtins.py": "24f5d991a21d480d43e26db91753528a4c2d9441dd9be9eb1aec380ea4ca6be6",
+    "/home/horde/sram-lab/IsaacLab/.venv/lib/python3.12/site-packages/warp/_src/tape.py": "65f3391187ec26425f24d381fc8fd5e6d03dff3bb20569faad3fe5040c2b5c2c"
+  },
+  "sources_unchanged": true
+}

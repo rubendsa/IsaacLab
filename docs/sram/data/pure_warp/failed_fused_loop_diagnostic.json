@@ -1,0 +1,25 @@
+{
+  "status": "FAIL_RETAINED_DIAGNOSTIC",
+  "device": "cpu",
+  "batch": 2,
+  "seed": 47,
+  "tested_original_module_hash": "2d66aaa",
+  "generated_source_sha256": "0bf0276bf2e304c4304434c49e718c826ac7280bdd7d5e5b79304d12701bbaf8",
+  "restored_failed_source_sha256": "3c930851bd07605a5a5a34327a1404c22dcea8b5d06665d8e46f96a3aed5d866",
+  "failure": {
+    "field": "normalized_rgb_gradient",
+    "mismatched_elements": 20346,
+    "total_elements": 24576,
+    "atol": 2e-05,
+    "rtol": 0.0002,
+    "max_abs_difference_violations": 0.00267542
+  },
+  "preceding_passes": [
+    "normalized_rgb",
+    "cnn_features",
+    "keypoints",
+    "feature_gradient"
+  ],
+  "inspection": "Generated backward source lines260-279 initializes var_5 from bias, constructs loop iterator but does not replay convolution reduction before evaluating ELU. The derivative therefore uses bias, not the true preactivation.",
+  "fix": "Separate Warp linear convolution and ELU kernels, saving true preactivation in a global buffer. No tolerance change."
+}

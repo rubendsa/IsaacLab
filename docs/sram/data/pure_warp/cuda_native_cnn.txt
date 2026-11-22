@@ -1,0 +1,9 @@
+Warp 1.17.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.0
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA RTX PRO 6000 Blackwell Server Edition" (95 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/horde/.cache/warp/1.17.0
+Module __main__ 2e36d8b load on device 'cuda:0' took 1.11 ms  (cached)
+{"status": "PASS", "output": "/home/horde/sram-lab/scratch/pure-warp/final_cuda_native_cnn.json", "max_absolute_error": 5.942769348621368e-06}

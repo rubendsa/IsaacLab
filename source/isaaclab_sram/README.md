@@ -142,7 +142,35 @@ camera recipe, clipped values and global advantage normalization. It rejects mix
 recurrent training, RND, symmetry, adaptive learning-rate schedules and other unsupported algorithm settings.
 The code uses Triton supplied by the Linux PyTorch environment. Convolutions and GEMMs still use PyTorch's CUDA
 libraries in the selective-fusion paths; persistent backends replace their selected networks and optimizers.
-All paths retain global rollout buffers and native checkpoint tensors.
+All paths retain global allocations and native checkpoint tensors.
+
+At 1–16 environments, `sram_unified` combines the native actor and critic optimizer
+phases in one cooperative launch. Both networks' weights and Adam moments remain
+on chip across all 40 steps, with a shared gradient arena reused between phases.
+`sram_resident` additionally retains the raw RGB rollout and prepared normalized
+numeric inputs through that launch. Selected input tiles, activations and
+communication remain global; GAE, normalization and native RNG alignment remain
+outside. These layouts target the validated 188-SM RTX PRO 6000 Blackwell and
+reject unsupported resource limits. They are not complete SRAM-only learners.
+
+```bash
+OMP_NUM_THREADS=1 uv run python scripts/sram/train_kuka_perception.py \
+    --backend sram_unified --camera rgb64 --num_envs 16 --iterations 30 --warmup_iterations 5 \
+    --compact_history --ieee_fp32 --seed 42 --output logs/sram/kuka_rgb64_unified
+# Use --backend sram_resident and a fresh output directory to exercise input retention.
+
+# Screen matched native/separate/combined/resident updates on a fixed synthetic rollout.
+uv run python scripts/sram/benchmark_unified_perception.py \
+    --separate-full --resident --output /tmp/kuka-full-update.json
+```
+
+The [technical report](../../docs/sram/SRAM_TRAINING.md) records the measured
+tradeoffs: at N16 the combined learner improved real-camera iteration throughput,
+while retaining additional inputs made synthetic updates slower than retaining
+models alone. The benchmark checks complete model/optimizer/normalizer state and
+RNG parity, rotates backend order and rejects cycles with observed foreign GPU
+processes. It excludes simulation, collection and GAE, and requires an otherwise
+idle GPU; sampled process monitoring cannot exclude activity between samples.
 
 ## Cartpole training
 

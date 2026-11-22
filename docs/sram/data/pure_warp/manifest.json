@@ -1,0 +1,34 @@
+{
+  "scope": "Pure Warp native RGB64 CNN + learned spatial softmax forward/backward component; not PPO training",
+  "script": "scripts/sram/experiment_warp_perception.py",
+  "script_sha256": "8bf3ed1fb6a8f6b815a44ba9944693959b8875a992094d2875c31f7d5474e588",
+  "cpu_and_cuda_test_exact_final_script": true,
+  "source_hashes_rechecked_against_current": true,
+  "versions": {
+    "warp-lang": "1.17.0",
+    "torch": "2.11.0+cu130",
+    "rsl-rl-lib": "5.5.1"
+  },
+  "performance_claim": false,
+  "persistent_state_claim": false,
+  "cpu_command": "CUDA_VISIBLE_DEVICES='' uv run python scripts/sram/experiment_warp_perception.py --device cpu --batch 2 --output /tmp/warp_cpu.json",
+  "cuda_command": "uv run python scripts/sram/experiment_warp_perception.py --device cuda:0 --batch 64 --output /tmp/warp_cuda.json",
+  "public_sources_verified_utc": "2026-11-22T23:01:09.714892+00:00",
+  "public_sources": [
+    "https://nvidia.github.io/warp/v1.17/user_guide/programming_model/tiles.html",
+    "https://nvidia.github.io/warp/v1.17/user_guide/differentiability.html",
+    "https://nvidia.github.io/warp/v1.17/language_reference/_generated/warp.tile_matmul.html",
+    "https://nvidia.github.io/warp/v1.17/api_reference/_generated/warp.optim.Adam.html",
+    "https://nvidia.github.io/warp/v1.17/user_guide/runtime.html",
+    "https://github.com/NVIDIA/warp-nn"
+  ],
+  "failure_diagnostic_provenance": "The original failing fixture and generated C++ are retained outside repository at scratch/pure-warp; their hashes are in the diagnostic. Only compact metadata is archived here.",
+  "files": {
+    "cpu_native_cnn.json": "18b286fb044fb2d7bf107862ee1485278c2a59284ed3b91f35a7f9ae00516bc9",
+    "cpu_native_cnn.txt": "60a87ca8572ff6905a516c6fe9c231e451117f69adc8bd7441a8caa0c9b7df4a",
+    "cuda_native_cnn.json": "eb7b78f1f8e6fd65434225e2335e135e5e9e070e0660bb598f7ee6c6625df5bd",
+    "cuda_native_cnn.txt": "27abfced487149cef41126edf88a8ec0fbed26287d89e9a94b78b5ea48a62b81",
+    "failed_fused_loop_diagnostic.json": "2cc48b6be70ecce1d4bbc4c9e3285ea1f33d3dba415532a4dc07b221330a3510",
+    "installed_source_audit.json": "7c8a8d777a25423ec72848f71510627b5f1e3bc39322e475c99d0060ed30184c"
+  }
+}

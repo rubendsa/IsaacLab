@@ -1,0 +1,260 @@
+{
+  "scope": "Bounded native RGB64 N16 throughput comparisons; synthetic PPO.update and real camera iterations are distinct experiments.",
+  "tested_commit": "beecb2dc4dd0511b700159d787033c29e25073ba",
+  "audited_utc": "2026-11-22T22:55:17.445906+00:00",
+  "audit_passed_for_bounded_comparisons": true,
+  "camera": {
+    "runs": {
+      "torch": {
+        "timings": {
+          "collection_s": {
+            "median": 0.36087679862976074,
+            "p10": 0.35042500495910645,
+            "p90": 0.3710206508636475,
+            "minimum": 0.34879446029663086,
+            "maximum": 0.3970012664794922
+          },
+          "learning_s": {
+            "median": 0.21343278884887695,
+            "p10": 0.20969538688659667,
+            "p90": 0.22550349235534667,
+            "minimum": 0.20905613899230957,
+            "maximum": 0.22782182693481445
+          },
+          "iteration_s": {
+            "median": 0.5750062465667725,
+            "p10": 0.56551194190979,
+            "p90": 0.5867544651031494,
+            "minimum": 0.5580499172210693,
+            "maximum": 0.6165523529052734
+          },
+          "transitions_per_s": {
+            "median": 890.4251093914753,
+            "p10": 872.5967272606204,
+            "p90": 905.3743405441844,
+            "minimum": 830.4242090511708,
+            "maximum": 917.480648594332
+          }
+        },
+        "measured_iteration_indices": [
+          5,
+          29
+        ],
+        "monitor": {
+          "samples": 331,
+          "max_start_gap_ms": 200.7573089795187,
+          "max_query_duration_ms": 39.01837393641472,
+          "boundary_gaps_ms": [
+            0.4838410532101989,
+            0.013672979548573494
+          ],
+          "external_pids": [],
+          "query_errors": 0
+        },
+        "integration_passed": true,
+        "cnn_changed": true,
+        "all_parameters_finite": true,
+        "checkpoint_action_max_abs_error": 0.0,
+        "image_action_sensitivity_max_abs": 0.012425065040588379,
+        "maximum_logged_training_success": 0.0,
+        "torch_peak_allocated_bytes": 78687232,
+        "torch_peak_reserved_bytes": 100663296,
+        "summary_sha256": "89336523da796d3b84c1bab0cd50f1c87531c8028e870e55f5f344e72a39db18"
+      },
+      "sram_unified": {
+        "timings": {
+          "collection_s": {
+            "median": 0.35435986518859863,
+            "p10": 0.3484204292297363,
+            "p90": 0.37047824859619144,
+            "minimum": 0.34504032135009766,
+            "maximum": 0.4056863784790039
+          },
+          "learning_s": {
+            "median": 0.0798196792602539,
+            "p10": 0.07946805953979492,
+            "p90": 0.0801041603088379,
+            "minimum": 0.0793294906616211,
+            "maximum": 0.08024954795837402
+          },
+          "iteration_s": {
+            "median": 0.4341318607330322,
+            "p10": 0.42824606895446776,
+            "p90": 0.45044770240783694,
+            "minimum": 0.4245917797088623,
+            "maximum": 0.4850752353668213
+          },
+          "transitions_per_s": {
+            "median": 1179.3651798222947,
+            "p10": 1136.760014220386,
+            "p90": 1195.5874208926675,
+            "minimum": 1055.5063682292866,
+            "maximum": 1205.864136962502
+          }
+        },
+        "measured_iteration_indices": [
+          5,
+          29
+        ],
+        "monitor": {
+          "samples": 318,
+          "max_start_gap_ms": 200.35213499795645,
+          "max_query_duration_ms": 26.971361017785966,
+          "boundary_gaps_ms": [
+            0.45033800415694714,
+            0.014954013749957085
+          ],
+          "external_pids": [],
+          "query_errors": 0
+        },
+        "integration_passed": true,
+        "cnn_changed": true,
+        "all_parameters_finite": true,
+        "checkpoint_action_max_abs_error": 8.940696716308594e-08,
+        "image_action_sensitivity_max_abs": 0.03152966499328613,
+        "maximum_logged_training_success": 0.0,
+        "torch_peak_allocated_bytes": 109190144,
+        "torch_peak_reserved_bytes": 123731968,
+        "summary_sha256": "df49f8a738325422654fd740d8f929d6d8c176ceed22a9fcd57f0777ba833aaa"
+      }
+    },
+    "ratios_of_median_seconds": {
+      "learning_s": 2.673936939197343,
+      "iteration_s": 1.3244967683225868
+    },
+    "source_matches_tested_commit": true,
+    "configuration_matches_except_backend_and_log_dir": true,
+    "sequential_run_order": [
+      "torch",
+      "sram_unified"
+    ],
+    "native_reset_bank": true,
+    "same_seed": 42,
+    "own_trajectories": true,
+    "all_samples_screened": true,
+    "scope": "Learning includes GAE and PPO.update; full iteration is collection plus learning, synchronized at update end. Logging/checkpoint IO and startup excluded.25 samples after5 warmups per run."
+  },
+  "limitations": [
+    "N16/B512 only; no N64 or N4096 extrapolation.",
+    "One fixed synthetic rollout and one short camera run per backend; one seed, no run-level confidence interval.",
+    "Camera trajectories differ despite native-equivalent optimizer RNG; this is not a matched-data learning experiment.",
+    "Sampled process presence cannot exclude work between samples; desktop services allowed; CPU load/affinity and camera clock/thermal behavior uncontrolled.",
+    "Camera source manifest hashes custom package/driver; tracked task source is supported by clean frozen commit checks, not separately captured pre-run per-file hashes.",
+    "CUDA-event update intervals include CPU launch/synchronization gaps. The speedup cannot be attributed solely to SRAM residency.",
+    "Both camera runs log zero maximum training success; no held-out evaluation or convergence claim.",
+    "The eight-cycle portable benchmark is an uncommitted prepared resident snapshot over beecb2dc4, not clean-commit evidence; exact before/after hashes are preserved.",
+    "The historical six-cycle collector omitted native models.py before the run; the primary eight-cycle portable collector includes it.",
+    "Input-retaining update latency is12.34% higher than unified model-only latency in the synthetic benchmark.",
+    "Neither combined variant improves on the two already persistent launches in this run."
+  ],
+  "historical_six_cycle_synthetic": {
+    "host_ms": {
+      "native_ppo_fused_adam": {
+        "median": 243.51353244856,
+        "p10": 241.2126229610294,
+        "p90": 246.1882890202105,
+        "minimum": 240.70417799521238,
+        "maximum": 246.23024300672114
+      },
+      "unified": {
+        "median": 78.43990199035034,
+        "p10": 78.27921502757818,
+        "p90": 78.56863446068019,
+        "minimum": 78.21777206845582,
+        "maximum": 78.60003295354545
+      },
+      "separate_full": {
+        "median": 78.41271295910701,
+        "p10": 78.26848950935528,
+        "p90": 78.62950494745746,
+        "minimum": 78.219571034424,
+        "maximum": 78.68782593868673
+      }
+    },
+    "native_over_candidate_ratio": {
+      "native_ppo_fused_adam": 1.0,
+      "unified": 3.104459927531743,
+      "separate_full": 3.105536376168424
+    },
+    "accepted_cycles": 6,
+    "rejected_cycles": 0,
+    "warmups_per_backend": 3,
+    "position_counts": {
+      "native_ppo_fused_adam": {
+        "0": 2,
+        "2": 2,
+        "1": 2
+      },
+      "unified": {
+        "1": 2,
+        "0": 2,
+        "2": 2
+      },
+      "separate_full": {
+        "2": 2,
+        "1": 2,
+        "0": 2
+      }
+    },
+    "identical_checkpoint_rollout_rng": true,
+    "matched_fused_adam": true,
+    "all18_state_loss_rng_gates_passed": true,
+    "raw_publication_flag_preserved": false,
+    "missing_prerun_dependency_hash": "Native task models.py was omitted; retrospective source matches tested commit. This does not establish its immutability during the run."
+  },
+  "synthetic": {
+    "scope": "Complete native RGB64 PPO.update at N16/B512: forty actor and critic Adam steps, normalization, metric conversion, permutation and native-equivalent discarded action RNG included. No simulator claim.",
+    "excluded": "Rollout generation, GAE, restore, compilation, warmup, parity validation, clock/process queries outside update timing.",
+    "host_ms": {
+      "native_ppo_fused_adam": {
+        "median": 246.02222302928567,
+        "p10": 240.70753577398136,
+        "p90": 283.1333843525499,
+        "minimum": 237.8698589745909,
+        "maximum": 285.57975695002824
+      },
+      "unified": {
+        "median": 79.24652547808364,
+        "p10": 78.72868833364919,
+        "p90": 81.23311121016741,
+        "minimum": 78.45500996336341,
+        "maximum": 81.42451499588788
+      },
+      "separate_full": {
+        "median": 78.53130251169205,
+        "p10": 78.14722439507023,
+        "p90": 80.78543260926381,
+        "minimum": 78.03972403053194,
+        "maximum": 81.48142998106778
+      },
+      "resident": {
+        "median": 89.02901847613975,
+        "p10": 88.73247305164114,
+        "p90": 91.32015146315098,
+        "minimum": 88.6960009811446,
+        "maximum": 91.56187903136015
+      }
+    },
+    "native_over_candidate_ratio": {
+      "native_ppo_fused_adam": 1.0,
+      "unified": 3.1045174731013967,
+      "separate_full": 3.1327918315458594,
+      "resident": 2.7633936354720223
+    },
+    "resident_over_unified_latency_ratio": 1.1234438095429378,
+    "accepted_cycles": 8,
+    "rejected_cycles": 0,
+    "warmups_per_backend": 3,
+    "all32_state_loss_rng_gates_passed": true,
+    "matched_fused_adam": true,
+    "same_checkpoint_rollout_rng": true,
+    "storage": "dense for all",
+    "base_commit": "beecb2dc4dd0511b700159d787033c29e25073ba",
+    "worktree_clean": false,
+    "exact_source_hash_count": 66,
+    "source_before_after_unchanged": true,
+    "native_models_in_prerun_hashes": true,
+    "raw_publication_flag_preserved": false,
+    "independent_audit": "synthetic_four_independent_audit.json.gz"
+  }
+}

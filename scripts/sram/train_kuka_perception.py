@@ -38,7 +38,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "source" / "isaacla
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--backend", choices=("torch", "sram", "sram_graph", "sram_critic", "sram_full", "sram_unified"), default="sram"
+        "--backend",
+        choices=("torch", "sram", "sram_graph", "sram_critic", "sram_full", "sram_unified", "sram_resident"),
+        default="sram",
     )
     parser.add_argument("--camera", choices=("rgb64", "depth64"), default="rgb64")
     parser.add_argument("--num_envs", type=int, default=4096)
@@ -64,9 +66,9 @@ def parse_args():
         parser.error("num_envs and iterations must be positive; warmup_iterations must be nonnegative")
     if args.backend in ("sram_critic", "sram_full") and args.num_envs > 64:
         parser.error("Persistent camera backends currently support at most 64 environments")
-    if args.backend == "sram_unified" and args.num_envs > 16:
-        parser.error("sram_unified currently supports at most 16 environments")
-    if args.backend in ("sram_full", "sram_unified") and args.camera != "rgb64":
+    if args.backend in ("sram_unified", "sram_resident") and args.num_envs > 16:
+        parser.error(f"{args.backend} currently supports at most 16 environments")
+    if args.backend in ("sram_full", "sram_unified", "sram_resident") and args.camera != "rgb64":
         parser.error(f"{args.backend} currently supports the native RGB64 actor only")
     return args
 
@@ -123,6 +125,8 @@ def main():
         agent_cfg.algorithm.class_name = "isaaclab_sram.persistent_full_perception:SramPersistentFullPerceptionPPO"
     elif args.backend == "sram_unified":
         agent_cfg.algorithm.class_name = "isaaclab_sram.unified_perception:SramUnifiedPerceptionPPO"
+    elif args.backend == "sram_resident":
+        agent_cfg.algorithm.class_name = "isaaclab_sram.resident_perception:SramResidentPerceptionPPO"
     if args.smoke_reset_bank is not None:
         env_cfg.events.conditional_reset.params["buffer_size_per_group"] = args.smoke_reset_bank
         env_cfg.events.conditional_reset.params["oversample_factor"] = 1.0
@@ -193,6 +197,12 @@ def main():
             "Both actor and critic weights/Adam retained across one cooperative launch; phase-overlaid gradient "
             "arena, with critic gradient diagnostics exported before reuse; global rollout/activation/transport; "
             "GAE, normalization and RNG alignment outside the kernel"
+        )
+    if args.backend == "sram_resident":
+        report["storage_scope"] = (
+            "Both networks weights/Adam, raw RGB and prepared numeric rollout retained across one cooperative "
+            "launch; phase-overlaid gradients with critic diagnostics exported before reuse; global selected-input "
+            "tiles, activations and transport; outer GAE, normalization and RNG alignment"
         )
     report["git_commit"] = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=Path(__file__).resolve().parents[2], text=True
@@ -326,6 +336,9 @@ def main():
             if getattr(alg, "_unified", None) is not None:
                 report["unified_learner_resources"] = alg._unified.resource_info
                 report["unified_learner_launches"] = alg._unified.launch_count
+            if getattr(alg, "_resident", None) is not None:
+                report["resident_learner_resources"] = alg._resident.resource_info
+                report["resident_learner_launches"] = alg._resident.launch_count
             storage_tensors = (
                 observation_storage_tensors(alg.storage.observations)
                 + [

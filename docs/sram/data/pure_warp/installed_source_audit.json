@@ -1,0 +1,52 @@
+{
+  "version": "1.17.0",
+  "kind": "READ_ONLY_INSTALLED_SOURCE_AUDIT",
+  "findings": [
+    {
+      "file": "native/warp.cu",
+      "line": 5680,
+      "claim": "wp_cuda_launch_kernel calls ordinary cuLaunchKernel_f; no cooperative-grid launch found in inspected Warp launch path."
+    },
+    {
+      "file": "_src/context.py",
+      "claim": "cluster_dim is a host launch grouping option; no grid-barrier primitive found in inspected context/builtins."
+    },
+    {
+      "file": "native/builtin.h",
+      "line": 784,
+      "claim": "adj_min and adj_max choose second operand at equal finite operands; adj_clamp chains those derivatives and excludes x gradient at upper equality."
+    },
+    {
+      "file": "_src/optim/adam.py",
+      "claim": "Adam has one shared host step counter, unlike independently stepped native checkpoint entries; expression order differs."
+    },
+    {
+      "file": "native/rand.h",
+      "claim": "rand_pcg/rand_init seed/hash path; not native Torch CUDA Philox equivalence."
+    },
+    {
+      "file": "examples/tile/example_tile_mlp.py",
+      "claim": "Trainable tile MLP example uses hidden dimension32 and float16; native FP32 width512 not established."
+    },
+    {
+      "file": "examples/tile/example_tile_convolution.py",
+      "claim": "Example performs FFT convolution/filtering, not native Conv2D CNN backward proof."
+    }
+  ],
+  "source_sha256": {
+    "native/warp.cu": "f8b9f4cef163b2c24fd45e8ded06d608c99d0392b8f89b45bef2931fa143c709",
+    "native/builtin.h": "9a8c44dda8453dcee2308ec016a648da43bc77d41427c7694b6555a1f810d7bf",
+    "native/rand.h": "a26b69c97f743d33460589ecca6976f31947c3e36c5e0932f17340d19db5c007",
+    "_src/optim/adam.py": "376c02ad098456479623b27abda0245bb62cb73a821a833604fed19d1c7acdf4",
+    "_src/context.py": "22641ad0b95746a72a68c06d583d311efb63a048e9e1f4e22311389b24b17a66",
+    "_src/builtins.py": "24f5d991a21d480d43e26db91753528a4c2d9441dd9be9eb1aec380ea4ca6be6",
+    "_src/tape.py": "65f3391187ec26425f24d381fc8fd5e6d03dff3bb20569faad3fe5040c2b5c2c",
+    "examples/tile/example_tile_mlp.py": "a080830655f654fd4930ac4866553682bd6a58e46125607e273931b67fa692e6",
+    "examples/tile/example_tile_convolution.py": "dad9b0abcd6d5f39c0588f857c97d60ac85643008fbfd22c3828f305b2b0db73"
+  },
+  "limits": [
+    "Source inspection is scoped to installed files, not a proof against future/custom Warp extensions.",
+    "No tile precision/occupancy/performance experiment was run.",
+    "No custom native injection or runtime patch is used by component."
+  ]
+}

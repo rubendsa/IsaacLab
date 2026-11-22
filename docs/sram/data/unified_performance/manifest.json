@@ -1,0 +1,231 @@
+{
+  "artifacts": [
+    {
+      "artifact": "unified_performance/synthetic_full16_fused.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-unified/quiet_full16_fused.json",
+      "bytes": 14775,
+      "sha256": "b3d0c1a4792f67e78bb81dc1e929b3ee89914b60c6bf6e726dbddc479a948f55",
+      "uncompressed_sha256": "45cb91051ac6bf3f4e570ac474066a9bf477d54e7565574014f12bae76a8638b",
+      "uncompressed_bytes": 216166,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/synthetic_independent_audit.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-unified/quiet_full16_fused_independent_audit.json",
+      "bytes": 2719,
+      "sha256": "ccae8bc0d83d027511b160fb9264a8926787d1580e7d372647b1efe06ee81820",
+      "uncompressed_sha256": "1b65bf39baeab739c3dd8f41888ef6db7ca58e7921b32c202af639fe6406abec",
+      "uncompressed_bytes": 6463,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/historical_synthetic_collector.py.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-unified/benchmark_quiet_pairs.py",
+      "bytes": 6273,
+      "sha256": "6c24ddb30094cbb001f285c0886ad83bc944bee0262e2e07b6c56ca735001cc1",
+      "uncompressed_sha256": "686d74b803eb8ff0250617c8cc12720f2bf268fd5497dd014a2c38ee2a912b20",
+      "uncompressed_bytes": 20527,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/historical_native_oracle.py.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-unified/verify_production.py",
+      "bytes": 3759,
+      "sha256": "834b743b336a4fd678cb0663e5be8b2767348126d7be692f97c7ca1a8b9db075",
+      "uncompressed_sha256": "e688e2b9cd0ff4059af3edc3d88a86364cad04a2087d8a61d18eb5e5c6bed19b",
+      "uncompressed_bytes": 11000,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/synthetic_independent_audit.py.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-unified/audit_full16_evidence.py",
+      "bytes": 3388,
+      "sha256": "95e17b1e58290ddcbea6ec1c91f0d1ef28c27bd641a5499bfe9a3d32504bdddd",
+      "uncompressed_sha256": "bd1e64d6a0f95bcdca54b4529116b26fe4ad5eac57b010067079cdd726b1394c",
+      "uncompressed_bytes": 8457,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_supervisor.py.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/run_clean_native16_30.py",
+      "bytes": 5399,
+      "sha256": "5c9719e0de35c8b74b4498176c4bb5b92de2531ff09c67f64882b6c44e9de213",
+      "uncompressed_sha256": "5b134c6c0133f1b4efedb09323e6b01d400499db15c4d2820d893cca82987287",
+      "uncompressed_bytes": 17869,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_supervisor.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_30_supervisor.log",
+      "bytes": 254,
+      "sha256": "2f855bd627e26d665ee59eb5e826092edde46b2261a01ab7c33f10381800c33c",
+      "uncompressed_sha256": "c24f65e71765dba6fabb2ad530674a1d52a84155b3f3ba2636183aea2306d43a",
+      "uncompressed_bytes": 510,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_torch16_30.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_torch_30/perception_summary.json",
+      "bytes": 8115,
+      "sha256": "c5a1ef4a02897b61dd71cb673e738f0c1622cf16643e1b62d5c7d004040b5e5c",
+      "uncompressed_sha256": "89336523da796d3b84c1bab0cd50f1c87531c8028e870e55f5f344e72a39db18",
+      "uncompressed_bytes": 38097,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_torch16_acceptance.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_torch_30_acceptance.json",
+      "bytes": 1623,
+      "sha256": "1f898844511218463ca6d0fb51e31c1642b6a14450834b6d0f99454470096456",
+      "uncompressed_sha256": "bf615eb9c9b17ae9a7465b3075733f4f6897f3d29b1afc6392f1ea4bc035fb48",
+      "uncompressed_bytes": 8910,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_torch16_monitor.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_torch_30_gpu_processes.json",
+      "bytes": 10387,
+      "sha256": "8cd2a7e9978a1f9327f0778c25419861f30771492e6f52e1ddb052bf6b4cff5c",
+      "uncompressed_sha256": "91d39a1b5445c25453cc40cdb695d313978d44d03b9b0356861acbed477b4338",
+      "uncompressed_bytes": 243050,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_torch16.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_torch_30.log",
+      "bytes": 13566,
+      "sha256": "ed48d79264957ee72c0300b8e6fccd56c951e00cc89d90423c49091d98ed64ea",
+      "uncompressed_sha256": "853eeff39f3af53adb47b5856c0ba6e79c66fb1098c63c5a4e440210bdb525ff",
+      "uncompressed_bytes": 99368,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_torch16_run.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_torch_30/run.json",
+      "bytes": 191,
+      "sha256": "2ce884c041e4e3d7ebba0d8b1b616d0419cb6d73f9ecb23c821a350226eebe7a",
+      "uncompressed_sha256": "c73872b8c4f9edce7c481828c2ebd2f9ef60f9f361ea7f65d6cbd9e6cf863766",
+      "uncompressed_bytes": 231,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_torch16_agent.yaml.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_torch_30/params/agent.yaml",
+      "bytes": 838,
+      "sha256": "77f07e61e26580a4a28d03bec76e2c9ebd31d4ba7249c1e0f842e6733c426070",
+      "uncompressed_sha256": "5e8ef54d8147fb48c5916b9b8741078afd4bde5bfe56359cc1688a9b43bf4010",
+      "uncompressed_bytes": 1743,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_torch16_env.yaml.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_torch_30/params/env.yaml",
+      "bytes": 9187,
+      "sha256": "cc91165818e8cf3312c161a34f2a1a59f0c334dc1095cc9281a26b97a51fef0d",
+      "uncompressed_sha256": "b87ff77e66709981b88f381945adfaec6faf3e111fd52cb530c72a0ec045c951",
+      "uncompressed_bytes": 110864,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_sram_unified16_30.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_sram_unified_30/perception_summary.json",
+      "bytes": 8781,
+      "sha256": "06ae6b71e55e751b7ef18360b3b4feb2a7af54adb8ebb7b7a314a386e80b6783",
+      "uncompressed_sha256": "df49f8a738325422654fd740d8f929d6d8c176ceed22a9fcd57f0777ba833aaa",
+      "uncompressed_bytes": 39568,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_sram_unified16_acceptance.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_sram_unified_30_acceptance.json",
+      "bytes": 1623,
+      "sha256": "d7dc9f5c4d492ee0bfd1e50993fa134c479a8c2af1ca10a3b50dc046af1f8c38",
+      "uncompressed_sha256": "a734b58e376ac32215ffdac8666fbe13eae97c3c2685068b6f4d3615ba557c84",
+      "uncompressed_bytes": 8930,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_sram_unified16_monitor.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_sram_unified_30_gpu_processes.json",
+      "bytes": 10006,
+      "sha256": "fdb146f545e1acba806bf106efa0a32a16909a2cab3ff7d353e1bacbfa302c5b",
+      "uncompressed_sha256": "394cc0fbd217fec6a00461776a7fc275d9f16b652798ad204f74058d55196ce1",
+      "uncompressed_bytes": 233121,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_sram_unified16.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_sram_unified_30.log",
+      "bytes": 14135,
+      "sha256": "f1b3101e4a4309426704cfa1bb2b2311aa801f96da17f4f895a5cf1461f9b783",
+      "uncompressed_sha256": "270f127aa32c795fe4ccd32f194b82ae6aaa71eb7c014a39c7583cc2afc535ce",
+      "uncompressed_bytes": 101185,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_sram_unified16_run.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_sram_unified_30/run.json",
+      "bytes": 195,
+      "sha256": "36e50de782d95297085c827aa184e2f3f5b2e6d977d443d3217e0bab6b612424",
+      "uncompressed_sha256": "0a4be2ab9245a7e56dca76521730283b5232a38f4fa9cfee8920e9da6deda2e3",
+      "uncompressed_bytes": 238,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_sram_unified16_agent.yaml.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_sram_unified_30/params/agent.yaml",
+      "bytes": 859,
+      "sha256": "4a1ec7d5aae3aa6fa70c78b57db0d773ec37f495ed6829a86e2b46024080f8bf",
+      "uncompressed_sha256": "96da78e84f8de6422cece2d48fcbb74246a10548a2ccd23a403168f8f5d60913",
+      "uncompressed_bytes": 1797,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/camera_sram_unified16_env.yaml.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/compact-real/quiet16_sram_unified_30/params/env.yaml",
+      "bytes": 9189,
+      "sha256": "9ce3274415c2ea0d577e27e9b45a755fe48b82be2f925ce5838419d97c67d8f5",
+      "uncompressed_sha256": "abb2515533cb8dd4251c80e19270d4255795b8a64f78296a743b76a59791f123",
+      "uncompressed_bytes": 110871,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/synthetic_full16_four.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-resident/quiet_full16_four.json",
+      "bytes": 19876,
+      "sha256": "a406cb515d165738e17cd9b6cc8107ba23fa688c07e6e6ccc50aaa9ae4735a42",
+      "uncompressed_sha256": "6d05374db28ad181f6b16cb57b3de78986cd3eb71f5243ea9e7addecfb312c53",
+      "uncompressed_bytes": 350877,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/synthetic_four_independent_audit.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-resident/quiet_full16_four_independent_audit.json",
+      "bytes": 1113,
+      "sha256": "12646d0770a9d4df2d708127b644ae553aebdb53f5fdc1c4748085a73477ca92",
+      "uncompressed_sha256": "0c20fe06bdb03ad3e4f940ecc2a34948e4786d96d9962ee06ea33ef870764003",
+      "uncompressed_bytes": 2394,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/portable_collector.py.txt.gz",
+      "original_path": "/home/horde/sram-lab/IsaacLab-unified/scripts/sram/benchmark_unified_perception.py",
+      "bytes": 6649,
+      "sha256": "ad4410a2c13347968305460bc6c03522b36ee75135af407e782b76166e10224f",
+      "uncompressed_sha256": "c687f9763406ea34b04b31766e342bcb82423b27b7a6f8e3bfea192cf046d897",
+      "uncompressed_bytes": 21910,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "unified_performance/portable_native_oracle.py.txt.gz",
+      "original_path": "/home/horde/sram-lab/IsaacLab-unified/scripts/sram/_perception_benchmark.py",
+      "bytes": 1854,
+      "sha256": "227fda28c5a2417a0c36235247acecf19a2d11e3e8652c3cd6d23bb9a3e95402",
+      "uncompressed_sha256": "8fdd75639d3fa6bf4a20e709921395edb241f27c45adc3e1221cd39a23f5cdf9",
+      "uncompressed_bytes": 4650,
+      "compression": "gzip; mtime=0"
+    }
+  ],
+  "derived_summary_sha256": "8c1c45f33d400a570989850917a6b2e706cae541dc9211a5816d4ce4e97f15ff",
+  "archive_format": "Immutable raw evidence is gzip-compressed with mtime=0. sha256/bytes identify the archive; uncompressed_sha256/uncompressed_bytes identify the original evidence."
+}

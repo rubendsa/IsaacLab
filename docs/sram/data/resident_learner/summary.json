@@ -1,0 +1,124 @@
+{
+  "scope": "Production native RGB64 model/input retention correctness and resource evidence; timings in this archive excluded. The separate synthetic comparison is in ../unified_performance.",
+  "production_tests": "Six full-update tests passed; includes resident reuse and checkpoint reconstruction.",
+  "native_resume_cases": [
+    {
+      "mode": "default",
+      "source_unchanged": true,
+      "optimizer_flags": {
+        "native": [
+          {
+            "fused": false,
+            "foreach": null,
+            "capturable": false
+          }
+        ],
+        "production": [
+          {
+            "fused": false,
+            "foreach": null,
+            "capturable": false
+          }
+        ]
+      },
+      "max_state_error": 1.1920928955078125e-07,
+      "all_model_normalizer_adam_loss_rng_gates_passed": true,
+      "resumed_updates": 2
+    },
+    {
+      "mode": "fused",
+      "source_unchanged": true,
+      "optimizer_flags": {
+        "native": [
+          {
+            "fused": true,
+            "foreach": false,
+            "capturable": false
+          }
+        ],
+        "production": [
+          {
+            "fused": true,
+            "foreach": false,
+            "capturable": false
+          }
+        ]
+      },
+      "max_state_error": 1.1920928955078125e-07,
+      "all_model_normalizer_adam_loss_rng_gates_passed": true,
+      "resumed_updates": 2
+    }
+  ],
+  "resources": {
+    "NUM_REGS": 255,
+    "LOCAL_SIZE_BYTES": 0,
+    "SHARED_SIZE_BYTES": 336,
+    "MAX_THREADS_PER_BLOCK": 256,
+    "MAX_DYNAMIC_SHARED_SIZE_BYTES": 91200,
+    "BINARY_VERSION": 120,
+    "dynamic_shared_bytes": 91200,
+    "resident_blocks_per_sm": 1,
+    "grid_blocks": 188,
+    "threads_per_block": 256,
+    "register_cap": 255,
+    "moment_register_values_per_thread": 84,
+    "canonical_parameter_count": 1527711,
+    "replicated_cnn_parameter_count": 118372,
+    "allocated_weight_and_gradient_shared_bytes": 12523056,
+    "allocated_total_dynamic_shared_bytes": 17145600,
+    "numeric_shared_floats_per_cta": 6147,
+    "numeric_shared_bytes_per_cta": 24588,
+    "numeric_logical_bytes_at_n16": 4622336,
+    "numeric_allocated_shared_bytes": 4622544,
+    "rgb_register_words_per_thread": 33,
+    "rgb_logical_bytes_at_n16": 6291456,
+    "rgb_allocated_register_bytes": 6352896,
+    "global_rgb_tile_bytes": 98304,
+    "global_numeric_tile_bytes": 408832,
+    "logical_resident_weight_and_moment_bytes": 19752996,
+    "gradient_bank_scope": "Phase-overlaid shared bank; critic final gradients exported before reuse",
+    "source_sha256": "c620c1a53fbf165fba839457f0ed850a8379afba26e7fd028bb536cf00aef548",
+    "cubin_sha256": "a9f9932f684f982b8e1bfd9e345784673c546be970a706e9cd71007ed0d4c619",
+    "compiler_log": "(cached)",
+    "scope": "Both networks W/m/v, raw RGB and prepared numeric rollout retained across both phases; phase-overlaid G; global selected-input tiles, activations and reduction mailboxes; normalization/GAE/RNG/packing/copyback outside",
+    "all_sram": false,
+    "zero_dram": false
+  },
+  "promotion_cubin_byte_identical_to_validated_scratch": true,
+  "source_comments_only_changed": true,
+  "production_source_sha256": "c620c1a53fbf165fba839457f0ed850a8379afba26e7fd028bb536cf00aef548",
+  "scratch_source_sha256": "971e3e19f20d4e9f99c7533234e36b9b70120dd4e722f19e9b72abf71c073456",
+  "retained_n16": {
+    "raw_rgb_bytes": 6291456,
+    "prepared_numeric_bytes": 4622336,
+    "numeric_fields_per_sample": 2257,
+    "samples": 512
+  },
+  "timing_valid": false,
+  "all_sram": false,
+  "zero_dram": false,
+  "convergence_claim": false,
+  "limitations": [
+    "RGB/numeric input tiles, activations, adjoints, reductions, permutation and correction metadata remain globally allocated.",
+    "GAE, normalization, native-equivalent discarded RNG, packing and copyback remain outside.",
+    "Numeric residency is of prepared normalized inputs, not all raw histories.",
+    "PTX source-pointer provenance and byte-identical binary support entry-only original input loads; this is not a DRAM counter measurement."
+  ],
+  "real_camera_smoke": {
+    "artifact": "real16_camera_TIMING_EXCLUDED.json.gz",
+    "integration_passed": true,
+    "native_reset_bank": true,
+    "compact_history": true,
+    "precision": "Float32 with TF32 disabled",
+    "num_envs": 16,
+    "iterations": 3,
+    "resident_launches": 3,
+    "cnn_changed": true,
+    "all_parameters_finite": true,
+    "checkpoint_action_max_abs_error": 5.960464477539063e-08,
+    "image_action_sensitivity_max_abs": 0.00165509432554245,
+    "all_timing_fields_excluded": true,
+    "exclusion_reason": "No continuous process monitor covered this correctness smoke."
+  },
+  "timing_scope_note": "This archive is correctness-only; the separate eight-cycle synthetic performance record is in ../unified_performance."
+}

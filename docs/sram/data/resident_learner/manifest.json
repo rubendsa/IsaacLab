@@ -1,0 +1,69 @@
+{
+  "artifacts": [
+    {
+      "artifact": "resident_learner/matched_default16.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-resident/matched_default16.json",
+      "bytes": 6427,
+      "sha256": "701ec7ed680b76829dcca4129a6facaf4694bd3feeca65b487a79d7522639b67",
+      "uncompressed_sha256": "a34e80ac088d81a3a9160e853d52970929c5bb3ca5982b6dc021897a78b9480e",
+      "uncompressed_bytes": 23979,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "resident_learner/matched_fused16.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-resident/matched_fused16.json",
+      "bytes": 6439,
+      "sha256": "0146056d85fc228584d98615c41bf42ba6b6cc0ea01b6370b818366d6970a5fd",
+      "uncompressed_sha256": "cfd487767685ae83d2478349a7464ee6149618b14d35643790554e9a15103ae3",
+      "uncompressed_bytes": 24018,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "resident_learner/production_update_tests.txt.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-resident/production_update_tests.txt",
+      "bytes": 285,
+      "sha256": "3600d85a0240beb4a35393313da9b9bd2c6a60fbfc955c2dddb23fd93e4bf262",
+      "uncompressed_sha256": "058ab09d1b2cb2d0f327cadb12b5a218eeed6e3e3465dd453be0423aa4616174",
+      "uncompressed_bytes": 571,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "resident_learner/compiler_binary_audit.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-resident/compile_resources.json",
+      "bytes": 1080,
+      "sha256": "84cfd8625647d4c66cc842c3585997254749fa4118904b46feaae8a35f2b1cbd",
+      "uncompressed_sha256": "9999b4fbbbc7908a37d1687010159b9be6477a68924b2bf90a362dde8c62c02b",
+      "uncompressed_bytes": 2982,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "resident_learner/ptx_input_lifetime_audit.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/unified-numeric/ptx_input_audit.json",
+      "bytes": 2257,
+      "sha256": "ef114d62bb10ebb8dc540b1c38de0b26d1832f7cd16748f5ae9f3643bc8e53be",
+      "uncompressed_sha256": "32427e5fcc474ec6ca17ded263697d6e6aaac0f6e2fbac0c8616c493221d40cc",
+      "uncompressed_bytes": 19246,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "resident_learner/numeric_index_audit.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/unified-numeric/index_audit.json",
+      "bytes": 329,
+      "sha256": "df0422775385b1554533cf36a091f417fb1404585dc3ee98fb8802095f78caad",
+      "uncompressed_sha256": "231d1ada539cddffaa9d4491e3581b7ab1869af74656975d6765fef08b38f3a9",
+      "uncompressed_bytes": 1011,
+      "compression": "gzip; mtime=0"
+    },
+    {
+      "artifact": "resident_learner/real16_camera_TIMING_EXCLUDED.json.gz",
+      "original_path": "/home/horde/sram-lab/scratch/production-resident/real16_3/perception_summary.json",
+      "bytes": 5087,
+      "sha256": "b8badf131ea805ce48f2ea4bf6e221d807d2766dfb7e414fd1e167dbc88e7f4d",
+      "uncompressed_sha256": "b80c263dff8bb2912f4b43f2940027caa3d1fa815ea12911d6a94322bce783d0",
+      "uncompressed_bytes": 14653,
+      "compression": "gzip; mtime=0"
+    }
+  ],
+  "derived_summary_sha256": "73f1b1682c66e8ed08940c6566f0bc528e0c26c63e4669e0615d983ef23eb363",
+  "archive_format": "Immutable raw evidence is gzip-compressed with mtime=0. sha256/bytes identify the archive; uncompressed_sha256/uncompressed_bytes identify the original evidence."
+}

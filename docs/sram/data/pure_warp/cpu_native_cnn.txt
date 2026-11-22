@@ -1,0 +1,9 @@
+Warp CUDA error 100: no CUDA-capable device is detected (in function init_cuda_driver, /builds/omniverse/warp/warp/native/cuda_util.cpp:333)
+Warp 1.17.0 initialized:
+   CUDA Toolkit 12.9, CUDA driver not available (NVRTC compilation available)
+   Devices:
+     "cpu"      : "x86_64"
+   Kernel cache:
+     /home/horde/.cache/warp/1.17.0
+Module __main__ 8f4d61c load on device 'cpu' took 1.75 ms  (cached)
+{"status": "PASS", "output": "/home/horde/sram-lab/scratch/pure-warp/final_cpu_native_cnn.json", "max_absolute_error": 2.05356627702713e-07}
