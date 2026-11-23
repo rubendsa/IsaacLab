@@ -114,7 +114,8 @@ tetrahedralization = ["pytetwild[all]>=0.3.0,<0.4"]
 
 video = ["moviepy>=1.0.3,<2.0.0.dev0"]
 
-optix = ["newton[optix]"]
+# The pinned Newton (cable-driven hand branch) has no OptiX renderer; this extra installs nothing.
+optix = []
 
 importers = [
     "isaacsim-asset-isolated==6.2.0.1",
@@ -428,8 +429,8 @@ override-dependencies = [
     "numpy>=2",
     "mujoco~=3.17.0",
     "mujoco-warp~=3.17.0",
-    "newton[sim] @ git+https://github.com/skulkar22/newton.git@d734988948883c6db96fb0c00f5b2e0d47e736c5 ; extra != 'optix'",
-    "newton[sim,optix] @ git+https://github.com/skulkar22/newton.git@d734988948883c6db96fb0c00f5b2e0d47e736c5 ; extra == 'optix'",
+    # The cable-driven hand branch of Newton predates the OptiX renderer and has no optix extra.
+    "newton[sim] @ git+https://github.com/skulkar22/newton.git@d734988948883c6db96fb0c00f5b2e0d47e736c5",
     # Force the Newton-matched schemas over isaacsim's ==0.2.0 pin.
     "newton-usd-schemas>=0.5.0",
     # isaacsim-asset-isolated and isaacsim-robot-schema 6.2 pin usd-exchange ==2.3.0.
