@@ -117,6 +117,10 @@ RESULTS_PLACEHOLDER
 - The fast solver settings are validated on the branch's scripted can and block grasps, not on the
   hand calculation the branch checks its digits against (0.07 deg at 20 x 16).
 - Only the massless-tendon cable model is used; the rod cable model is far more expensive.
-- The task is a Newton-native vectorized environment with the `rsl_rl` `VecEnv` interface; it does not
-  go through Isaac Lab's scene, cloner or `NewtonManager`, which do not support the tendon solver state
-  or the per-substep hand control of the branch.
+- The task is a Newton-native vectorized environment with the `rsl_rl` `VecEnv` interface, placed in
+  `isaaclab_tasks.contrib` and built on the Kuka-Allegro asset; it is not an Isaac Lab
+  `ManagerBasedRLEnv`/`DirectRLEnv`. The hand is built procedurally by the branch's helpers rather than
+  from USD, and a per-world reset needs the solver's tendon history restored, which Isaac Lab's Newton
+  scene path (USD cloner, `NewtonManager`) has no hook for. Porting it means adding the hand through
+  `newton_builder_world_hook`, the governor and opposition drive as state-force callbacks, and the
+  tendon reset to the environment's `_reset_idx`.

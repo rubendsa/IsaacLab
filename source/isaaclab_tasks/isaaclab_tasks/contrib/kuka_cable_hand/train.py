@@ -35,6 +35,12 @@ def main():
         default=0.3,
         help="Share of resets that start with the cube held by a scripted pinch (spawn-in-hand curriculum).",
     )
+    parser.add_argument(
+        "--pregrasp_reset_fraction",
+        type=float,
+        default=0.0,
+        help="Share of resets that start with the open hand around the cube, just before the scripted pinch closes.",
+    )
     args = parser.parse_args()
 
     import torch
@@ -45,7 +51,11 @@ def main():
 
     torch.manual_seed(args.seed)
     env_cfg = KukaCableHandLiftCfg(
-        num_envs=args.num_envs, device=args.device, seed=args.seed, held_reset_fraction=args.held_reset_fraction
+        num_envs=args.num_envs,
+        device=args.device,
+        seed=args.seed,
+        held_reset_fraction=args.held_reset_fraction,
+        pregrasp_reset_fraction=args.pregrasp_reset_fraction,
     )
     t0 = time.time()
     env = KukaCableHandLiftEnv(env_cfg)

@@ -134,6 +134,9 @@ class KukaCableHandLiftCfg:
     palm_floor_margin: float = 0.002
     """The arm driver does not take a step that brings a palm pad within this distance of the table top [m]
     (a stiff arm would otherwise crush the fingers into the table and past their stops)."""
+    link_clearance: float = 0.065
+    """Smallest height of the origins of arm links 4 to 7 above the table top while they are over the table [m]
+    (about the radius of the iiwa wrist housings; the arm links do not collide)."""
     finger_angle_margin: float = 0.15
     """An episode ends when a flexion joint leaves its range by more than this [rad]: a digit crushed past its
     stop (the arm is prescribed and stronger than any contact) can turn a cable around its sheave."""
@@ -164,6 +167,9 @@ class KukaCableHandLiftCfg:
     The states are made once at start-up (see :meth:`KukaCableHandLiftEnv._build_held_bank`)."""
     held_bank_groups: int = 8
     """Number of different cube poses the scripted pinch is run from (the worlds are split into groups)."""
+    pregrasp_reset_fraction: float = 0.0
+    """Share of resets that start from the scripted pinch just before the fingers close: the pinch point at
+    the cube, the thumb opposed, the cables at rest (a step between the held states and the table)."""
 
     @property
     def step_dt(self) -> float:
@@ -446,13 +452,24 @@ class KukaCableHandLiftEnv:
         self.qd_ref = wp.zeros((n, 7), dtype=float, device=self.wp_device)
         self.arm_blocked = wp.zeros(n, dtype=int, device=self.wp_device)
         # safety floor of the arm driver: palm pad ends, palm origin and wrist flange above the table top
-        # (palm pad ends, palm origin and wrist flange; the digits are free to touch the table)
+        # (palm pad ends, palm origin, forearm stub and wrist flange; the digits are free to touch the table)
         pads = lay.pads
         palm_pads = [i for i, k in enumerate(pads.keys) if k.startswith("palm/")]
-        points = [*pads.p0[palm_pads], *pads.p1[palm_pads], (0.0, 0.0, 0.0), arm_lib.PALM_FLANGE_IN_PALM]
+        pad_clear = [float(pads.radius[i]) + cfg.palm_floor_margin for i in palm_pads]
+        points = [*pads.p0[palm_pads], *pads.p1[palm_pads]]
+        clearance = pad_clear + pad_clear
+        for point, clear in (
+            ((0.0, 0.0, 0.0), 0.015),
+            ((-0.045, 0.0, 0.0), 0.02),
+            (arm_lib.PALM_FLANGE_IN_PALM, 0.025),
+        ):
+            points.append(point)
+            clearance.append(clear)
         self._floor_points = wp.array(np.asarray(points, dtype=np.float32), dtype=wp.vec3, device=self.wp_device)
-        self._palm_floor = TABLE_TOP + float(pads.radius[palm_pads].max()) + cfg.palm_floor_margin
-        self._link_floor = TABLE_TOP
+        self._floor_clearance = wp.array(np.asarray(clearance, dtype=np.float32), dtype=float, device=self.wp_device)
+        tx, tz = cfg.table_center[0], cfg.table_half_extents
+        self._table_x = wp.vec2(tx - tz[0], tx + tz[0])
+        self._table_half_y = float(tz[1])
 
         # --- torch views -----------------------------------------------------------------------------
         self._views()
@@ -475,7 +492,9 @@ class KukaCableHandLiftEnv:
         self._take_snapshot()
         self._snap_held = None
         self.held_valid = torch.zeros(n, dtype=torch.bool, device=self.device)
-        if cfg.held_reset_fraction > 0.0:
+        self._snap_pregrasp = None
+        self.started_held = torch.zeros(n, dtype=torch.bool, device=self.device)
+        if cfg.held_reset_fraction > 0.0 or cfg.pregrasp_reset_fraction > 0.0:
             self._build_held_bank()
         self.reset_idx(torch.arange(n, device=self.device))
         self._compute_state()
@@ -576,8 +595,11 @@ class KukaCableHandLiftEnv:
                     self._palm_body,
                     model.body_com,
                     self._floor_points,
-                    self._palm_floor,
-                    self._link_floor,
+                    self._floor_clearance,
+                    TABLE_TOP,
+                    self._table_x,
+                    self._table_half_y,
+                    self.cfg.link_clearance,
                     dt,
                 ],
                 outputs=[self.q_ref, self.qd_ref, self.arm_blocked, s0.body_q, s0.body_qd],
@@ -709,7 +731,7 @@ class KukaCableHandLiftEnv:
                 links = arm.link_transforms(q)
                 t = links[-1] @ arm.mount
                 p = t[:3, :3] @ site + t[:3, 3]
-                low = np.clip(TABLE_TOP + 0.05 - links[5:, 2, 3], 0.0, None)
+                low = np.clip(TABLE_TOP + cfg.link_clearance + 0.01 - links[4:, 2, 3], 0.0, None)
                 orient = np.concatenate([t[:3, i] - rot[:, i] for i in range(3)])
                 return np.concatenate([p - target, 0.1 * orient, 3.0 * low, 0.01 * (q - q0)])
 
@@ -750,6 +772,12 @@ class KukaCableHandLiftEnv:
             self._script_step(last, rest, oppose)
         follow(1, rest, 8)
         last = torch.tensor(np.stack([p[1][-1] for p in plans]), dtype=torch.float32, device=dev)[group]
+        for _ in range(15):
+            self._script_step(last, rest, oppose)
+        self._compute_state()
+        on_table = self._obj_pos[:, 2] < TABLE_TOP + h + 0.005
+        self.pregrasp_valid = on_table & (torch.linalg.norm(self._site - self._obj_pos, dim=-1) < 0.015)
+        self._snap_pregrasp = self._capture()
         for _ in range(40):
             self._script_step(last, grip, oppose)
         follow(2, grip, 8)
@@ -771,9 +799,11 @@ class KukaCableHandLiftEnv:
         )
         actions[:, -1] = 2.0 * (oppose - lo) / (hi - lo) - 1.0
         self._held_actions = actions
+        self._pregrasp_actions = actions.clone()
+        self._pregrasp_actions[:, 7 : 7 + len(keys)] = -1.0
         print(
-            f"[kuka_cable_hand] held-object reset bank: {int(self.held_valid.sum())}/{n} worlds hold the cube "
-            f"({groups} cube poses)",
+            f"[kuka_cable_hand] reset bank: {int(self.held_valid.sum())}/{n} worlds hold the cube, "
+            f"{int(self.pregrasp_valid.sum())}/{n} pre-grasp states ({groups} cube poses)",
             flush=True,
         )
 
@@ -805,15 +835,24 @@ class KukaCableHandLiftEnv:
         cfg, n = self.cfg, self.num_envs
         ids = env_ids.to(self.device, torch.long)
         held = torch.zeros(len(ids), dtype=torch.bool, device=self.device)
+        pregrasp = torch.zeros_like(held)
         if self._snap_held is not None:
             u = torch.rand(len(ids), generator=self._torch_gen, device=self.device)
             held = (u < cfg.held_reset_fraction) & self.held_valid[ids]
-        held_ids, ids = ids[held], ids[~held]
-        if held_ids.numel() > 0:
-            self._restore(self._snap_held, held_ids)
-            self._reset_common(held_ids)
-            self.actions[held_ids] = self._held_actions[held_ids]
-            self.prev_actions[held_ids] = self._held_actions[held_ids]
+            pregrasp = (u >= cfg.held_reset_fraction) & (u < cfg.held_reset_fraction + cfg.pregrasp_reset_fraction)
+            pregrasp &= self.pregrasp_valid[ids]
+        self.started_held[ids] = held | pregrasp
+        for start, snap, act in (
+            (held, self._snap_held, "_held_actions"),
+            (pregrasp, self._snap_pregrasp, "_pregrasp_actions"),
+        ):
+            sel = ids[start]
+            if sel.numel() > 0:
+                self._restore(snap, sel)
+                self._reset_common(sel)
+                self.actions[sel] = getattr(self, act)[sel]
+                self.prev_actions[sel] = getattr(self, act)[sel]
+        ids = ids[~(held | pregrasp)]
         if ids.numel() == 0:
             return
         # state of the whole world
@@ -883,8 +922,11 @@ class KukaCableHandLiftEnv:
                 self._palm_body,
                 self.model.body_com,
                 self._floor_points,
-                self._palm_floor,
-                self._link_floor,
+                self._floor_clearance,
+                TABLE_TOP,
+                self._table_x,
+                self._table_half_y,
+                self.cfg.link_clearance,
                 self.sim_dt,
             ],
             outputs=[self.q_ref, self.qd_ref, self.arm_blocked, self.state_0.body_q, self.state_0.body_qd],
@@ -933,6 +975,12 @@ class KukaCableHandLiftEnv:
             ).mean()
         log["Metrics/success"] = self._success.float().mean()
         log["Metrics/lifted"] = self._lifted.float().mean()
+        if self._snap_held is not None:
+            table = ~self.started_held
+            log["Metrics/lifted_from_table"] = (self._lifted & table).float().sum() / table.float().sum().clamp(min=1.0)
+            log["Metrics/success_from_table"] = (self._success & table).float().sum() / table.float().sum().clamp(
+                min=1.0
+            )
         log["Metrics/goal_distance"] = self._goal_dist.mean()
         self.extras = {"time_outs": truncated & ~terminated, "log": log}
         # values of this step before the finished worlds are reset (for evaluation scripts)

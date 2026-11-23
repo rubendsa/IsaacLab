@@ -277,8 +277,11 @@ def arm_drive_kernel(
     palm_body: wp.array[int],
     body_com: wp.array[wp.vec3],
     palm_points: wp.array[wp.vec3],
-    palm_floor: float,
-    link_floor: float,
+    palm_clearance: wp.array[float],
+    table_top: float,
+    table_x: wp.vec2,
+    table_half_y: float,
+    link_clearance: float,
     dt: float,
     q_ref: wp.array2d[float],
     qd_ref: wp.array2d[float],
@@ -295,6 +298,11 @@ def arm_drive_kernel(
     the reference; their velocities are the motion of this call over ``dt``. Run once per substep,
     after the hand control has measured the slider travels against the palm (all poses of a substep
     must belong to the same instant).
+
+    Safety floor: a step is not taken when it would bring a palm point closer to the table top than
+    its clearance (the arm is stronger than any contact and would crush the hand into the table), or
+    the origin of link 4, 5, 6 or 7 closer than ``link_clearance`` while it is above the table (the
+    arm links do not collide).
     """
     w = wp.tid()
     base = body_q[link_body[w, 0]]  # the base stays where it was built
@@ -312,16 +320,18 @@ def arm_drive_kernel(
             v = e / dt  # settle on the target
         q_new[j] = wp.clamp(q + v * dt, q_lower[j], q_upper[j])
         v_new[j] = (q_new[j] - q) / dt
-    # safety floor: a step that would take the palm pads or the wrist below the floor is not taken
+    # safety floor
     x = base
     ok = True
     for j in range(7):
         x = wp.transform_multiply(wp.transform_multiply(x, joint_xforms[j]), _rot_z(q_new[j]))
-        if j >= 4 and wp.transform_get_translation(x)[2] < link_floor:
+        p = wp.transform_get_translation(x)
+        over_table = p[0] > table_x[0] and p[0] < table_x[1] and wp.abs(p[1]) < table_half_y
+        if j >= 3 and over_table and p[2] < table_top + link_clearance:
             ok = False
     palm = wp.transform_multiply(x, mount)
     for k in range(palm_points.shape[0]):
-        if wp.transform_point(palm, palm_points[k])[2] < palm_floor:
+        if wp.transform_point(palm, palm_points[k])[2] < table_top + palm_clearance[k]:
             ok = False
     if not ok:
         for j in range(7):
