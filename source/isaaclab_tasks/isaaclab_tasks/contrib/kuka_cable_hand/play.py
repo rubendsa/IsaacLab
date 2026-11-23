@@ -103,7 +103,16 @@ def evaluate(checkpoint: str, num_envs: int, seed: int, device: str) -> dict:
 
 
 def record_video(
-    checkpoint: str, path: str, num_envs: int, episodes: int, seed: int, device: str, size=(1280, 720), steps=None
+    checkpoint: str,
+    path: str,
+    num_envs: int,
+    episodes: int,
+    seed: int,
+    device: str,
+    size=(1280, 720),
+    steps=None,
+    xray: bool = False,
+    view: str = "front",
 ):
     """Render ``episodes`` episodes of ``num_envs`` environments side by side into an MP4."""
     import math
@@ -120,18 +129,29 @@ def record_video(
     cfg = KukaCableHandLiftCfg(num_envs=num_envs, device=device, seed=seed, visuals=True)
     env = KukaCableHandLiftEnv(cfg)
     policy = _load_policy(env, checkpoint, device)
+    if xray:
+        ch.set_xray_look(env.model)  # translucent shells: the cables inside the digits show
     viewer = newton.viewer.ViewerGL(width=size[0], height=size[1], headless=True)
     viewer.set_model(env.model)
     spacing = 0.9
     viewer.set_world_offsets((0.0, spacing, 0.0))
     offsets = viewer.world_offsets.numpy() if viewer.world_offsets is not None else np.zeros((num_envs, 3))
     center = offsets.mean(axis=0)
-    # camera beyond the far edge of the table (the robot reaches toward -x), looking back at the hands
+    # orbit camera around the hand region; azimuth 0 sits beyond the far edge of the table (the robot reaches
+    # toward -x) and looks back at the robot, positive azimuth swings it toward the robot's right (-y)
     span = spacing * max(num_envs - 1, 0)
-    dist = 0.75 + 0.75 * span
-    pitch = 14.0
-    height = 0.42 + dist * math.tan(math.radians(pitch))
-    viewer.set_camera(pos=wp.vec3(-0.55 - dist, float(center[1]), height), pitch=-pitch, yaw=0.0)
+    if view == "front":
+        azimuth, elevation, dist, look = 0.0, 12.0, 1.0 + 0.7 * span, np.array([-0.56, float(center[1]), 0.38])
+    else:
+        azimuth, elevation, dist, look = 38.0, 15.0, 0.82 + 0.7 * span, np.array([-0.63, float(center[1]), 0.42])
+    az, el = math.radians(azimuth), math.radians(elevation)
+    eye = look + dist * np.array([-math.cos(el) * math.cos(az), -math.cos(el) * math.sin(az), math.sin(el)])
+    d = look - eye
+    viewer.set_camera(
+        pos=wp.vec3(*eye.tolist()),
+        pitch=math.degrees(math.atan2(d[2], math.hypot(d[0], d[1]))),
+        yaw=math.degrees(math.atan2(d[1], d[0])),
+    )
     piece = newton.Mesh.create_cylinder(1.0, 1.0, up_axis=newton.Axis.Z, segments=12, compute_inertia=False)
     viewer.log_mesh(
         "/cable_piece", wp.array(piece.vertices, dtype=wp.vec3), wp.array(piece.indices, dtype=wp.int32), hidden=True
@@ -237,6 +257,8 @@ def main():
     parser.add_argument(
         "--video_steps", type=int, default=None, help="Policy steps to record (default: whole episodes)."
     )
+    parser.add_argument("--xray", action="store_true", help="Draw the hand shells translucent so the cables show.")
+    parser.add_argument("--view", choices=("front", "angled"), default="front", help="Camera of the video.")
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--json", default=None, help="Write the evaluation statistics to this file.")
@@ -250,7 +272,15 @@ def main():
                 json.dump(stats, f, indent=2)
     if args.video:
         path = record_video(
-            checkpoint, args.video, args.video_envs, args.video_episodes, args.seed, args.device, steps=args.video_steps
+            checkpoint,
+            args.video,
+            args.video_envs,
+            args.video_episodes,
+            args.seed,
+            args.device,
+            steps=args.video_steps,
+            xray=args.xray,
+            view=args.view,
         )
         print("video:", path)
 

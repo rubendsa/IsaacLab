@@ -62,7 +62,8 @@ class RewardWeights:
     fingertips: float = 1.0
     """``1 - tanh(d / 0.05)`` of the mean distance of the index, middle and thumb tip pads to the object [m]."""
     lifting: float = 15.0
-    """1 while the object is more than :attr:`KukaCableHandLiftCfg.lift_height` above its resting height."""
+    """1 while the object is more than :attr:`KukaCableHandLiftCfg.lift_height` above its resting height and
+    between the pinch digits (:attr:`KukaCableHandLiftCfg.held_distance`)."""
     goal_tracking: float = 16.0
     """``lifted * (1 - tanh(d / 0.3))`` of the object-to-target distance [m]."""
     goal_tracking_fine: float = 5.0
@@ -72,7 +73,8 @@ class RewardWeights:
     arm_velocity: float = -1.0e-3
     """Squared joint velocity of the arm reference [rad^2/s^2]."""
     table_penetration: float = -200.0
-    """Depth of the lowest palm pad below the table top [m] (the palm is prescribed and can enter the table)."""
+    """Depth of the lowest palm pad below the table top [m]; a guard, the safety floor of the arm driver already
+    keeps the pads above the table."""
     termination: float = -10.0
     """Paid once when an episode ends early (object off the table, palm deep in the table, invalid state)."""
 
@@ -116,8 +118,8 @@ class KukaCableHandLiftCfg:
     object_yaw_range: float = math.pi
     """Half range of the uniform object yaw [rad]."""
     arm_home: tuple[float, ...] = (-0.0578, -0.3568, 0.6659, 1.901, -1.8673, -1.5234, 0.5995)
-    """Arm joints at reset [rad]: the palm faces the table with its grasp site 17 cm above the object center
-    (inverse kinematics from the Kuka-Allegro home pose)."""
+    """Arm joints at reset [rad]: the palm faces the table 21 cm above the nominal cube center, the pinch point
+    11 cm above it (inverse kinematics from the Kuka-Allegro home pose)."""
     arm_home_noise: float = 0.0
     """Half range of a uniform offset added to every arm joint at reset [rad]."""
     visuals: bool = False

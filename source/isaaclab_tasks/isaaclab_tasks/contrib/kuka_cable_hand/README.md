@@ -6,7 +6,9 @@ branch (`newton.examples.cable.cable_hand`) on the KUKA LBR iiwa 7 of the Kuka-A
 (`Isaac-Lift-KukaAllegro`), with a PPO policy that picks a cube up from the table and carries it to a
 target in the air.
 
-![Policy rollout](docs/kuka_cable_hand.jpg)
+![Policy rollout: approach, pinch, lift, hold at the target (green)](docs/kuka_cable_hand.jpg)
+
+[Video: highlights](docs/kuka_cable_hand_highlights.mp4) (close-up, x-ray with the cables, 4 environments)
 
 ## What is simulated
 
@@ -38,8 +40,10 @@ mount plane).
 toward the commanded target under the iiwa 7 speed limits (x0.5) and a 5 rad/s^2 acceleration limit,
 the way the branch's grasp examples drive a kinematic wrist. This models a stiff position-controlled
 industrial arm; the arm has no dynamics of its own and its links do not collide. A safety floor in the
-driver refuses steps that would bring the palm pads, the palm origin or the wrist flange to the table
-(a stronger-than-any-contact arm would otherwise crush the fingers into the table and past their stops).
+driver refuses steps that would bring the palm pads, the palm origin, the forearm stub or the wrist
+flange to the table (a stronger-than-any-contact arm would otherwise crush the fingers into the table
+and past their stops), or the origins of links 4 to 7 within 6.5 cm of it while they are over the table
+(the first policy, trained without that rule, rested the wrist housings in the table).
 
 **Physics settings.** The branch tunes the tendon hand at 20 substeps x 16 iterations per 60 Hz frame.
 Training uses 10 substeps x 8 iterations, at most 8 capstan sweeps per iteration and a contact
@@ -51,8 +55,8 @@ own scripted grasps still work (the kinematic wrist of `example_cable_driven_han
 | can (side power grasp) | 100.8 mm | can thrown out (unstable) | 101.0 mm |
 | block (three-digit pinch) | 99.3 mm | 102.1 mm | 102.1 mm |
 
-At 4096 environments the task runs at about 21,000 environment steps per second on one RTX PRO 6000
-Blackwell (0.19 s per policy step, 4.7 s per PPO iteration of 24 steps); the cost is set by the number
+At 4096 environments the task runs at about 20,000 environment steps per second on one RTX PRO 6000
+Blackwell (0.19 s per policy step, 4.8 s per PPO iteration of 24 steps); the cost is set by the number
 of kernel launches per substep, so it is nearly flat from 1 to 4096 worlds.
 
 **Resets.** All worlds are identical replicas. After 0.5 s of settling the complete per-world state is
@@ -94,18 +98,64 @@ The branch pins Newton to the cable-driven hand commit (`pyproject.toml`, `uv.lo
 
 ```bash
 uv sync
-# train (4096 environments, about 2.6 h for 2000 iterations)
-.venv/bin/python -m isaaclab_tasks.contrib.kuka_cable_hand.train --num_envs 4096 --max_iterations 2000
+# train (4096 environments, 30 % spawn-in-hand resets; about 4.9 s per iteration)
+.venv/bin/python -m isaaclab_tasks.contrib.kuka_cable_hand.train --num_envs 4096 --max_iterations 1500
 # evaluate 1024 episodes and record a video of 4 environments (needs an X display for the GL viewer)
 DISPLAY=:0 .venv/bin/python -m isaaclab_tasks.contrib.kuka_cable_hand.play \
     --checkpoint logs/rsl_rl/kuka_cable_hand_lift/<run> --eval_envs 1024 --video lift.mp4 --video_envs 4
+# close-up from a three-quarter view, shells translucent so the cables (colored by tension) show
+DISPLAY=:0 .venv/bin/python -m isaaclab_tasks.contrib.kuka_cable_hand.play \
+    --checkpoint logs/rsl_rl/kuka_cable_hand_lift/<run> --eval_envs 0 --video xray.mp4 --video_envs 1 \
+    --view angled --xray
 ```
 
 Run the scripts with the environment's Python directly; `uv run` re-syncs the environment first.
 
 ## Results
 
-RESULTS_PLACEHOLDER
+One training run: seed 42, 4096 environments, 1500 PPO iterations (147 M environment steps), 2 h 14 min
+on one RTX PRO 6000 Blackwell, 30 % of the resets from the held-cube bank (2355 of 4096 worlds held the cube
+after the scripted pinch). Every evaluation below starts **from the table** (no held starts): the
+deterministic policy, one 7 s episode per environment, cube pose and target drawn as in training.
+
+![Learning curve](docs/learning_curve.png)
+
+| Checkpoint | Episodes | Lifted the cube | Reached the target (5 cm) | At the target at 7 s | Holding at 7 s | Ended early |
+|---|---|---|---|---|---|---|
+| 100 | 1024 | 76.8 % | 12.8 % | 0.0 % | 37.4 % | 9.4 % |
+| 300 | 1024 | 91.9 % | 39.1 % | 13.2 % | 78.3 % | 7.8 % |
+| 500 | 1024 | 92.8 % | 52.9 % | 30.5 % | 83.2 % | 6.0 % |
+| 700 | 1024 | 96.5 % | 93.4 % | 87.0 % | 92.2 % | 5.1 % |
+| 900 | 1024 | 99.4 % | 98.7 % | 95.2 % | 95.7 % | 3.1 % |
+| 1200 | 1024 | 99.8 % | 99.2 % | 96.3 % | 96.5 % | 2.6 % |
+| **1499** | **4096** | **99.8 %** | **99.4 %** | **97.5 %** | **97.5 %** | **2.1 %** |
+
+In the final evaluation the cube ends 16.5 mm from the target on average. Of the 85 early endings, 73 are
+a cube knocked off the table and 12 a digit pushed out of its range. All checkpoints are in
+[`pretrained/sweep.jsonl`](pretrained/sweep.jsonl), the final evaluation in
+[`pretrained/final_eval.json`](pretrained/final_eval.json).
+
+The policy pinches the cube between the opposed thumb and the index and middle fingers (both cables of
+those fingers pulled), lifts it and holds it at the target; when it drops the cube it goes back for it.
+
+Videos (rendered with `play.py`, Newton OpenGL viewer):
+[highlights](docs/kuka_cable_hand_highlights.mp4) (all three below, 50 s),
+[close-up, 3 episodes](docs/kuka_cable_hand_closeup.mp4),
+[x-ray, cables colored by tension](docs/kuka_cable_hand_xray.mp4),
+[4 environments](docs/kuka_cable_hand_4envs.mp4).
+
+Two earlier runs shaped the recipe: without the held-cube resets PPO brought the pinch point to the cube but
+did not lift it once in 106 iterations; a first run with the bank lifted the cube from the table in 87 % of
+the episodes after 100 iterations but rested the wrist housings in the table, which the link rule of the
+safety floor now prevents (that run was stopped and the recipe retrained from scratch).
+
+The trained policy and its configuration are in [`pretrained/`](pretrained/):
+
+```bash
+DISPLAY=:0 .venv/bin/python -m isaaclab_tasks.contrib.kuka_cable_hand.play \
+    --checkpoint source/isaaclab_tasks/isaaclab_tasks/contrib/kuka_cable_hand/pretrained/model_1499.pt \
+    --eval_envs 4096 --video rollout.mp4 --video_envs 1 --view angled
+```
 
 ## Limitations
 

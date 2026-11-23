@@ -1,0 +1,17 @@
+{
+  "checkpoint": "pretrained/model_1499.pt",
+  "episodes": 4096,
+  "lifted_any": 0.998291015625,
+  "success_any": 0.99365234375,
+  "success_at_end": 0.975341796875,
+  "held_at_end": 0.975341796875,
+  "early_termination": 0.020751953125,
+  "termination_reasons": {
+    "object_off_table": 73,
+    "palm_in_table": 0,
+    "hand_invalid": 12,
+    "non_finite": 0
+  },
+  "mean_final_goal_distance_m": 0.01650044694542885,
+  "mean_max_lift_m": 0.21032986044883728
+}
