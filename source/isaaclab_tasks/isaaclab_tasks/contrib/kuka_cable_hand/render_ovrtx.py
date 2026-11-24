@@ -73,8 +73,9 @@ TABLE_LEG_HALF_WIDTH = 0.025
 TABLE_LEG_INSET = 0.035
 """Distance of the legs from the edges of the table top [m]."""
 
-MOUNT_PLATE_RADIUS = 0.18
-"""Radius of the floor plate under each arm base [m]; the iiwa base flange reaches 0.13 m."""
+MOUNT_PLATE_RADIUS = 0.145
+"""Radius of the floor plate under each arm base [m]: wider than the iiwa base flange (0.13 m) and clear of the
+table, whose far edge is 0.15 m from the base axis."""
 
 TARGET_HIDE_DISTANCE = 0.03
 """The target marker hides once the cube center comes this close to it [m] (the goal is reached)."""
@@ -252,7 +253,7 @@ def camera_path(
         az, el, dist, target = 36.0, 22.0, 1.05 + 0.7 * span, np.array([-0.56, -0.02, 0.50])
     elif view == "side":
         # the whole robot from beside the table: the base stands on the floor next to the table, which hides it from
-        # any view over the table (it is 4 cm behind the table's far edge, below the top)
+        # the low views over the table (it is 4 cm behind the table's far edge, below the top)
         az, el, dist, target = SIDE_VIEW[0], SIDE_VIEW[1], SIDE_VIEW[2] + 0.7 * span, np.array(SIDE_VIEW[3])
     elif view == "front":
         az, el, dist, target = 0.0, 12.0, 1.05 + 0.75 * span, np.array([-0.56, 0.0, 0.38])

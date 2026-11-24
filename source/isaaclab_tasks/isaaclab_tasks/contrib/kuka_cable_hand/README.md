@@ -150,12 +150,14 @@ python -m isaaclab_tasks.contrib.kuka_cable_hand.render_ovrtx --rollout overview
 ```
 
 Views: `side` (the whole robot from beside the table: its base stands on the floor next to the table, 4 cm behind
-the table's far edge and below its top, so views over the table hide it), `angled` (fixed three-quarter view over
-the table), `track` (follows the pinch point, raised or lowered to keep the cube and the lift target in view; both
-fit while the target is less than about 24 cm above the cube), `wide` (several environments), `front`;
-`--distance`, `--elevation` and `--azimuth` override a view's camera. The first OVRTX run compiles the RTX shader
-cache (`~/.cache/ovrtx`), which can take many minutes; later runs set up in about 2.5 s. The look was checked by
-two rounds of review of full-resolution stills and a frame-by-frame review of the final videos.
+the table's far edge and below its top, so the low views over the table (`angled`, `front`, `track`, the default
+`wide`) hide it; the 4-environment video looks down from 55 deg, where the bases show behind the table), `angled`
+(fixed three-quarter view over the table), `track` (follows the pinch point, raised or lowered to keep the cube and
+the lift target in view; both fit while the target is less than about 24 cm above the cube), `wide` (several
+environments), `front`; `--distance`, `--elevation` and `--azimuth` override a view's camera. The first OVRTX run
+compiles the RTX shader cache (`~/.cache/ovrtx`), which can take many minutes; later runs set up in about 2.5 s.
+The look was checked by two rounds of review of full-resolution stills and a frame-by-frame review of the final
+videos.
 
 ## Results
 
