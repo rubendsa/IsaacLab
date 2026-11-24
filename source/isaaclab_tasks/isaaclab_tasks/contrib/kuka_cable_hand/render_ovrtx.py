@@ -11,8 +11,10 @@ The scene is authored as USD and rendered by ``ovrtx`` through an ``ovstage`` st
   link meshes and their materials are copied from ``Robots/KukaAllegro/kuka.usd`` into an arm-only USD (no
   Allegro hand, no physics) that is referenced once per environment;
 - the cable-driven hand from ``cable_hand_visuals.usd`` of the Newton branch (its own looks), one prim per body;
-- the cube, the lift target, the table and a light set (near-white floor, white dome and a soft key light);
-- the cables as linear ``BasisCurves``, colored by tension like the branch's examples.
+- the cube, the lift target, a light-oak bench with a mounting plate under each arm, and a light set (light
+  floor and backdrop; dome, key, fill and rim lights, of which the fill and rim cast no shadows);
+- the cables as linear ``BasisCurves``: in the x-ray view colored by role like the branch's examples and glowing
+  with tension, otherwise neutral gray (they show through the openings of the hand).
 
 Every frame writes the recorded world pose of every body to its prim (``omni:xform`` with
 ``omni:resetXformStack``), rewrites the cable curves, and renders a converged path-traced frame (the history is
@@ -197,29 +199,58 @@ def look_at(eye, target) -> np.ndarray:
 PINCH_POINT_IN_PALM = (0.0535, 0.095, 0.022)
 """Pinch point of the task in the palm frame [m]; the tracking camera follows it."""
 
+TRACK_MARGIN = 0.12
+"""Largest height [m] of the cube below, and of the shown lift target above, the tracking camera's look point
+(half the frame height at the track distance of the x-ray clip, 0.48 m, is 0.17 m)."""
 
-def camera_path(view: str, data, meta: dict, frames: int, spacing: float, orbit: float, distance: float | None):
+CABLE_GLOW_TENSION = 45.0
+"""Tension [N] at which a cable glows fully: the largest tension the policy commands (``tension_command_max``)."""
+
+CABLE_NEUTRAL = (0.46, 0.47, 0.49)
+"""Color of the cables outside the x-ray view, where only short stretches show through the hand's openings."""
+
+CABLE_GLOW_XRAY = 1.0
+"""Default glow of a fully loaded cable in the x-ray view, relative to its base color (no glow otherwise)."""
+
+
+def camera_path(
+    view: str,
+    data,
+    meta: dict,
+    frames: int,
+    spacing: float,
+    orbit: float,
+    distance: float | None,
+    elevation: float | None = None,
+):
     """Eye and target of every frame for a camera preset.
 
     ``angled``, ``front`` and ``wide`` are fixed views of the whole scene. ``track`` follows the pinch point of
-    environment 0 (smoothed over about one second, so it glides through grasps and episode resets) from a fixed
-    direction. ``orbit`` sweeps the azimuth by that many degrees over the clip; ``distance`` overrides the preset
-    distance [m].
+    environment 0 from a fixed direction, raised or lowered to keep the cube and the shown lift target in view
+    (:data:`TRACK_MARGIN`) and smoothed over about one second per episode. ``orbit`` sweeps the azimuth by that
+    many degrees over the clip; ``distance`` [m] and ``elevation`` [deg] override the preset's.
     """
     n = meta["num_envs"]
     span = spacing * max(n - 1, 0)
     targets = None
     if view == "angled":
-        az, el, dist, target = 36.0, 20.0, 1.05 + 0.7 * span, np.array([-0.56, -0.02, 0.50])
+        # 22 deg keeps the far floor, where grazing path-tracing noise crawls, out of the top of the frame
+        az, el, dist, target = 36.0, 22.0, 1.05 + 0.7 * span, np.array([-0.56, -0.02, 0.50])
     elif view == "front":
         az, el, dist, target = 0.0, 12.0, 1.05 + 0.75 * span, np.array([-0.56, 0.0, 0.38])
     elif view == "wide":
         az, el, dist, target = 30.0, 22.0, 0.975 + 0.75 * span, np.array([-0.36, -0.10 * span, 0.44])
     elif view == "track":
-        az, el, dist, target = 40.0, 20.0, 0.55, None
+        az, el, dist, target = 40.0, 22.0, 0.55, None
         palm = data["body_q"][:frames, 0, meta["hand_bodies"]["palm"]].astype(np.float64)
         rot = usd_matrices(palm)[:, :3, :3]  # row vectors: point_world = point_local @ R + p
-        pinch = palm[:, :3] + np.asarray(PINCH_POINT_IN_PALM) @ rot
+        look = palm[:, :3] + np.asarray(PINCH_POINT_IN_PALM) @ rot
+        look[:, 2] += 0.06  # frame the hand above the pinch point
+        # keep the cube, and the lift target while it shows, within TRACK_MARGIN of the look point's height
+        shown = target_visibility(data, meta, frames)[:, 0]
+        goal_z = np.where(shown, data["targets"][:frames, 0, 2], -np.inf)
+        cube_z = data["body_q"][:frames, 0, meta["object_body"], 2]
+        look[:, 2] = np.minimum(np.maximum(look[:, 2], goal_z - TRACK_MARGIN), cube_z + TRACK_MARGIN)
         off = env_offsets(n, spacing)[0]
         k = 15  # half window [frames]
         kernel = np.hanning(2 * k + 3)[1:-1]
@@ -229,15 +260,17 @@ def camera_path(view: str, data, meta: dict, frames: int, spacing: float, orbit:
         cuts = [0, *(int(c) for c in np.flatnonzero(data["dones"][1:frames, 0]) + 1), frames]
         smooth = []
         for a, b in zip(cuts[:-1], cuts[1:], strict=True):
-            seg = pinch[a:b]
+            seg = look[a:b]
             pad = np.concatenate([np.repeat(seg[:1], k, 0), seg, np.repeat(seg[-1:], k, 0)])
             smooth.append(np.stack([np.convolve(pad[:, j], kernel, mode="valid") for j in range(3)], -1))
         targets = np.concatenate(smooth) + off
-        targets[:, 2] += 0.06  # frame the hand above the pinch point
     else:
         raise ValueError(f"unknown view {view!r}")
     if distance is not None:
         dist = distance
+    if elevation is not None:
+        el = elevation
+    el = min(max(el, -89.0), 89.0)  # look_at needs a forward direction that is not vertical
     path = []
     for i in range(frames):
         a = az + (orbit * (i / (frames - 1) - 0.5) if orbit and frames > 1 else 0.0)
@@ -248,6 +281,35 @@ def camera_path(view: str, data, meta: dict, frames: int, spacing: float, orbit:
     return path
 
 
+def define_disc(stage, path: str, radius: float, height: float, segments: int = 128):
+    """A closed cylinder along z, centered at the origin, as a polygon mesh with flat caps and a smooth side.
+
+    Implicit ``UsdGeom.Cylinder`` prims are tessellated coarsely by the renderer (visible facets on a plate).
+    """
+    from pxr import Gf, UsdGeom, Vt
+
+    ang = np.linspace(0.0, 2.0 * np.pi, segments, endpoint=False)
+    rim = np.stack([np.cos(ang), np.sin(ang), np.zeros(segments)], -1)
+    h = 0.5 * height
+    points = np.concatenate([radius * rim + [0.0, 0.0, h], radius * rim - [0.0, 0.0, h]])
+    nxt = (np.arange(segments) + 1) % segments
+    top, bottom = np.arange(segments), np.arange(segments)[::-1] + segments
+    side = np.stack([np.arange(segments) + segments, nxt + segments, nxt, np.arange(segments)], -1)
+    side_normals = np.stack([rim, rim[nxt], rim[nxt], rim], 1)
+    normals = np.concatenate(
+        [np.tile([0.0, 0.0, 1.0], (segments, 1)), np.tile([0.0, 0.0, -1.0], (segments, 1)), side_normals.reshape(-1, 3)]
+    )
+    mesh = UsdGeom.Mesh.Define(stage, path)
+    mesh.CreatePointsAttr(Vt.Vec3fArray.FromNumpy(points.astype(np.float32)))
+    mesh.CreateFaceVertexCountsAttr(Vt.IntArray([segments, segments] + [4] * segments))
+    mesh.CreateFaceVertexIndicesAttr(Vt.IntArray(np.concatenate([top, bottom, side.reshape(-1)]).tolist()))
+    mesh.CreateNormalsAttr(Vt.Vec3fArray.FromNumpy(normals.astype(np.float32)))
+    mesh.SetNormalsInterpolation(UsdGeom.Tokens.faceVarying)
+    mesh.CreateSubdivisionSchemeAttr(UsdGeom.Tokens.none)
+    mesh.CreateExtentAttr(Vt.Vec3fArray([Gf.Vec3f(-radius, -radius, -h), Gf.Vec3f(radius, radius, h)]))
+    return mesh
+
+
 def env_offsets(num_envs: int, spacing: float) -> np.ndarray:
     """Display offsets of the environments: a row along y, centered on y = 0."""
     out = np.zeros((num_envs, 3))
@@ -255,31 +317,55 @@ def env_offsets(num_envs: int, spacing: float) -> np.ndarray:
     return out
 
 
-def cable_curves(frame_pieces, num_envs: int, num_cables: int, roles, tension_max: float, radius: float):
-    """Per environment: curve vertex counts, points, widths and colors of the cables of one frame."""
+def cable_curves(
+    frame_pieces,
+    num_envs: int,
+    num_cables: int,
+    roles,
+    tension_max: float,
+    radius: float,
+    glow: float = 0.0,
+    colored: bool = True,
+):
+    """Per environment: curve vertex counts, points, widths, colors and glow of the cables of one frame.
+
+    The color is the branch's (hue by role, brightness by tension), or :data:`CABLE_NEUTRAL` if not ``colored``.
+    The glow (emission) is ``glow`` times the base color of the role, scaled linearly from 0 at the rest tension
+    to 1 at :data:`CABLE_GLOW_TENSION`, so loaded cables stand out regardless of the lighting.
+    """
     from newton.examples.cable import cable_hand as ch
 
     start, end, tension, world, cable = frame_pieces
     out = []
     for w in range(num_envs):
-        counts, points, colors = [], [], []
+        counts, points, colors, glows = [], [], [], []
         for c in range(num_cables):
             sel = (world == w) & (cable == c)
             if not np.any(sel):
                 continue
             s, e, t = start[sel], end[sel], tension[sel]
-            col = np.asarray(ch.tension_colors(t, tension_max, roles[c]), dtype=np.float32)
+            if colored:
+                col = np.asarray(ch.tension_colors(t, tension_max, roles[c]), dtype=np.float32)
+            else:
+                col = np.tile(np.asarray(CABLE_NEUTRAL, dtype=np.float32), (len(t), 1))
+            rest = ch.CABLE_COLOR_REST_TENSION
+            u = np.clip((t - rest) / (CABLE_GLOW_TENSION - rest), 0.0, 1.0)
+            base = np.asarray(ch.CABLE_COLORS.get(roles[c], ch.CABLE_COLORS["curl"]), dtype=np.float32)
+            emit = (glow * u[:, None] * base).astype(np.float32)
             points.append(np.concatenate([s[:1], e]).astype(np.float32))
             colors.append(np.concatenate([col[:1], col]).astype(np.float32))
+            glows.append(np.concatenate([emit[:1], emit]))
             counts.append(len(s) + 1)
         pts = np.concatenate(points) if points else np.zeros((0, 3), np.float32)
         cols = np.concatenate(colors) if colors else np.zeros((0, 3), np.float32)
+        emits = np.concatenate(glows) if glows else np.zeros((0, 3), np.float32)
         out.append(
             (
                 np.asarray(counts, np.int32),
                 pts,
                 np.full(len(pts), 2.0 * radius, np.float32),
                 cols,
+                emits,
             )
         )
     return out
@@ -350,6 +436,12 @@ def build_scene(
     cable_sh.CreateIdAttr("UsdPreviewSurface")
     cable_sh.CreateInput("diffuseColor", T.Color3f).ConnectToSource(reader.ConnectableAPI(), "result")
     cable_sh.CreateInput("roughness", T.Float).Set(0.45)
+    glow_reader = UsdShade.Shader.Define(st, "/World/Looks/Cable/TensionGlow")
+    glow_reader.CreateIdAttr("UsdPrimvarReader_float3")
+    glow_reader.CreateInput("varname", T.Token).Set("tensionGlow")
+    glow_reader.CreateInput("fallback", T.Float3).Set(Gf.Vec3f(0.0, 0.0, 0.0))
+    glow_reader.CreateOutput("result", T.Float3)
+    cable_sh.CreateInput("emissiveColor", T.Color3f).ConnectToSource(glow_reader.ConnectableAPI(), "result")
     cable_mat.CreateSurfaceOutput().ConnectToSource(cable_sh.ConnectableAPI(), "surface")
 
     # floor and one long bench under all environments (the task table, extended to the floor)
@@ -390,10 +482,7 @@ def build_scene(
                 sh.CreateInput("opacity", T.Float).Set(opacity)
                 sh.CreateInput("roughness", T.Float).Set(0.1)
                 sh.CreateInput("ior", T.Float).Set(1.0)
-        plate = UsdGeom.Cylinder.Define(st, f"{env}/mount")  # the arm is bolted through the bench top
-        plate.CreateAxisAttr(UsdGeom.Tokens.z)
-        plate.CreateRadiusAttr(0.13)
-        plate.CreateHeightAttr(0.012)
+        plate = define_disc(st, f"{env}/mount", radius=0.13, height=0.012)  # the arm is bolted through the bench
         UsdGeom.Xformable(plate).AddTranslateOp().Set(Gf.Vec3d(0.0, float(offsets[w, 1]), top + 0.006))
         UsdShade.MaterialBindingAPI.Apply(plate.GetPrim()).Bind(mount_mat)
         cube = UsdGeom.Cube.Define(st, f"{env}/cube")
@@ -407,7 +496,7 @@ def build_scene(
         UsdShade.MaterialBindingAPI.Apply(target.GetPrim()).Bind(target_mat)
         UsdGeom.PrimvarsAPI(target).CreatePrimvar("doNotCastShadows", T.Bool).Set(True)
         driven["targets"].append(f"{env}/target")
-        counts, pts, widths, cols = first_curves[w]
+        counts, pts, widths, cols, emits = first_curves[w]
         curves = UsdGeom.BasisCurves.Define(st, f"{env}/cables")
         curves.CreateTypeAttr(UsdGeom.Tokens.linear)
         curves.CreateWrapAttr(UsdGeom.Tokens.nonperiodic)
@@ -417,6 +506,8 @@ def build_scene(
         curves.SetWidthsInterpolation(UsdGeom.Tokens.vertex)
         pv = UsdGeom.PrimvarsAPI(curves).CreatePrimvar("displayColor", T.Color3fArray, UsdGeom.Tokens.vertex)
         pv.Set(Vt.Vec3fArray.FromNumpy(cols))
+        glow_pv = UsdGeom.PrimvarsAPI(curves).CreatePrimvar("tensionGlow", T.Color3fArray, UsdGeom.Tokens.vertex)
+        glow_pv.Set(Vt.Vec3fArray.FromNumpy(emits))
         UsdShade.MaterialBindingAPI.Apply(curves.GetPrim()).Bind(cable_mat)
         driven["curves"].append(f"{env}/cables")
 
@@ -493,6 +584,8 @@ def render(
     keep_frames: int = 0,
     distance: float | None = None,
     only_frames: list[int] | None = None,
+    elevation: float | None = None,
+    cable_glow: float | None = None,
 ) -> dict:
     """Render a recorded rollout to an MP4; returns timing statistics."""
     import ovrtx
@@ -517,7 +610,8 @@ def render(
         return tuple(x[a:b] for x in pieces)
 
     num_cables = len(meta["cable_keys"])
-    curves_args = (n, num_cables, meta["cable_roles"], meta["tension_max"], meta["cable_radius"])
+    glow = cable_glow if cable_glow is not None else (CABLE_GLOW_XRAY if xray else 0.0)
+    curves_args = (n, num_cables, meta["cable_roles"], meta["tension_max"], meta["cable_radius"], glow, xray)
     workdir = os.path.abspath(workdir)
     out = os.path.abspath(out)
     arm_usd = os.path.join(os.path.expanduser("~/.cache/kuka_cable_hand"), "kuka_arm.usd")
@@ -604,6 +698,14 @@ def render(
                 str(round(1.0 / meta["step_dt"])),
                 "-i",
                 "-",
+                "-vf",
+                "scale=out_color_matrix=bt709:out_range=tv",  # HD video is BT.709; tag it so players agree
+                "-colorspace",
+                "bt709",
+                "-color_primaries",
+                "bt709",
+                "-color_trc",
+                "bt709",
                 "-c:v",
                 "libx264",
                 "-pix_fmt",
@@ -612,12 +714,14 @@ def render(
                 "17",
                 "-preset",
                 "slow",
+                "-movflags",
+                "+faststart",  # playable while it downloads
                 out,
             ],
             stdin=subprocess.PIPE,
         )
     )
-    cameras = camera_path(view, data, meta, frames, spacing, orbit, distance)
+    cameras = camera_path(view, data, meta, frames, spacing, orbit, distance, elevation)
     target_visible = target_visibility(data, meta, frames)
     t_setup = time.perf_counter() - t0
     t_frames = []
@@ -652,11 +756,12 @@ def render(
             is_array=False,
             semantic=ovstage.AttributeSemantic.MATRIX,
         ).wait()
-        for w, (counts, pts, widths, cols) in enumerate(cable_curves(frame_pieces(i), *curves_args)):
+        for w, (counts, pts, widths, cols, emits) in enumerate(cable_curves(frame_pieces(i), *curves_args)):
             write_array(q_curves[w], "curveVertexCounts", counts, ordinal)
             write_array(q_curves[w], "points", (pts + offsets[w]).astype(np.float32), ordinal)
             write_array(q_curves[w], "widths", (cable_scale * widths).astype(np.float32), ordinal)
             write_array(q_curves[w], "primvars:displayColor", cols, ordinal)
+            write_array(q_curves[w], "primvars:tensionGlow", emits, ordinal)
         stage.advance_write_floor(ordinal, ovstage.Scope.ALL).wait()
         renderer.clear_history([product], first_frame_quality=True)
         result = renderer.step({product}, meta["step_dt"], ordinal=ordinal)
@@ -703,6 +808,7 @@ def main():
     parser.add_argument("--out", required=True, help="Output .mp4")
     parser.add_argument("--view", choices=("angled", "front", "wide", "track"), default="angled")
     parser.add_argument("--distance", type=float, default=None, help="Camera distance override [m].")
+    parser.add_argument("--elevation", type=float, default=None, help="Camera elevation override [deg].")
     parser.add_argument("--only_frames", type=int, nargs="+", default=None, help="Render only these frames (stills).")
     parser.add_argument("--width", type=int, default=1920)
     parser.add_argument("--height", type=int, default=1080)
@@ -711,6 +817,12 @@ def main():
     parser.add_argument("--orbit", type=float, default=0.0, help="Camera azimuth sweep over the clip [deg].")
     parser.add_argument("--spacing", type=float, default=0.9, help="Distance between environments [m].")
     parser.add_argument("--cable_scale", type=float, default=1.5, help="Drawn cable width / real width.")
+    parser.add_argument(
+        "--cable_glow",
+        type=float,
+        default=None,
+        help=f"Cable glow at full load (default {CABLE_GLOW_XRAY} with --xray, else 0).",
+    )
     parser.add_argument("--max_frames", type=int, default=None)
     parser.add_argument("--keep_frames", type=int, default=0, help="Also save every k-th frame as PNG.")
     args = parser.parse_args()
@@ -728,6 +840,8 @@ def main():
         keep_frames=args.keep_frames,
         distance=args.distance,
         only_frames=args.only_frames,
+        elevation=args.elevation,
+        cable_glow=args.cable_glow,
     )
     print(json.dumps(stats, indent=2))
 

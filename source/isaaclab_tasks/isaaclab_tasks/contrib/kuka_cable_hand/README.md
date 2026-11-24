@@ -6,9 +6,14 @@ branch (`newton.examples.cable.cable_hand`) on the KUKA LBR iiwa 7 of the Kuka-A
 (`Isaac-Lift-KukaAllegro`), with a PPO policy that picks a cube up from the table and carries it to a
 target in the air.
 
-![Policy rollout: approach, pinch, lift, hold at the target (green)](docs/kuka_cable_hand.jpg)
+![The policy reaches, pinches and lifts the cube, then holds it at the target (OVRTX render)](docs/kuka_cable_hand_rtx_preview.gif)
 
-[Video: highlights](docs/kuka_cable_hand_highlights.mp4) (close-up, x-ray with the cables, 4 environments)
+Videos rendered with OVRTX (RTX path tracing, the arm in the original Kuka-Allegro materials):
+[highlights](docs/kuka_cable_hand_rtx_highlights.mp4),
+[close-up](docs/kuka_cable_hand_rtx_closeup.mp4),
+[x-ray with the cables](docs/kuka_cable_hand_rtx_xray.mp4),
+[4 environments](docs/kuka_cable_hand_rtx_4envs.mp4).
+GitHub does not play MP4s in the page: each link opens the file view, which has a download button.
 
 ## What is simulated
 
@@ -103,13 +108,51 @@ uv sync
 # evaluate 1024 episodes and record a video of 4 environments (needs an X display for the GL viewer)
 DISPLAY=:0 .venv/bin/python -m isaaclab_tasks.contrib.kuka_cable_hand.play \
     --checkpoint logs/rsl_rl/kuka_cable_hand_lift/<run> --eval_envs 1024 --video lift.mp4 --video_envs 4
-# close-up from a three-quarter view, shells translucent so the cables (colored by tension) show
+# close-up from a three-quarter view, shells translucent so the cables (colored by role, brighter with tension) show
 DISPLAY=:0 .venv/bin/python -m isaaclab_tasks.contrib.kuka_cable_hand.play \
     --checkpoint logs/rsl_rl/kuka_cable_hand_lift/<run> --eval_envs 0 --video xray.mp4 --video_envs 1 \
     --view angled --xray
 ```
 
 Run the scripts with the environment's Python directly; `uv run` re-syncs the environment first.
+
+## Rendering with OVRTX
+
+`record.py` replays the policy and stores every body pose, the cable pieces with their tensions and the targets;
+`render_ovrtx.py` renders such a recording with OVRTX, the kitless Omniverse RTX renderer (the `ovrtx` extra:
+`uv sync --extra ovrtx`). The scene is authored as USD: the iiwa 7 link meshes with their original OmniPBR
+materials, copied from the Kuka-Allegro asset into an arm-only USD (no Allegro hand); the hand from
+`cable_hand_visuals.usd` of the Newton branch; the cables as `BasisCurves`, in the x-ray view colored by role (cyan
+flexor and curl cables, magenta knuckle cables) and glowing with tension (none at the 2 N rest, full at 45 N, the
+policy's largest command), otherwise neutral gray; a light set (light floor and backdrop, light-oak bench with a
+mounting plate under each arm; dome, key, fill and rim lights, of which the fill and rim cast no shadows). Each
+frame writes the recorded world poses to the prims (`omni:xform`) and renders a converged path-traced image
+(history cleared, so moving parts leave no ghosting). On one RTX PRO 6000 Blackwell a 1920x1080 frame takes about
+1.05 s at 48 spp and 1.95 s for the x-ray at 96 spp. The target marker hides once the cube reaches it (with
+hysteresis, so it does not flicker).
+
+```bash
+python -m isaaclab_tasks.contrib.kuka_cable_hand.record \
+    --checkpoint source/isaaclab_tasks/isaaclab_tasks/contrib/kuka_cable_hand/pretrained/model_1499.pt \
+    --num_envs 1 --episodes 3 --seed 3 --out closeup.npz
+python -m isaaclab_tasks.contrib.kuka_cable_hand.render_ovrtx --rollout closeup.npz --out closeup.mp4 --view angled
+python -m isaaclab_tasks.contrib.kuka_cable_hand.record \
+    --checkpoint source/isaaclab_tasks/isaaclab_tasks/contrib/kuka_cable_hand/pretrained/model_1499.pt \
+    --num_envs 1 --episodes 2 --seed 11 --out xray.npz
+python -m isaaclab_tasks.contrib.kuka_cable_hand.render_ovrtx --rollout xray.npz --out xray.mp4 \
+    --view track --distance 0.48 --xray --cable_scale 3.0 --spp 96 --max_frames 353
+python -m isaaclab_tasks.contrib.kuka_cable_hand.record \
+    --checkpoint source/isaaclab_tasks/isaaclab_tasks/contrib/kuka_cable_hand/pretrained/model_1499.pt \
+    --num_envs 4 --episodes 1 --seed 5 --out overview.npz
+python -m isaaclab_tasks.contrib.kuka_cable_hand.render_ovrtx --rollout overview.npz --out overview.mp4 \
+    --view wide --elevation 30
+```
+
+Views: `angled` (fixed three-quarter view), `track` (follows the pinch point, raised or lowered to keep the cube
+and the lift target in view; both fit while the target is less than about 24 cm above the cube), `wide` (several
+environments), `front`; `--distance` and `--elevation` override a view's camera. The first OVRTX run compiles the
+RTX shader cache (`~/.cache/ovrtx`), which can take many minutes; later runs set up in about 2.5 s. The look was
+checked by two rounds of review of full-resolution stills and a frame-by-frame review of the final videos.
 
 ## Results
 
@@ -138,10 +181,12 @@ a cube knocked off the table and 12 a digit pushed out of its range. All checkpo
 The policy pinches the cube between the opposed thumb and the index and middle fingers (both cables of
 those fingers pulled), lifts it and holds it at the target; when it drops the cube it goes back for it.
 
-Videos (rendered with `play.py`, Newton OpenGL viewer):
-[highlights](docs/kuka_cable_hand_highlights.mp4) (all three below, 50 s),
+![One episode: reach, pre-grasp, pinch, lift, at the target, hold](docs/kuka_cable_hand_rtx.jpg)
+
+Earlier previews (rendered with `play.py`, Newton OpenGL viewer):
+[highlights](docs/kuka_cable_hand_highlights.mp4) (all three below, 42 s),
 [close-up, 3 episodes](docs/kuka_cable_hand_closeup.mp4),
-[x-ray, cables colored by tension](docs/kuka_cable_hand_xray.mp4),
+[x-ray, cables colored by role](docs/kuka_cable_hand_xray.mp4),
 [4 environments](docs/kuka_cable_hand_4envs.mp4).
 
 Two earlier runs shaped the recipe: without the held-cube resets PPO brought the pinch point to the cube but
