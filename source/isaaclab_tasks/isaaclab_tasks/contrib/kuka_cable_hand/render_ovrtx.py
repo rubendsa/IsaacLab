@@ -11,8 +11,9 @@ The scene is authored as USD and rendered by ``ovrtx`` through an ``ovstage`` st
   link meshes and their materials are copied from ``Robots/KukaAllegro/kuka.usd`` into an arm-only USD (no
   Allegro hand, no physics) that is referenced once per environment;
 - the cable-driven hand from ``cable_hand_visuals.usd`` of the Newton branch (its own looks), one prim per body;
-- the cube, the lift target, a light-oak bench with a mounting plate under each arm, and a light set (light
-  floor and backdrop; dome, key, fill and rim lights, of which the fill and rim cast no shadows);
+- the cube, the lift target, the task table at its simulated size and place (a light-oak top on legs, in front
+  of the arms, which stand on the floor on a mounting plate, as in Isaac Lab's Kuka-Allegro lift task), and a
+  light set (light floor and backdrop; dome, key, fill and rim lights, of which the fill and rim cast no shadows);
 - the cables as linear ``BasisCurves``: in the x-ray view colored by role like the branch's examples and glowing
   with tension, otherwise neutral gray (they show through the openings of the hand).
 
@@ -59,9 +60,21 @@ THEME = {
     "rim": 350.0,
     "mount": (0.15, 0.15, 0.16),
 }
-"""Light theme: colors (linear RGB) and light intensities. Near-white floor and backdrop, a light-oak bench, a
+"""Light theme: colors (linear RGB) and light intensities. Near-white floor and backdrop, a light-oak table, a
 key light from the upper front left, a soft fill from the right and a weak rim light from behind that keeps the
 white hand shells apart from the white set."""
+
+SIDE_VIEW = (100.0, 20.0, 1.55, (-0.33, 0.0, 0.38))
+"""Azimuth and elevation [deg], distance [m] and look-at point [m] of the ``side`` view."""
+
+TABLE_LEG_HALF_WIDTH = 0.025
+"""Half width of the table legs [m] (render only; the simulated table is the top slab)."""
+
+TABLE_LEG_INSET = 0.035
+"""Distance of the legs from the edges of the table top [m]."""
+
+MOUNT_PLATE_RADIUS = 0.18
+"""Radius of the floor plate under each arm base [m]; the iiwa base flange reaches 0.13 m."""
 
 TARGET_HIDE_DISTANCE = 0.03
 """The target marker hides once the cube center comes this close to it [m] (the goal is reached)."""
@@ -222,13 +235,14 @@ def camera_path(
     orbit: float,
     distance: float | None,
     elevation: float | None = None,
+    azimuth: float | None = None,
 ):
     """Eye and target of every frame for a camera preset.
 
-    ``angled``, ``front`` and ``wide`` are fixed views of the whole scene. ``track`` follows the pinch point of
-    environment 0 from a fixed direction, raised or lowered to keep the cube and the shown lift target in view
-    (:data:`TRACK_MARGIN`) and smoothed over about one second per episode. ``orbit`` sweeps the azimuth by that
-    many degrees over the clip; ``distance`` [m] and ``elevation`` [deg] override the preset's.
+    ``angled``, ``side``, ``front`` and ``wide`` are fixed views of the whole scene. ``track`` follows the pinch
+    point of environment 0 from a fixed direction, raised or lowered to keep the cube and the shown lift target in
+    view (:data:`TRACK_MARGIN`) and smoothed over about one second per episode. ``orbit`` sweeps the azimuth by that
+    many degrees over the clip; ``distance`` [m], ``elevation`` and ``azimuth`` [deg] override the preset's.
     """
     n = meta["num_envs"]
     span = spacing * max(n - 1, 0)
@@ -236,6 +250,10 @@ def camera_path(
     if view == "angled":
         # 22 deg keeps the far floor, where grazing path-tracing noise crawls, out of the top of the frame
         az, el, dist, target = 36.0, 22.0, 1.05 + 0.7 * span, np.array([-0.56, -0.02, 0.50])
+    elif view == "side":
+        # the whole robot from beside the table: the base stands on the floor next to the table, which hides it from
+        # any view over the table (it is 4 cm behind the table's far edge, below the top)
+        az, el, dist, target = SIDE_VIEW[0], SIDE_VIEW[1], SIDE_VIEW[2] + 0.7 * span, np.array(SIDE_VIEW[3])
     elif view == "front":
         az, el, dist, target = 0.0, 12.0, 1.05 + 0.75 * span, np.array([-0.56, 0.0, 0.38])
     elif view == "wide":
@@ -270,6 +288,8 @@ def camera_path(
         dist = distance
     if elevation is not None:
         el = elevation
+    if azimuth is not None:
+        az = azimuth
     el = min(max(el, -89.0), 89.0)  # look_at needs a forward direction that is not vertical
     path = []
     for i in range(frames):
@@ -444,20 +464,27 @@ def build_scene(
     cable_sh.CreateInput("emissiveColor", T.Color3f).ConnectToSource(glow_reader.ConnectableAPI(), "result")
     cable_mat.CreateSurfaceOutput().ConnectToSource(cable_sh.ConnectableAPI(), "surface")
 
-    # floor and one long bench under all environments (the task table, extended to the floor)
     # a floor large enough that its far edge sits on the horizon (no visible corner)
     box("/World/Floor", (0.0, 0.0, -0.01), (200.0, 200.0, 0.01), floor_mat)
-    # the bench: the task table extended under the robot bases, so the arms rise out of it
+    # the task table as simulated (Isaac Lab's Kuka-Allegro lift table): its top slab at the true footprint, in front
+    # of the arms, which stand on the floor; one long top under all environments, on legs
     tc, th = np.asarray(meta["table_center"]), np.asarray(meta["table_half_extents"])
     top = float(meta["table_top"])
-    x0, x1 = tc[0] - th[0], 0.25
+    x0, x1 = tc[0] - th[0], tc[0] + th[0]
     y0, y1 = offsets[:, 1].min() - th[1], offsets[:, 1].max() + th[1]
-    box(
-        "/World/Table",
-        (0.5 * (x0 + x1), 0.5 * (y0 + y1), 0.5 * top),
-        (0.5 * (x1 - x0), 0.5 * (y1 - y0), 0.5 * top),
-        table_mat,
-    )
+    UsdGeom.Xform.Define(st, "/World/Table")
+    box("/World/Table/top", (tc[0], 0.5 * (y0 + y1), top - th[2]), (th[0], 0.5 * (y1 - y0), th[2]), table_mat)
+    under = top - 2.0 * th[2]  # underside of the top
+    inset = TABLE_LEG_INSET + TABLE_LEG_HALF_WIDTH
+    leg_y = np.linspace(y0 + inset, y1 - inset, max(2, int(np.ceil((y1 - y0 - 2 * inset) / 1.4)) + 1))
+    for i, leg_x in enumerate((x0 + inset, x1 - inset)):
+        for j, y in enumerate(leg_y):
+            box(
+                f"/World/Table/leg_{i}_{j}",
+                (leg_x, y, 0.5 * under),
+                (TABLE_LEG_HALF_WIDTH, TABLE_LEG_HALF_WIDTH, 0.5 * under),
+                table_mat,
+            )
 
     driven = {"bodies": [], "body_index": [], "env": [], "targets": [], "curves": []}
     half = float(meta["object_half_extent"])
@@ -482,8 +509,8 @@ def build_scene(
                 sh.CreateInput("opacity", T.Float).Set(opacity)
                 sh.CreateInput("roughness", T.Float).Set(0.1)
                 sh.CreateInput("ior", T.Float).Set(1.0)
-        plate = define_disc(st, f"{env}/mount", radius=0.13, height=0.012)  # the arm is bolted through the bench
-        UsdGeom.Xformable(plate).AddTranslateOp().Set(Gf.Vec3d(0.0, float(offsets[w, 1]), top + 0.006))
+        plate = define_disc(st, f"{env}/mount", radius=MOUNT_PLATE_RADIUS, height=0.01)  # the arm's base on the floor
+        UsdGeom.Xformable(plate).AddTranslateOp().Set(Gf.Vec3d(0.0, float(offsets[w, 1]), 0.005))
         UsdShade.MaterialBindingAPI.Apply(plate.GetPrim()).Bind(mount_mat)
         cube = UsdGeom.Cube.Define(st, f"{env}/cube")
         cube.CreateSizeAttr(2.0 * half)
@@ -586,6 +613,7 @@ def render(
     only_frames: list[int] | None = None,
     elevation: float | None = None,
     cable_glow: float | None = None,
+    azimuth: float | None = None,
 ) -> dict:
     """Render a recorded rollout to an MP4; returns timing statistics."""
     import ovrtx
@@ -721,7 +749,7 @@ def render(
             stdin=subprocess.PIPE,
         )
     )
-    cameras = camera_path(view, data, meta, frames, spacing, orbit, distance, elevation)
+    cameras = camera_path(view, data, meta, frames, spacing, orbit, distance, elevation, azimuth)
     target_visible = target_visibility(data, meta, frames)
     t_setup = time.perf_counter() - t0
     t_frames = []
@@ -806,9 +834,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--rollout", required=True, help=".npz written by record.py")
     parser.add_argument("--out", required=True, help="Output .mp4")
-    parser.add_argument("--view", choices=("angled", "front", "wide", "track"), default="angled")
+    parser.add_argument("--view", choices=("angled", "side", "front", "wide", "track"), default="angled")
     parser.add_argument("--distance", type=float, default=None, help="Camera distance override [m].")
     parser.add_argument("--elevation", type=float, default=None, help="Camera elevation override [deg].")
+    parser.add_argument("--azimuth", type=float, default=None, help="Camera azimuth override [deg].")
     parser.add_argument("--only_frames", type=int, nargs="+", default=None, help="Render only these frames (stills).")
     parser.add_argument("--width", type=int, default=1920)
     parser.add_argument("--height", type=int, default=1080)
@@ -842,6 +871,7 @@ def main():
         only_frames=args.only_frames,
         elevation=args.elevation,
         cable_glow=args.cable_glow,
+        azimuth=args.azimuth,
     )
     print(json.dumps(stats, indent=2))
 

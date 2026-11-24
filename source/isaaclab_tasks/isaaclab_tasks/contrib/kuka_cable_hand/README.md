@@ -10,7 +10,7 @@ target in the air.
 
 Videos rendered with OVRTX (RTX path tracing, the arm in the original Kuka-Allegro materials):
 [highlights](docs/kuka_cable_hand_rtx_highlights.mp4),
-[close-up](docs/kuka_cable_hand_rtx_closeup.mp4),
+[side view, 3 episodes](docs/kuka_cable_hand_rtx_closeup.mp4),
 [x-ray with the cables](docs/kuka_cable_hand_rtx_xray.mp4),
 [4 environments](docs/kuka_cable_hand_rtx_4envs.mp4).
 GitHub does not play MP4s in the page: each link opens the file view, which has a download button.
@@ -124,18 +124,19 @@ Run the scripts with the environment's Python directly; `uv run` re-syncs the en
 materials, copied from the Kuka-Allegro asset into an arm-only USD (no Allegro hand); the hand from
 `cable_hand_visuals.usd` of the Newton branch; the cables as `BasisCurves`, in the x-ray view colored by role (cyan
 flexor and curl cables, magenta knuckle cables) and glowing with tension (none at the 2 N rest, full at 45 N, the
-policy's largest command), otherwise neutral gray; a light set (light floor and backdrop, light-oak bench with a
-mounting plate under each arm; dome, key, fill and rim lights, of which the fill and rim cast no shadows). Each
-frame writes the recorded world poses to the prims (`omni:xform`) and renders a converged path-traced image
-(history cleared, so moving parts leave no ghosting). On one RTX PRO 6000 Blackwell a 1920x1080 frame takes about
-1.05 s at 48 spp and 1.95 s for the x-ray at 96 spp. The target marker hides once the cube reaches it (with
-hysteresis, so it does not flicker).
+policy's largest command), otherwise neutral gray; the task table at its simulated size and place (a light-oak top
+on legs; as in Isaac Lab's Kuka-Allegro lift task the arm stands on the floor beside it, here on a mounting plate);
+and a light set (light floor and backdrop; dome, key, fill and rim lights, of which the fill and rim cast no
+shadows). Each frame writes the recorded world poses to the prims (`omni:xform`) and renders a converged
+path-traced image (history cleared, so moving parts leave no ghosting). On one RTX PRO 6000 Blackwell a 1920x1080
+frame takes about 1.05 s at 48 spp and 1.95 s for the x-ray at 96 spp. The target marker hides once the cube
+reaches it (with hysteresis, so it does not flicker).
 
 ```bash
 python -m isaaclab_tasks.contrib.kuka_cable_hand.record \
     --checkpoint source/isaaclab_tasks/isaaclab_tasks/contrib/kuka_cable_hand/pretrained/model_1499.pt \
     --num_envs 1 --episodes 3 --seed 3 --out closeup.npz
-python -m isaaclab_tasks.contrib.kuka_cable_hand.render_ovrtx --rollout closeup.npz --out closeup.mp4 --view angled
+python -m isaaclab_tasks.contrib.kuka_cable_hand.render_ovrtx --rollout closeup.npz --out closeup.mp4 --view side
 python -m isaaclab_tasks.contrib.kuka_cable_hand.record \
     --checkpoint source/isaaclab_tasks/isaaclab_tasks/contrib/kuka_cable_hand/pretrained/model_1499.pt \
     --num_envs 1 --episodes 2 --seed 11 --out xray.npz
@@ -145,14 +146,16 @@ python -m isaaclab_tasks.contrib.kuka_cable_hand.record \
     --checkpoint source/isaaclab_tasks/isaaclab_tasks/contrib/kuka_cable_hand/pretrained/model_1499.pt \
     --num_envs 4 --episodes 1 --seed 5 --out overview.npz
 python -m isaaclab_tasks.contrib.kuka_cable_hand.render_ovrtx --rollout overview.npz --out overview.mp4 \
-    --view wide --elevation 30
+    --view wide --elevation 55
 ```
 
-Views: `angled` (fixed three-quarter view), `track` (follows the pinch point, raised or lowered to keep the cube
-and the lift target in view; both fit while the target is less than about 24 cm above the cube), `wide` (several
-environments), `front`; `--distance` and `--elevation` override a view's camera. The first OVRTX run compiles the
-RTX shader cache (`~/.cache/ovrtx`), which can take many minutes; later runs set up in about 2.5 s. The look was
-checked by two rounds of review of full-resolution stills and a frame-by-frame review of the final videos.
+Views: `side` (the whole robot from beside the table: its base stands on the floor next to the table, 4 cm behind
+the table's far edge and below its top, so views over the table hide it), `angled` (fixed three-quarter view over
+the table), `track` (follows the pinch point, raised or lowered to keep the cube and the lift target in view; both
+fit while the target is less than about 24 cm above the cube), `wide` (several environments), `front`;
+`--distance`, `--elevation` and `--azimuth` override a view's camera. The first OVRTX run compiles the RTX shader
+cache (`~/.cache/ovrtx`), which can take many minutes; later runs set up in about 2.5 s. The look was checked by
+two rounds of review of full-resolution stills and a frame-by-frame review of the final videos.
 
 ## Results
 
